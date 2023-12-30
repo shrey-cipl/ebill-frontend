@@ -1,0 +1,77 @@
+import React from "react"
+import { Card, CardContent, Typography, Stack, Box } from "@mui/material"
+
+type Props = {
+  title?: string
+  titleVariant?: string | any
+  subtitle?: string
+  action?: JSX.Element | any
+  footer?: JSX.Element
+  cardheading?: string | JSX.Element
+  headtitle?: string | JSX.Element
+  headsubtitle?: string | JSX.Element
+  children?: JSX.Element
+  middlecontent?: string | JSX.Element
+}
+
+const DashboardNew = ({
+  title,
+  titleVariant,
+  subtitle,
+  children,
+  action,
+  footer,
+  cardheading,
+  headtitle,
+  headsubtitle,
+  middlecontent,
+}: Props) => {
+  return (
+    <Card sx={{ padding: 0 }} elevation={9} variant={undefined}>
+      {cardheading ? (
+        <CardContent>
+          <Typography variant="h5">{headtitle}</Typography>
+          <Typography variant="subtitle2" color="textSecondary">
+            {headsubtitle}
+          </Typography>
+        </CardContent>
+      ) : (
+        <CardContent sx={{ p: "10px" }}>
+          {title ? (
+            <Stack
+              direction="row"
+              justifyContent="space-between"
+              alignItems={"center"}
+            >
+              <Box>
+                {title ? (
+                  <Typography variant={titleVariant ? titleVariant : "h5"}>
+                    {title}
+                  </Typography>
+                ) : (
+                  ""
+                )}
+
+                {subtitle ? (
+                  <Typography variant="subtitle2" color="textSecondary">
+                    {subtitle}
+                  </Typography>
+                ) : (
+                  ""
+                )}
+              </Box>
+              {action}
+            </Stack>
+          ) : null}
+
+          {children}
+        </CardContent>
+      )}
+
+      {middlecontent}
+      {footer}
+    </Card>
+  )
+}
+
+export default DashboardNew

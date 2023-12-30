@@ -1,0 +1,3 @@
+export const STRAPI_BASE_URL = process.env.NEXT_PUBLIC_STRAPI_BASE_URL;
+export const BACKEND_BASE_URL = process.env.NEXT_PUBLIC_BACKEND_BASE_URL;
+export const STRAPI_ENABLED = !!process.env.NEXT_PUBLIC_STRAPI_ENABLED;
