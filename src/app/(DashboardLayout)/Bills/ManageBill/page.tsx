@@ -68,7 +68,6 @@ const DATA_FIELDS = [
     type: "number",
   },
 
-  
   {
     id: "claimPeriodFrom",
     fieldName: "Claimed Period From",
@@ -199,19 +198,25 @@ const getBillData = async (id: any, token: any) => {
   }
 }
 interface TableRowData {
-  phone: string;
-  periodFrom: string;
-  periodTo: string;
-  claimedAmount: string;
-  admissibleAmount: string;
+  phone: string
+  periodFrom: string
+  periodTo: string
+  claimedAmount: string
+  admissibleAmount: string
 }
 
 const ManageBill = () => {
   const [dataFields, setDataFields] = useState(initialFieldState)
   const [formerEmp, setFormerEmp] = useState([])
   const [tableData, setTableData] = useState<TableRowData[]>([
-    { phone: '', periodFrom: '', periodTo: '', claimedAmount: '', admissibleAmount: '' }
-  ]);
+    {
+      phone: "",
+      periodFrom: "",
+      periodTo: "",
+      claimedAmount: "",
+      admissibleAmount: "",
+    },
+  ])
 
   const [allReportsByfilter, setAllReportsByfilter]: any = useState([])
   const [updateModeFields, setUpdateModeFields] = useState(
@@ -230,12 +235,13 @@ const ManageBill = () => {
   useEffect(() => {
     if (paramBillId) {
       getBillData(paramBillId, authCtx.user.token).then((billData: any) => {
-        // console.log(billData)
+        console.log("billDATA: ", billData?.data)
         const {
           diaryNumber,
           claimReceivingDate,
           billType,
-          formerDetails,
+          former,
+          fileNumber,
           claimPeriodFrom,
           claimPeriodTo,
           totalClaimedAmount,
@@ -246,15 +252,17 @@ const ManageBill = () => {
           sanctionedAmount,
           PFMS,
           billProcessingStartDate,
-        } = billData.data
+          telephoneNumbers,
+        } = billData?.data
 
         setDataFields({
           diaryNumber,
           claimReceivingDate: dayjs(claimReceivingDate).format("YYYY-MM-DD"),
           billType,
-          name: formerDetails.name,
-          email: formerDetails.email,
-          phone: formerDetails.phone,
+          name: former?.name,
+          email: former?.email,
+          phone: former?.phone,
+          fileNumber: fileNumber,
           claimPeriodFrom: dayjs(claimPeriodFrom).format("YYYY-MM-DD"),
           claimPeriodTo: dayjs(claimPeriodTo).format("YYYY-MM-DD"),
           totalClaimedAmount,
@@ -271,10 +279,18 @@ const ManageBill = () => {
             "YYYY-MM-DD"
           ),
         })
+
+        for (let item of telephoneNumbers) {
+          item.periodFrom = dayjs(item.periodFrom).format("YYYY-MM-DD")
+          item.periodTo = dayjs(item.periodTo).format("YYYY-MM-DD")
+        }
+
+        // console.log("finall:", telephoneNumbers)
+
+        setTableData(telephoneNumbers)
       })
     }
-    
-  }, [authCtx.user.token])
+  }, [paramBillId, authCtx.user.token])
 
   // Fetches list of former emoloyee
   useEffect(() => {
@@ -292,11 +308,9 @@ const ManageBill = () => {
 
       try {
         const res = await axiosApi(config.url, config.method, config.headers)
-      console.log(res);
         // Data transformation
         for (let item of res.data) {
-          transformedArr.push({name:item.name,
-          _id:item._id })
+          transformedArr.push({ name: item.name, _id: item._id })
         }
 
         setFormerEmp(transformedArr)
@@ -310,7 +324,6 @@ const ManageBill = () => {
 
   // Posts form data
   const handleFormSubmit = async (e: any) => {
-    console.log( "[]]][][yyyyyyyyyyyyyyyyyyy][]");
     e.preventDefault()
 
     try {
@@ -334,10 +347,11 @@ const ManageBill = () => {
           data: {
             ...fieldsCopy,
             lastForwardedBy: authCtx.user.data.role.name,
-            former:dataFields.name,
-            fileNumber:dataFields.fileNumber,
-            bill:"650834eeec89bb1b15cb69cb",
-            telephoneNumbers:tableData
+            former: dataFields.name,
+            fileNumber: dataFields.fileNumber,
+            // bill: "650834eeec89bb1b15cb69cb0",
+            telephoneNumbers: tableData,
+            maxAdmissibleAmount: 123, // ask about this field
           },
         }
 
@@ -347,7 +361,6 @@ const ManageBill = () => {
           config.headers,
           config.data
         )
-        
       } else if (paramMode === BILL_MODES.update) {
         const { currentStatus, lastForwardedTo, currentremark } = dataFields
 
@@ -365,11 +378,11 @@ const ManageBill = () => {
             currentremark,
             lastForwardedBy: authCtx.user.data.role.name,
             // Update Fields
-          
+
             sanctionedAmount: updateModeFields.sanctionedAmount,
             PFMS: updateModeFields.PFMS,
             billProcessingStartDate: updateModeFields.billProcessingStartDate,
-            telephoneNumbers:tableData
+            telephoneNumbers: tableData,
           },
         }
 
@@ -379,8 +392,8 @@ const ManageBill = () => {
           config.headers,
           config.data
         )
-        console.log(config.data);
-        console.log("ssdssds",tableData);
+        console.log(config.data)
+        console.log("ssdssds", tableData)
       }
       if (res) {
         alert("Data Added!")
@@ -432,15 +445,13 @@ const ManageBill = () => {
     getBillMovement()
   }, [authCtx.user.token])
 
-
-  console.log(formerEmp,"formerEmp");
+  // console.log(formerEmp, "formerEmp")
   return (
     <>
       <PageContainer title="Add Bill" description="Add bills here">
         <DashboardNew title="Add New Bill" titleVariant="h5">
           <Box mt={2}>
             <form
-              
               style={{
                 display: "grid",
                 gridTemplateColumns: "1fr 1fr",
@@ -475,9 +486,8 @@ const ManageBill = () => {
                     >
                       {field.fieldName}
                     </Typography>
-                
+
                     {field.type === "select" ? (
-                      
                       <Select
                         name={field.id}
                         size="small"
@@ -486,19 +496,14 @@ const ManageBill = () => {
                         sx={{ width: "100%" }}
                         disabled={disabledUpdateFields}
                       >
-                        
                         {field.id === "name"
-                          ? formerEmp.map((emp:any) => (
+                          ? formerEmp.map((emp: any) => (
                               <MenuItem value={emp._id}>{emp.name}</MenuItem>
                             ))
                           : field.selectOptions?.map((option) => (
-                           
                               <MenuItem value={option}>{option}</MenuItem>
                             ))}
-                             
                       </Select>
-                    
-                    
                     ) : (
                       <TextField
                         name={field.id}
@@ -513,9 +518,6 @@ const ManageBill = () => {
                   </FormControl>
                 )
               })}
-
-
-
 
               {paramMode === BILL_MODES.update &&
                 UPDATE_FIELDS.map((field, i) => (
@@ -543,35 +545,45 @@ const ManageBill = () => {
                     />
                   </FormControl>
                 ))}
-                
             </form>
-           <br />
-           <br />
-                <Box 
-                sx={{
-                width:"100%",
-                }}>
-                 {dataFields.billType==="Resident Telephone/Mobile charges Reimbursement"?
-                   <DynamicTable  tableData={tableData} setTableData={setTableData} /> :null}
-                </Box>
-              <ButtonWrapper sx={{ gridColumn: "1/-1" }}>
-                <Button type="submit" size="small" variant="contained" onClick={handleFormSubmit}>
-                  Submit
-                </Button>
-                <Button
-                  type="button"
-                  variant="contained"
-                  size="small"
-                  onClick={() => router.back()}
-                >
-                  Cancel    
-                </Button>
-              </ButtonWrapper>
+            <br />
+            <br />
+            <Box
+              sx={{
+                width: "100%",
+              }}
+            >
+              {dataFields.billType ===
+              "Resident Telephone/Mobile charges Reimbursement" ? (
+                <DynamicTable
+                  tableData={tableData}
+                  setTableData={setTableData}
+                />
+              ) : null}
+            </Box>
+            <ButtonWrapper sx={{ gridColumn: "1/-1" }}>
+              <Button
+                type="submit"
+                size="small"
+                variant="contained"
+                onClick={handleFormSubmit}
+              >
+                Submit
+              </Button>
+              <Button
+                type="button"
+                variant="contained"
+                size="small"
+                onClick={() => router.back()}
+              >
+                Cancel
+              </Button>
+            </ButtonWrapper>
           </Box>
         </DashboardNew>
       </PageContainer>
       <br />
-      
+
       {allReportsByfilter.length !== 0 ? (
         <DashboardNew>
           <Box sx={{ overflow: "auto", width: { xs: "600px", sm: "100%" } }}>

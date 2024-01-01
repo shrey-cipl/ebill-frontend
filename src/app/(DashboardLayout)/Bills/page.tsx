@@ -89,7 +89,7 @@ const bills = () => {
 
     try {
       const res = await axiosApi(config.url, config.method, config.headers)
-console.log(res,"ressssssssssssssssssssss");
+      // console.log(res,"ressssssssssssssssssssss");
       setBillList(res.data)
       // if (String(res.status).charAt(0) === "2") {
       // }
@@ -127,7 +127,7 @@ console.log(res,"ressssssssssssssssssssss");
 
     tempCounter += 1
   }
-console.log(billList);
+  console.log(billList)
   return (
     <PageContainer title="Bills" description="List of all the bills">
       <DashboardNew title="Bills" titleVariant="h5">
@@ -217,9 +217,7 @@ console.log(billList);
                     <TableRow key={bill._id} sx={{ background: rowColor }}>
                       <TabelCellStyled>{`${itemNumber}.`}</TabelCellStyled>
                       <TabelCellStyled>{bill.diaryNumber}</TabelCellStyled>
-                      <TabelCellStyled>
-                        {bill.former.name}
-                      </TabelCellStyled>
+                      <TabelCellStyled>{bill.former.name}</TabelCellStyled>
                       <TabelCellStyled>{bill.billType}</TabelCellStyled>
                       <TabelCellStyled>
                         {bill.totalClaimedAmount}

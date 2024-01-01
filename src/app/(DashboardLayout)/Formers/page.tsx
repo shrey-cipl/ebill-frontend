@@ -233,7 +233,7 @@ const Formers = () => {
                       <TabelCellStyled>{former.designation}</TabelCellStyled>
                       <TabelCellStyled>{former.email}</TabelCellStyled>
                       <TabelCellStyled>
-                        {former.bankAccountNumber}
+                        {former.bankDetails.bankAccountNumber}
                       </TabelCellStyled>
                       <TabelCellStyled
                         sx={{

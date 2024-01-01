@@ -65,6 +65,7 @@ const ManageUser = () => {
   // const paramMode = searchParams.get("mode")
 
   const authCtx: any = useAuth()
+  // console.log(authCtx)
 
   useEffect(() => {
     const getData = async () => {
@@ -73,13 +74,16 @@ const ManageUser = () => {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
+          authorization: `Bearer ${authCtx.user.token}`,
         },
       }
 
       try {
         const res = await axiosApi(config.url, config.method, config.headers)
+        console.log("new:", res)
 
         const { name, email, phone, role } = res.data
+
         setUserFieldData({
           role: role.name,
           name,
@@ -92,7 +96,7 @@ const ManageUser = () => {
     }
 
     getData()
-  }, [])
+  }, [paramUserId, authCtx.user.token])
 
   const handleFormSubmit = async (e: any) => {
     e.preventDefault()
