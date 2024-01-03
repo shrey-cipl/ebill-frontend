@@ -25,7 +25,7 @@ const Profile = () => {
   }
 
   const handleLogout = async () => {
-    console.log("sdsdsd");
+
     router.push("/login")
     await auth.signOut()
   }

@@ -51,8 +51,9 @@ const Pagination = ({ url, data, setPageNo }: any) => {
         marginTop: "20px",
       }}
     >
-      {paginationBtns.map((btn) => (
+      {paginationBtns.map((btn,i) => (
         <Fab
+        key={i}
           // variant="contained"
           size="small"
           sx={{

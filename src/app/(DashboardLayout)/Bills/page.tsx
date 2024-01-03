@@ -63,7 +63,7 @@ const TabelCellStyled = styled(TableCell)(() => ({
 
 let tempCounter = 0
 
-const bills = () => {
+const Bills = () => {
   const [billList, setBillList] = useState<any>([])
   const [filterInputs, setFilterInputs] = useState({
     name: "",
@@ -101,7 +101,7 @@ const bills = () => {
   // collect bills and updates list
   useEffect(() => {
     handleFetchBills()
-  }, [pageNo, tempCounter, authCtx.user.token])
+  }, [pageNo, tempCounter, authCtx.user.token,handleFetchBills])
 
   const handleViewBill = (id: any) => {
     const filteredBill = billList.find((bill: any) => bill._id === id)
@@ -183,7 +183,10 @@ const bills = () => {
                 </Button>
               </Box>
             </OptionsWrapper>
-            <Table
+         
+          </Box>
+          <Box>
+               <Table
               sx={{
                 display: "block",
                 overflowX: "auto",
@@ -285,7 +288,7 @@ const bills = () => {
               </BoxWrapper>
               <BoxWrapper>
                 <Typography fontWeight={600}>Name:</Typography>
-                <Typography>{selectedBill?.formerDetails?.name}</Typography>
+                <Typography>{selectedBill?.former?.name}</Typography>
               </BoxWrapper>
               <BoxWrapper>
                 <Typography fontWeight={600}>Claim Receiving Date:</Typography>
@@ -333,4 +336,4 @@ const bills = () => {
   )
 }
 
-export default bills
+export default Bills

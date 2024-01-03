@@ -67,7 +67,7 @@ const Menuitems: any = {
     },
     {
       id: uniqueId(),
-      title: "Lists of All Bills",
+      title: "Lists",
       icon: FormatListBulletedIcon,
       href: "/ListOfAllBills",
       present: "no",

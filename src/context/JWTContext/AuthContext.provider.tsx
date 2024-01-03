@@ -6,14 +6,11 @@ import { isValidToken, setSession } from "../../Util/jwt"
 import AuthReducer from "./AuthContext.reducer"
 import { Alert } from "@mui/material"
 
-// Note: If you're trying to connect JWT to your own backend, don't forget
-// to remove the Axios mocks in the `/src/pages/_app.js` file.
 
 const INITIALIZE = "INITIALIZE"
 const SIGN_IN = "SIGN_IN"
 const SIGN_OUT = "SIGN_OUT"
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const illegalStateFunction = (...args: any) => {
   throw new Error("You must wrap your components in <AuthProvider />")
 }
@@ -60,6 +57,7 @@ export default function AuthProvider({ children }: AuthProviderProps) {
             },
           })
         } else {
+         
           dispatch({
             type: INITIALIZE,
             payload: {
@@ -67,6 +65,9 @@ export default function AuthProvider({ children }: AuthProviderProps) {
               user: null,
             },
           })
+          // console.log("logout");
+        
+          router.push("/login")
         }
       } catch (err) {
         dispatch({
@@ -119,8 +120,8 @@ export default function AuthProvider({ children }: AuthProviderProps) {
     setSession(null)
     dispatch({ type: SIGN_OUT })
     
-    localStorage.setItem("login", "logout")
-   
+    // localStorage.setItem("login", "logout")
+    localStorage.removeItem("login");
   }
   return (
     <AuthContext.Provider

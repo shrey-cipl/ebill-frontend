@@ -9,11 +9,17 @@ import { Box, Grid } from "@mui/material"
 import DashboardNew from "./components/shared/DashboardNew"
 import PendingActionsIcon from "@mui/icons-material/PendingActions"
 
+import { useAuth } from "@/context/JWTContext/AuthContext.provider"
+
 const DashboardBox = dynamic(
   () => import("./components/dashboard/DashboardBox")
 )
 
 const Dashboard = () => {
+
+  const useauth=useAuth();
+
+   console.log(useauth);
   return (
     <PageContainer
       title="Welcome to Dashboard"

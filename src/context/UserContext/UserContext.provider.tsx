@@ -2,7 +2,6 @@ import { createContext, useContext, useMemo } from "react"
 import axios from "../../config/axios"
 import { useAuth } from "../JWTContext/AuthContext.provider"
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const illegalStateFunction = async (..._args: any) => {
   throw new Error("You must wrap your components in <UserContextProvider />")
 }

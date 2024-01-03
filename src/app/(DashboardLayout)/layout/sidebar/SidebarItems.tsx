@@ -14,7 +14,7 @@ const SidebarItems = ({ toggleMobileSidebar }: any) => {
  
   // const [state ,setstate] =useState(auth?.user?.role?.name);
   const [allData, setItems] = useState<any>(
-    Menuitems[auth?.user?.data?.role?.name || "Joint Secretary Admin"]
+    Menuitems["Joint Secretary Admin"]
   )
 
   return (

@@ -171,8 +171,8 @@ const YearlyWiseReport = () => {
                   </MenuItem>
                   {allReports.map((el: any, i: any) => {
                     return (
-                      <MenuItem value={el.formerDetails.name} key={i}>
-                        {el.formerDetails.name}
+                      <MenuItem value={el.former.name} key={i}>
+                        {el.former.name}
                       </MenuItem>
                     )
                   })}
@@ -368,7 +368,7 @@ const YearlyWiseReport = () => {
                         <TableRow key={bills._id} sx={{ background: rowColor }}>
                           <TabelCellStyled>{bills.diaryNumber}</TabelCellStyled>
                           <TabelCellStyled>
-                            {bills.formerDetails.name}
+                            {bills.former.name}
                           </TabelCellStyled>
                           <TabelCellStyled>{bills.billType}</TabelCellStyled>
                           <TabelCellStyled>

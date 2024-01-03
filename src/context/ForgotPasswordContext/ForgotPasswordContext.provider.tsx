@@ -3,7 +3,6 @@ import ForgotPasswordReducer from './ForgotPasswordContext.reducer';
 import axios from '../../config/axios';
 import { useAuth } from '../JWTContext/AuthContext.provider';
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const illegalStateFunction = async (...args: any) => {
     throw new Error(
         'You must wrap your components in <ForgotPasswordContextProvider />',
