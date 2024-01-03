@@ -101,7 +101,7 @@ const Bills = () => {
   // collect bills and updates list
   useEffect(() => {
     handleFetchBills()
-  }, [pageNo, tempCounter, authCtx.user.token,handleFetchBills])
+  }, [pageNo, tempCounter, authCtx.user.token])
 
   const handleViewBill = (id: any) => {
     const filteredBill = billList.find((bill: any) => bill._id === id)
@@ -183,10 +183,9 @@ const Bills = () => {
                 </Button>
               </Box>
             </OptionsWrapper>
-         
           </Box>
           <Box>
-               <Table
+            <Table
               sx={{
                 display: "block",
                 overflowX: "auto",

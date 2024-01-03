@@ -65,7 +65,7 @@ const DATA_FIELDS = [
   },
   {
     id: "fileNumber",
-    fieldName: "fileNumber",
+    fieldName: "File Number",
     type: "number",
   },
 
@@ -87,6 +87,11 @@ const DATA_FIELDS = [
   {
     id: "totalAdmissibleAmount",
     fieldName: "Total Amissible Amount",
+    type: "number",
+  },
+  {
+    id: "maxAdmissibleAmount",
+    fieldName: "Max Amissible Amount",
     type: "number",
   },
   {
@@ -219,7 +224,6 @@ const ManageBill = () => {
     },
   ])
 
-  const [allReportsByfilter, setAllReportsByfilter]: any = useState([])
   const [updateModeFields, setUpdateModeFields] = useState(
     initialUpdateModeFields
   )
@@ -248,6 +252,7 @@ const ManageBill = () => {
             claimPeriodTo,
             totalClaimedAmount,
             totalAdmissibleAmount,
+            maxAdmissibleAmount,
             currentStatus,
             lastForwardedTo,
             currentremark,
@@ -255,10 +260,10 @@ const ManageBill = () => {
             PFMS,
             billProcessingStartDate,
             telephoneNumbers,
-          } = billData.data;
-  
+          } = billData.data
+
           setDataFields({
-            diaryNumber:diaryNumber,
+            diaryNumber: diaryNumber,
             claimReceivingDate: dayjs(claimReceivingDate).format("YYYY-MM-DD"),
             billType,
             name: former?.name,
@@ -269,37 +274,29 @@ const ManageBill = () => {
             claimPeriodTo: dayjs(claimPeriodTo).format("YYYY-MM-DD"),
             totalClaimedAmount,
             totalAdmissibleAmount,
+            maxAdmissibleAmount,
             currentStatus,
             lastForwardedTo,
             currentremark,
-          });
-  
+          })
+
           setUpdateModeFields({
             sanctionedAmount,
             PFMS,
             billProcessingStartDate: dayjs(billProcessingStartDate).format(
               "YYYY-MM-DD"
             ),
-          });
-  
+          })
+
           for (let item of telephoneNumbers) {
-            item.periodFrom = dayjs(item.periodFrom).format("YYYY-MM-DD");
-            item.periodTo = dayjs(item.periodTo).format("YYYY-MM-DD");
+            item.periodFrom = dayjs(item.periodFrom).format("YYYY-MM-DD")
+            item.periodTo = dayjs(item.periodTo).format("YYYY-MM-DD")
           }
-  
-          // console.log("finall:", telephoneNumbers)
-  
-          setTableData(telephoneNumbers);
-        } else {
-          console.error("Invalid or missing data in the API response.");
+
+          setTableData(telephoneNumbers)
         }
       })
-      .catch((error) => {
-        console.error("Error fetching bill data:", error);
-      });
-  } else {
-    console.error("Invalid 'bill_id' parameter in the URL.");
-  }
+    }
   }, [paramBillId, authCtx.user.token])
 
   // Fetches list of former emoloyee
@@ -319,9 +316,14 @@ const ManageBill = () => {
       try {
         const res = await axiosApi(config.url, config.method, config.headers)
         // Data transformation
-        console.log(res.data,"kjhjkhweiusekjhcsql");
+        console.log(res.data, "kjhjkhweiusekjhcsql")
         for (let item of res.data) {
-          transformedArr.push({ name: item.name, _id: item._id ,  email:item.email  ,  phone:item.phone})
+          transformedArr.push({
+            name: item.name,
+            _id: item._id,
+            email: item.email,
+            phone: item.phone,
+          })
         }
 
         setFormerEmp(transformedArr)
@@ -347,25 +349,23 @@ const ManageBill = () => {
         delete fieldsCopy.name
         delete fieldsCopy.email
         delete fieldsCopy.phone
-console.log(tableData[0].phone ,"tableData[0].phone ");
-        let obj= tableData[0].phone !== ""? {
-          ...fieldsCopy,
-          lastForwardedBy: authCtx.user.data.role.name,
-          // former: dataFields.name,
-          fileNumber: dataFields.fileNumber,
-          // bill: "650834eeec89bb1b15cb69cb0",
-          telephoneNumbers: tableData,
-          maxAdmissibleAmount: 123, // ask about this field 
-        
-        }:{
-          ...fieldsCopy,
-          lastForwardedBy: authCtx.user.data.role.name,
-          // former: dataFields.name,
-          fileNumber: dataFields.fileNumber,
-          // bill: "650834eeec89bb1b15cb69cb0",
-         
-          maxAdmissibleAmount: 123, // ask about this field
-        }
+
+        let obj =
+          tableData[0].phone !== ""
+            ? {
+                ...fieldsCopy,
+                lastForwardedBy: authCtx.user.data.role.name,
+                // former: dataFields.name,
+                fileNumber: dataFields.fileNumber,
+                telephoneNumbers: tableData,
+              }
+            : {
+                ...fieldsCopy,
+                lastForwardedBy: authCtx.user.data.role.name,
+                // former: dataFields.name,
+                fileNumber: dataFields.fileNumber,
+              }
+
         const config = {
           url: `/api/claim/create`,
           method: "POST",
@@ -374,7 +374,7 @@ console.log(tableData[0].phone ,"tableData[0].phone ");
             authorization: `Bearer ${authCtx.user.token}`,
           },
           data: {
-            ...obj
+            ...obj,
           },
         }
 
@@ -386,31 +386,35 @@ console.log(tableData[0].phone ,"tableData[0].phone ");
         )
       } else if (paramMode === BILL_MODES.update) {
         const { currentStatus, lastForwardedTo, currentremark } = dataFields
-         let obj= tableData[0].phone !== ""? {
-          claimId: paramBillId,
-          currentStatus,
-          lastForwardedTo,
-          currentremark,
-          lastForwardedBy: authCtx.user.data.role.name,
-          // Update Fields
+        let obj =
+          tableData[0].phone !== ""
+            ? {
+                claimId: paramBillId,
+                currentStatus,
+                lastForwardedTo,
+                currentremark,
+                lastForwardedBy: authCtx.user.data.role.name,
+                // Update Fields
 
-          sanctionedAmount: updateModeFields.sanctionedAmount,
-          PFMS: updateModeFields.PFMS,
-          billProcessingStartDate: updateModeFields.billProcessingStartDate,
-          telephoneNumbers: tableData,
-        }: {
-          claimId: paramBillId,
-          currentStatus,
-          lastForwardedTo,
-          currentremark,
-          lastForwardedBy: authCtx.user.data.role.name,
-          // Update Fields
+                sanctionedAmount: updateModeFields.sanctionedAmount,
+                PFMS: updateModeFields.PFMS,
+                billProcessingStartDate:
+                  updateModeFields.billProcessingStartDate,
+                telephoneNumbers: tableData,
+              }
+            : {
+                claimId: paramBillId,
+                currentStatus,
+                lastForwardedTo,
+                currentremark,
+                lastForwardedBy: authCtx.user.data.role.name,
+                // Update Fields
 
-          sanctionedAmount: updateModeFields.sanctionedAmount,
-          PFMS: updateModeFields.PFMS,
-          billProcessingStartDate: updateModeFields.billProcessingStartDate,
-         
-        }
+                sanctionedAmount: updateModeFields.sanctionedAmount,
+                PFMS: updateModeFields.PFMS,
+                billProcessingStartDate:
+                  updateModeFields.billProcessingStartDate,
+              }
         const config = {
           url: `/api/claim/approveClaim`,
           method: "PATCH",
@@ -418,7 +422,7 @@ console.log(tableData[0].phone ,"tableData[0].phone ");
             "Content-Type": "application/json",
             authorization: `Bearer ${authCtx.user.token}`,
           },
-          
+
           data: {
             claimId: paramBillId,
             currentStatus,
@@ -431,7 +435,7 @@ console.log(tableData[0].phone ,"tableData[0].phone ");
             PFMS: updateModeFields.PFMS,
             billProcessingStartDate: updateModeFields.billProcessingStartDate,
             telephoneNumbers: obj,
-          }
+          },
         }
 
         res = await axiosApi(
@@ -440,9 +444,8 @@ console.log(tableData[0].phone ,"tableData[0].phone ");
           config.headers,
           config.data
         )
-        console.log(config.data,"saaddddddddddddddddda")
-        console.log("ssdssds", tableData)
       }
+
       if (res) {
         alert("Data Added!")
         // view mode -> redirect instead && update mode -> redirect
@@ -456,80 +459,39 @@ console.log(tableData[0].phone ,"tableData[0].phone ");
   // Updates field values
   // const handleFieldChange = (e: any) => {
 
-
-
   //   setDataFields((prevState: any) => ({
   //     ...prevState,
 
   //     [e.target.name]: e.target.value,
-   
+
   //   }))
-// }
-  const handleFieldChange = (event:any, formerEmp:any) => {
-    const { name, value } = event.target;
-  
+  // }
+
+  const handleFieldChange = (event: any, formerEmp: any) => {
+    const { name, value } = event.target
+
     // If the field is 'name', find the corresponding emp object and set its _id
-    if (name === 'name') {
-      const selectedEmp = formerEmp.find((emp:any) => emp.name === value);
-      const empId = selectedEmp ? selectedEmp._id : null;
-        console.log(selectedEmp,"selectedEmp");
-      setDataFields((prevDataFields:any) => ({
+    if (name === "name") {
+      const selectedEmp = formerEmp.find((emp: any) => emp.name === value)
+      const empId = selectedEmp ? selectedEmp._id : null
+      console.log(selectedEmp, "selectedEmp")
+      setDataFields((prevDataFields: any) => ({
         ...prevDataFields,
         [name]: value,
         // Set emp._id in dataFields
         email: selectedEmp.email,
         phone: selectedEmp.phone,
         former: empId,
-      }));
+      }))
     } else {
       // For other fields, directly set the value
-      console.log("SDsdds");
-      setDataFields((prevDataFields:any) => ({
+      console.log("SDsdds")
+      setDataFields((prevDataFields: any) => ({
         ...prevDataFields,
         [name]: value,
-
-      }));
+      }))
     }
-  };
-  // async function getBillMovement() {
-  //   try {
-  //     const url = `/api/claim/get/${paramBillId}`
-  //     const method = "GET"
-  //     const headers = {
-  //       "Content-Type": "application/json",
-  //       authorization: `Bearer ${authCtx.user.token}`,
-  //     }
-  //     const res = await axiosApi(url, method, headers)
-  //     setAllReportsByfilter([...res.data.movement])
-  //     if (res.success != true || !res) {
-  //       console.log("Bad Request")
-  //     } else {
-  //       console.log("200")
-  //     }
-  //   } catch (error) {
-  //     console.error("Error fetching ", error)
-  //   }
-  // }
-
-  const getBillMovement = useCallback(async () => {
-    try {
-      const url = `/api/claim/get/${paramBillId}`;
-      const method = "GET";
-      const headers = {
-        "Content-Type": "application/json",
-        authorization: `Bearer ${authCtx.user.token}`,
-      };
-      const res = await axiosApi(url, method, headers);
-      setAllReportsByfilter([...res.data.movement]);
-      if (res.success != true || !res) {
-        console.log("Bad Request");
-      } else {
-        console.log("200");
-      }
-    } catch (error) {
-      console.error("Error fetching ", error);
-    }
-  }, [authCtx.user.token, paramBillId]);
+  }
 
   // Updates 'update' mode fields
   const handleUpdatedModeFields = (e: any) => {
@@ -538,15 +500,6 @@ console.log(tableData[0].phone ,"tableData[0].phone ");
       [e.target.name]: e.target.value,
     }))
   }
-
-  // useEffect(() => {
-  //   getBillMovement()
-  // }, [authCtx.user.token,getBillMovement])
-
-
-  useEffect(() => {
-    getBillMovement();
-  }, [getBillMovement]);
 
   console.log(formerEmp, "formerEmp")
   return (
@@ -585,7 +538,6 @@ console.log(tableData[0].phone ,"tableData[0].phone ");
                         fontSize: "13px",
                         lineHeight: "12px",
                       }}
-                      key={i}
                       mb={1}
                     >
                       {field.fieldName}
@@ -596,17 +548,22 @@ console.log(tableData[0].phone ,"tableData[0].phone ");
                         name={field.id}
                         size="small"
                         value={dataFields[field.id]}
-                        onChange={(event) => handleFieldChange(event, formerEmp)}
+                        onChange={(event) =>
+                          handleFieldChange(event, formerEmp)
+                        }
                         sx={{ width: "100%" }}
                         disabled={disabledUpdateFields}
-                        key={i}
                       >
                         {field.id === "name"
                           ? formerEmp.map((emp: any) => (
-                              <MenuItem value={emp.name} key={emp._id}>{emp.name}</MenuItem>
+                              <MenuItem value={emp.name} key={emp._id}>
+                                {emp.name}
+                              </MenuItem>
                             ))
-                          : field.selectOptions?.map((option,i) => (
-                              <MenuItem value={option} key={i} >{option}</MenuItem>
+                          : field.selectOptions?.map((option, i) => (
+                              <MenuItem value={option} key={i}>
+                                {option}
+                              </MenuItem>
                             ))}
                       </Select>
                     ) : (
@@ -615,11 +572,10 @@ console.log(tableData[0].phone ,"tableData[0].phone ");
                         type={field.type}
                         size="small"
                         value={dataFields[field.id]}
-                        onChange={(event) => handleFieldChange(event,{})}
+                        onChange={(event) => handleFieldChange(event, {})}
                         sx={{ width: "100%" }}
                         disabled={disabledUpdateFields}
-                        // disabled={!!dataFields.name} 
-                       key={i}
+                        // disabled={!!dataFields.name}
                       />
                     )}
                   </FormControl>
@@ -689,63 +645,8 @@ console.log(tableData[0].phone ,"tableData[0].phone ");
           </Box>
         </DashboardNew>
       </PageContainer>
-      <br />
-
-      {/* {allReportsByfilter.length !== 0 ? (
-        <DashboardNew>
-          <Box sx={{ overflow: "auto", width: { xs: "600px", sm: "100%" } }}>
-            <TableContainer>
-              <Table
-                sx={{
-                  // display: "block",
-                  overflowX: "auto",
-                  // maxWidth: 500,
-                  minWidth: "500px",
-                  // "& .MuiTableCell-root": { border: "1px solid #333" },
-                }}
-                size="medium"
-              >
-                <TableHead>
-                  <TableRow sx={{ background: "#4C7AFF" }}>
-                    {TABLE_HEADERS.map((header, i) => (
-                      <TableCell
-                        key={i}
-                        sx={{
-                          color: "white",
-                          padding: "5px",
-                        }}
-                      >
-                        {header}
-                      </TableCell>
-                    ))}
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {allReportsByfilter.map((bills: any, i: any) => {
-                    const rowColor = (i + 1) % 2 === 0 ? "#eee" : "#fff"
-
-                    return (
-                      <TableRow key={bills._id} sx={{ background: rowColor }}>
-                        <TabelCellStyled>{i + 1}</TabelCellStyled>
-                        <TabelCellStyled>
-                          {bills.forwardedAt.substring(0, 10)}
-                        </TabelCellStyled>
-                        <TabelCellStyled>{bills.forwardedBy}</TabelCellStyled>
-                        <TabelCellStyled>{bills.forwardedTo}</TabelCellStyled>
-                        <TabelCellStyled>{bills.status}</TabelCellStyled>
-                        <TabelCellStyled>{bills.remarks}</TabelCellStyled>
-                      </TableRow>
-                    )
-                  })}
-                </TableBody>
-              </Table>
-            </TableContainer>
-          </Box>
-        </DashboardNew>
-      ) : null} */}
     </>
   )
 }
 
 export default ManageBill
-
