@@ -153,8 +153,8 @@ const Reports = () => {
 
                   {allReports.map((el: any, i: any) => {
                     return (
-                      <MenuItem value={el.formerDetails.name} key={i}>
-                        {el.formerDetails.name}
+                      <MenuItem value={el.former.name} key={i}>
+                        {el.former.name}
                       </MenuItem>
                     )
                   })}
