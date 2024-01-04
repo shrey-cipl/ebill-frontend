@@ -31,7 +31,7 @@ const BILLS_HEADERS = [
   "Admissible Amount",
   "Sanctioned Amount",
   "Status",
-  "Last Update",
+  "Last Updated",
   "Action",
 ]
 
@@ -58,7 +58,7 @@ const OptionsWrapper = styled("div")(() => ({
 const TabelCellStyled = styled(TableCell)(() => ({
   fontSize: "12px",
   padding: "10px 5px",
-  // wordBreak: "break-all",
+  wordBreak: "normal",
 }))
 
 let tempCounter = 0
@@ -83,7 +83,7 @@ const Bills = () => {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        authorization: `Bearer ${authCtx.user.token}`,
+        authorization: `Bearer ${authCtx?.user?.token}`,
       },
     }
 
@@ -101,7 +101,7 @@ const Bills = () => {
   // collect bills and updates list
   useEffect(() => {
     handleFetchBills()
-  }, [pageNo, tempCounter, authCtx.user.token])
+  }, [pageNo, tempCounter, authCtx?.user?.token])
 
   const handleViewBill = (id: any) => {
     const filteredBill = billList.find((bill: any) => bill._id === id)
