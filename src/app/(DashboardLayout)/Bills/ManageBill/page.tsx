@@ -159,7 +159,6 @@ const TabelCellStyled = styled(TableCell)(() => ({
   // wordBreak: "break-all",
 }))
 
-const TABLE_HEADERS = ["S.No", "Date", "From", "To", "Status", "Remarks"]
 // Add to constants folder
 const BILL_MODES = { add: "add_bill", update: "update_bill" }
 
@@ -185,6 +184,11 @@ const initialUpdateModeFields: any = {}
 for (let arrEl of UPDATE_FIELDS) {
   if (!initialUpdateModeFields[arrEl.id]) initialUpdateModeFields[arrEl.id] = ""
 }
+
+// Stores a cached data for UpdateModeFields and TableData field
+// to reset to initial field state IF IN UPDATE MODE
+let cachedUpdateModeField: any
+let cachedTableData: any
 
 const getBillData = async (id: any, token: any) => {
   const config = {
@@ -288,12 +292,24 @@ const ManageBill = () => {
             ),
           })
 
+          cachedUpdateModeField = {
+            sanctionedAmount,
+            PFMS,
+            billProcessingStartDate: dayjs(billProcessingStartDate).format(
+              "YYYY-MM-DD"
+            ),
+          }
+
           for (let item of telephoneNumbers) {
             item.periodFrom = dayjs(item.periodFrom).format("YYYY-MM-DD")
             item.periodTo = dayjs(item.periodTo).format("YYYY-MM-DD")
           }
 
+          console.log(telephoneNumbers)
+
           setTableData(telephoneNumbers)
+
+          cachedTableData = telephoneNumbers
         }
       })
     }
@@ -316,7 +332,6 @@ const ManageBill = () => {
       try {
         const res = await axiosApi(config.url, config.method, config.headers)
         // Data transformation
-        console.log(res.data, "kjhjkhweiusekjhcsql")
         for (let item of res.data) {
           transformedArr.push({
             name: item.name,
@@ -386,6 +401,7 @@ const ManageBill = () => {
         )
       } else if (paramMode === BILL_MODES.update) {
         const { currentStatus, lastForwardedTo, currentremark } = dataFields
+
         let obj =
           tableData[0].phone !== ""
             ? {
@@ -415,6 +431,7 @@ const ManageBill = () => {
                 billProcessingStartDate:
                   updateModeFields.billProcessingStartDate,
               }
+
         const config = {
           url: `/api/claim/approveClaim`,
           method: "PATCH",
@@ -485,7 +502,6 @@ const ManageBill = () => {
       }))
     } else {
       // For other fields, directly set the value
-      console.log("SDsdds")
       setDataFields((prevDataFields: any) => ({
         ...prevDataFields,
         [name]: value,
@@ -501,7 +517,15 @@ const ManageBill = () => {
     }))
   }
 
-  console.log(formerEmp, "formerEmp")
+  const handleReset = () => {
+    if (paramMode === BILL_MODES.add) {
+      setDataFields(initialFieldState)
+    } else if (paramMode === BILL_MODES.update) {
+      setUpdateModeFields(cachedUpdateModeField)
+      setTableData(cachedTableData)
+    }
+  }
+
   return (
     <>
       <PageContainer title="Add Bill" description="Add bills here">
@@ -637,7 +661,7 @@ const ManageBill = () => {
                 type="button"
                 variant="contained"
                 size="small"
-                onClick={() => router.back()}
+                onClick={() => handleReset()}
               >
                 Cancel
               </Button>

@@ -122,6 +122,10 @@ const getFormerData = async (id: any, token: any) => {
   }
 }
 
+// Stores a cached data for Former fields
+// to reset to initial field state IF IN UPDATE MODE
+let cachedFormerFields: any
+
 const ManageFormer = () => {
   const [formerFields, setFormerFields] = useState(initialFieldState)
 
@@ -153,6 +157,22 @@ const ManageFormer = () => {
             updatedAt: formerData.updatedAt,
             lastUpdatedBy: formerData.lastUpdatedBy,
           })
+
+          cachedFormerFields = {
+            name: formerData.name,
+            designation: formerData.designation,
+            status: formerData.status,
+            isActive: formerData.isActive,
+            phone: formerData.phone,
+            email: formerData.email,
+            bankAccountNumber: formerData.bankDetails.bankAccountNumber,
+            bankName: formerData.bankDetails.bankName,
+            branchName: formerData.bankDetails.branchName,
+            ifscCode: formerData.bankDetails.ifscCode,
+            createdAt: formerData.createdAt,
+            updatedAt: formerData.updatedAt,
+            lastUpdatedBy: formerData.lastUpdatedBy,
+          }
         }
       })
     }
@@ -255,6 +275,14 @@ const ManageFormer = () => {
       ...prevState,
       [e.target.name]: e.target.value,
     }))
+  }
+
+  const handleReset = () => {
+    if (paramMode === FORMER_MODES.add) {
+      setFormerFields(initialFieldState)
+    } else if (paramMode === FORMER_MODES.update) {
+      setFormerFields(cachedFormerFields)
+    }
   }
 
   const pageTitle =
@@ -369,7 +397,7 @@ const ManageFormer = () => {
                   type="button"
                   variant="contained"
                   size="small"
-                  onClick={() => router.back()}
+                  onClick={() => handleReset()}
                 >
                   Cancel
                 </Button>

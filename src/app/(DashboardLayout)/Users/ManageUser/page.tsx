@@ -56,6 +56,10 @@ for (let arrEl of USER_FIELDS) {
   if (!initialFieldState[arrEl.id]) initialFieldState[arrEl.id] = ""
 }
 
+// Stores a cached data for User fields
+// to reset to initial field state
+let cachedUserFields: any
+
 const ManageUser = () => {
   const [userFieldData, setUserFieldData] = useState(initialFieldState)
   const router = useRouter()
@@ -80,7 +84,6 @@ const ManageUser = () => {
 
       try {
         const res = await axiosApi(config.url, config.method, config.headers)
-        console.log("new:", res)
 
         const { name, email, phone, role } = res.data
 
@@ -90,6 +93,13 @@ const ManageUser = () => {
           email,
           phone,
         })
+
+        cachedUserFields = {
+          role: role.name,
+          name,
+          email,
+          phone,
+        }
       } catch (err) {
         console.log(err)
       }
@@ -146,6 +156,10 @@ const ManageUser = () => {
     }))
   }
 
+  const handleReset = () => {
+    setUserFieldData(cachedUserFields)
+  }
+
   return (
     <PageContainer title="Manage User" description="Manage Users here">
       <DashboardNew title="Manage User" titleVariant="h5">
@@ -193,7 +207,7 @@ const ManageUser = () => {
                 type="button"
                 variant="contained"
                 size="small"
-                onClick={() => router.back()}
+                onClick={() => handleReset()}
               >
                 Cancel
               </Button>
