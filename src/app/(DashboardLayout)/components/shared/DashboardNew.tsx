@@ -1,6 +1,8 @@
 import React from "react"
 import { Card, CardContent, Typography, Stack, Box } from "@mui/material"
 
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+
 type Props = {
   title?: string
   titleVariant?: string | any
@@ -26,6 +28,11 @@ const DashboardNew = ({
   headsubtitle,
   middlecontent,
 }: Props) => {
+  const goBack = () => {
+    window.history.back();
+  };
+  
+  let stitle=title?.slice(1)
   return (
     <Card sx={{ padding: 0 }} elevation={9} variant={undefined}>
       {cardheading ? (
@@ -41,10 +48,38 @@ const DashboardNew = ({
             <Stack
               direction="row"
               justifyContent="space-between"
-              alignItems={"center"}
+            // alignItems={"center"}
             >
-              <Box>
-                {title ? (
+              <Box sx={{
+                display: "flex",
+                justifyContent: 'space-between',
+                alignItems: "center",
+                mb: 2
+              }}>
+                
+               {stitle==="Dashboard"?null: <Box
+                  sx={{
+                    width: "40px",
+                    height: "40px",
+                    borderRadius: '50%',
+                    border: " 1px solid #fafafce8",
+                    backgroundColor: "#c6c6d4de",
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    mr: 2
+                  }}
+
+                  onClick={goBack}
+                >
+                  <ArrowBackIcon sx={{
+                    color: "white",
+                  }} />
+
+                </Box>}
+
+
+                <Box> {title ? (
                   <Typography variant={titleVariant ? titleVariant : "h5"}>
                     {title}
                   </Typography>
@@ -52,13 +87,13 @@ const DashboardNew = ({
                   ""
                 )}
 
-                {subtitle ? (
-                  <Typography variant="subtitle2" color="textSecondary">
-                    {subtitle}
-                  </Typography>
-                ) : (
-                  ""
-                )}
+                  {subtitle ? (
+                    <Typography variant="subtitle2" color="textSecondary">
+                      {subtitle}
+                    </Typography>
+                  ) : (
+                    ""
+                  )}</Box>
               </Box>
               {action}
             </Stack>

@@ -1,8 +1,15 @@
+
+'use client';
+
 import React from "react"
 import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
 
+import RefreshIcon from "@mui/icons-material/Refresh";
+
+import Snackbar, { SnackbarOrigin } from '@mui/material/Snackbar'
 import {
+  Alert,
   Box,
   Button,
   IconButton,
@@ -12,6 +19,8 @@ import {
   MenuItem,
   Typography,
   styled,
+  TextField,
+  Tooltip
 } from "@mui/material"
 import { Visibility, VisibilityOff } from "@mui/icons-material"
 
@@ -113,9 +122,12 @@ function Login() {
   const router = useRouter()
   const [branch, setBranch] = useState<any>("")
   const [userName, setUserName] = useState<any>("")
+  const [inputCaptcha, setInputCaptcha] = useState<any>("");
+  const [captchaCode, SetCaptchaCode] = useState<any>("");
   const [allUser, setAllUser] = useState<any>([])
   const [tryagain, setTryagain] = useState<any>(false)
   const [password, setPassword]: any = useState(null)
+  const [toast, setToast] =useState<any>({open: false,severity: "",message: "" });
   // const [alert, setAlert]:any = useState(false);
   const [showPassword, setShowPassword] = useState(false)
   const handleClickShowPassword = () => setShowPassword(!showPassword)
@@ -124,13 +136,32 @@ function Login() {
     auth,
     "---------------------------------------------------------------------------s-s-----------"
   )
+
+  const refreshCapcha = () => {
+    SetCaptchaCode(Math.random().toString(36).substr(2, 8));
+  };
+  useEffect(() => {
+    SetCaptchaCode(Math.random().toString(36).substr(2, 8))
+  }, [])
   const loginUser = (email: any) => {
-    if (emailValidationRegex.test(email)) {
-      auth.signIn(email, password)
-    } else if (mobileValidationRegex.test(email)) {
-      auth.signIn(email, password)
+
+    if (
+
+      password == "" ||
+      inputCaptcha == ""
+    ) {
+      // alert("Please fill All field");
+      SetCaptchaCode(Math.random().toString(36).substr(2, 8));
+      return;
     } else {
-      auth.signIn(email, password)
+      // setLoading(true);
+      if (captchaCode == inputCaptcha) {
+        console.log(captchaCode, "==", inputCaptcha);
+
+        if (emailValidationRegex.test(email)) {
+          auth.signIn(email, password)
+        }
+      }
     }
   }
 
@@ -303,6 +334,14 @@ function Login() {
     ],
     // Add similar entries for other branches
   }
+  const handleClose = () => {
+    setToast({
+      open: false,
+      severity: "",
+      message: "",
+    });
+  };
+
   const userNameOptions = branchOptions[branch] || ["select Branch !!!"]
   console.log(allUser)
   useEffect(() => {
@@ -310,6 +349,25 @@ function Login() {
   }, [])
   return (
     <Box>
+      <Snackbar
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+        open={toast.open}
+        onClose={handleClose}
+        // message="I love snacks"
+        key={"top" + "center"}
+        autoHideDuration={2000}
+      >
+        <Alert
+          severity={toast.severity}
+          sx={{
+            backgroundColor: toast.severity == "error" ? "#EF5350" : "green",
+            color: "white",
+            fontWeight: 700,
+          }}
+        >
+          <Typography sx={{ fontWeight: 700 }}>{toast.message}</Typography>
+        </Alert>
+      </Snackbar>
       <Box
         sx={{
           display: "flex",
@@ -504,6 +562,95 @@ function Login() {
                 </InputAdornment>
               }
             />
+            <Box
+              sx={{
+                width: "500px",
+                display: "flex",
+                justifyContent: "space-between",
+                mt: "20px",
+              }}
+            >
+              <TextField
+                id="outlined-basic"
+                placeholder="Enter Captcha"
+                autoComplete="off"
+                // variant="outlined"
+                type="text"
+                onPaste={(event: any) => {
+                  event.preventDefault();
+                  return false;
+                }}
+                onDrop={(event: any) => {
+                  event.preventDefault();
+                  return false;
+                }}
+                onKeyDown={(event) => {
+                  if (event.key == "Enter") {
+                    // handleLogin()
+                  }
+                }}
+                value={inputCaptcha}
+                sx={{ width: "55%", background: "white" }}
+                onChange={(event) => {
+                  setInputCaptcha(event.target.value);
+                }}
+                inputProps={{
+                  style: {
+                    height: "45px",
+                    padding: "0 14px",
+                  },
+                }}
+              ></TextField>
+
+              <Box
+                sx={{
+                  width: "40%",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-around",
+                }}
+              >
+                <Box
+                  sx={{
+                    fontWeight: 600,
+                    height: "100%",
+                    width: "80%",
+                    backgroundColor: "grey",
+                    color: "white",
+                    borderRadius: "4px",
+                    cursor: "not-allowed",
+                  }}
+                >
+                  <Typography
+                    variant="body1"
+                    sx={{
+                      fontWeight: 600,
+                      p: 1.2,
+                      fontSize: "20px",
+                      width: "fit-content",
+                      margin: "auto",
+                      height: "45px",
+                      color: "white",
+                      borderRadius: "4px",
+                      cursor: "not-allowed",
+                    }}
+                    fontFamily="Nunito"
+                  >
+                    {captchaCode}
+                  </Typography>
+                </Box>
+                <Tooltip title="Refresh Captcha">
+                  <RefreshIcon
+                    onClick={refreshCapcha}
+                    sx={{
+                      fontSize: "33px",
+                      color: "#E15A11",
+                      cursor: "pointer",
+                    }}
+                  />
+                </Tooltip>
+              </Box>
+            </Box>
             <LoginButton
               onClick={handleLogin}
               size="small"
