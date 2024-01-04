@@ -60,7 +60,7 @@ const NavItem = ({ item, level, pathDirect, onClick }: ItemType) => {
       },
     },
   }))
-
+  // console.log("test", pathDirect, item)
   return (
     <List component="div" disablePadding key={item.id}>
       <ListItemStyled>
@@ -71,7 +71,7 @@ const NavItem = ({ item, level, pathDirect, onClick }: ItemType) => {
           component={Link}
           href={item.href}
           disabled={item.disabled}
-          selected={pathDirect === item.href}
+          selected={pathDirect.includes(item.href)}
           target={item.external ? "_blank" : ""}
           onClick={onClick}
         >

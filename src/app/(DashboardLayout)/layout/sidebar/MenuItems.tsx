@@ -28,12 +28,11 @@ const Menuitems: any = {
       navlabel: true,
       subheader: "Home",
     },
-
     {
       id: uniqueId(),
       title: "Dashboard",
       icon: IconLayoutDashboard,
-      href: "/",
+      href: "/Home",
       present: "no",
     },
     {
