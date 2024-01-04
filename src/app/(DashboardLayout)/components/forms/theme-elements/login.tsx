@@ -143,14 +143,10 @@ function Login() {
   useEffect(() => {
     SetCaptchaCode(Math.random().toString(36).substr(2, 8))
   }, [])
-  const loginUser = (email: any) => {
 
-    if (
 
-      password == "" ||
-      inputCaptcha == ""
-    ) {
-      // alert("Please fill All field");
+  const loginUser = async (email: any) => {
+    if (password === "" || inputCaptcha === "") {
       SetCaptchaCode(Math.random().toString(36).substr(2, 8));
       setToast({
         message: "Please fill all fields",
@@ -159,25 +155,42 @@ function Login() {
       });
       return;
     } else {
-      // setLoading(true);
-      if (captchaCode == inputCaptcha) {
+      if (captchaCode === inputCaptcha) {
         console.log(captchaCode, "==", inputCaptcha);
-
+  
         if (emailValidationRegex.test(email)) {
-          auth.signIn(email, password)
+    
+            let ress:any = await auth.signIn(email, password);
+            console.log(ress, "Response from auth.signIn");
+          
+            console.log(!ress?.success);
+            if(ress?.success==false){
+            setToast({
+              message: "Incorrect credentials",
+              open: true,
+              severity: "error",
+            });
+            }
+          
+        } else {
+          SetCaptchaCode(Math.random().toString(36).substr(2, 8));
+          setToast({
+            message: "Please enter a valid email address",
+            open: true,
+            severity: "error",
+          });
         }
-      }else{
+      } else {
         SetCaptchaCode(Math.random().toString(36).substr(2, 8));
-
         setToast({
-          message: "Please Enter Correct Captcha",
+          message: "Please enter the correct Captcha",
           open: true,
           severity: "error",
         });
-      
       }
     }
-  }
+  };
+  
 
   const handleLogin = async () => {
     let info = allUser.find((ele: any) => {

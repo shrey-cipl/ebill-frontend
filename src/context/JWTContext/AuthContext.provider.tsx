@@ -104,8 +104,8 @@ export default function AuthProvider({ children }: AuthProviderProps) {
         //  response;
         return router.push("/")
       } catch (err: any) {
-        console.log(err, "errrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr")
-      alert("Invalid email or invalid password please try again");
+      //   console.log(err, "errrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr")
+      // alert("Invalid email or invalid password please try again");
         dispatch({
           type: SIGN_IN,
           payload: {
@@ -113,6 +113,7 @@ export default function AuthProvider({ children }: AuthProviderProps) {
             validationErrors: err.error,
           },
         })
+        return  err;
       }
     }
 
