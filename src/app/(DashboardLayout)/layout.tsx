@@ -33,7 +33,7 @@ export default function RootLayout({
   const path = usePathname()
   return (
     <>
-      {path === "/login" ? (
+      {path === "/login" || path ==="/login/Forgot"?  (
         <>
           <Box sx={{ minHeight: "calc(100vh - 170px)" }}>{children}</Box>
         </>
