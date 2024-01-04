@@ -152,6 +152,11 @@ function Login() {
     ) {
       // alert("Please fill All field");
       SetCaptchaCode(Math.random().toString(36).substr(2, 8));
+      setToast({
+        message: "Please fill all fields",
+        open: true,
+        severity: "error",
+      });
       return;
     } else {
       // setLoading(true);
@@ -161,6 +166,15 @@ function Login() {
         if (emailValidationRegex.test(email)) {
           auth.signIn(email, password)
         }
+      }else{
+        SetCaptchaCode(Math.random().toString(36).substr(2, 8));
+
+        setToast({
+          message: "Please Enter Correct Captcha",
+          open: true,
+          severity: "error",
+        });
+      
       }
     }
   }
@@ -676,7 +690,7 @@ function Login() {
                 variant="body1"
                 onClick={() => {
                   console.log(branch)
-                  // router.push("/forgot")
+                  router.push("/login/Forgot")
                 }}
               >
                 Forgot Password ?
