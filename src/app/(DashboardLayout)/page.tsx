@@ -12,10 +12,6 @@ import PendingActionsIcon from "@mui/icons-material/PendingActions"
 import { useAuth } from "@/context/JWTContext/AuthContext.provider"
 import { redirect } from "next/navigation"
 
-const DashboardBox = dynamic(
-  () => import("./components/dashboard/DashboardBox")
-)
-
 const Dashboard = () => {
   redirect("/Home")
 

@@ -361,12 +361,8 @@ const ManageBill = () => {
         // creates a copy of the state
         const fieldsCopy: any = { ...dataFields }
 
-        delete fieldsCopy.name
-        delete fieldsCopy.email
-        delete fieldsCopy.phone
-
         let obj =
-          tableData[0].phone !== ""
+          tableData[0]?.phone !== ""
             ? {
                 ...fieldsCopy,
                 lastForwardedBy: authCtx.user.data.role.name,
@@ -403,7 +399,7 @@ const ManageBill = () => {
         const { currentStatus, lastForwardedTo, currentremark } = dataFields
 
         let obj =
-          tableData[0].phone !== ""
+          tableData[0]?.phone !== ""
             ? {
                 claimId: paramBillId,
                 currentStatus,
@@ -441,17 +437,7 @@ const ManageBill = () => {
           },
 
           data: {
-            claimId: paramBillId,
-            currentStatus,
-            lastForwardedTo,
-            currentremark,
-            lastForwardedBy: authCtx.user.data.role.name,
-            // Update Fields
-
-            sanctionedAmount: updateModeFields.sanctionedAmount,
-            PFMS: updateModeFields.PFMS,
-            billProcessingStartDate: updateModeFields.billProcessingStartDate,
-            telephoneNumbers: obj,
+            ...obj,
           },
         }
 
