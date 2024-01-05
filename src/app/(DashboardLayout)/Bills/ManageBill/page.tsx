@@ -305,8 +305,6 @@ const ManageBill = () => {
             item.periodTo = dayjs(item.periodTo).format("YYYY-MM-DD")
           }
 
-          console.log(telephoneNumbers)
-
           setTableData(telephoneNumbers)
 
           cachedTableData = telephoneNumbers
@@ -450,7 +448,14 @@ const ManageBill = () => {
       }
 
       if (res) {
-        alert("Data Added!")
+        if (BILL_MODES.add) {
+          alert("Data Added!")
+        }
+
+        if (BILL_MODES.update) {
+          alert("Data Updated!")
+        }
+
         // view mode -> redirect instead && update mode -> redirect
         router.push("/Bills")
       }
