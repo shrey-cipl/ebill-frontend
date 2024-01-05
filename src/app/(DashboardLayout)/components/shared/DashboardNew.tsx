@@ -1,7 +1,6 @@
 import React from "react"
 import { Card, CardContent, Typography, Stack, Box } from "@mui/material"
-
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 
 type Props = {
   title?: string
@@ -31,8 +30,8 @@ const DashboardNew = ({
   const goBack = () => {
     window.history.back();
   };
-  
-  let stitle=title?.slice(1)
+
+  let stitle = title?.slice(1)
   return (
     <Card sx={{ padding: 0 }} elevation={9} variant={undefined}>
       {cardheading ? (
@@ -56,26 +55,35 @@ const DashboardNew = ({
                 alignItems: "center",
                 mb: 2
               }}>
-                
-               {stitle==="Dashboard"?null: <Box
+
+                {stitle === "Dashboard" ? null : <Box
                   sx={{
-                    width: "40px",
+                    width: "80px",
                     height: "40px",
-                    borderRadius: '50%',
+                    borderRadius: '5px',
                     border: " 1px solid #fafafce8",
-                    backgroundColor: "#c6c6d4de",
+                    backgroundColor: "#5d87ff",
                     display: 'flex',
                     justifyContent: 'center',
+                 
                     alignItems: 'center',
-                    mr: 2
+                    mr: 2,
+                    fontSize: '14px',
+                    fontWeight: 'bold',
+                    color:"white",
                   }}
 
                   onClick={goBack}
                 >
-                  <ArrowBackIcon sx={{
+                  <ArrowBackIosIcon sx={{
                     color: "white",
+                    mr: -2
                   }} />
-
+                  <ArrowBackIosIcon sx={{
+                    color: "white",
+                    mr: -1
+                  }} />
+                  Back
                 </Box>}
 
 
