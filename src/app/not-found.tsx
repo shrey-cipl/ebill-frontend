@@ -1,4 +1,5 @@
 // 404.js
+"use client"
 
 import React from "react"
 import { Container, Typography, Button } from "@mui/material"

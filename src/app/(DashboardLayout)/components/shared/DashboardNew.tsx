@@ -1,6 +1,6 @@
 import React from "react"
 import { Card, CardContent, Typography, Stack, Box } from "@mui/material"
-import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
+import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos"
 
 type Props = {
   title?: string
@@ -28,8 +28,8 @@ const DashboardNew = ({
   middlecontent,
 }: Props) => {
   const goBack = () => {
-    window.history.back();
-  };
+    window.history.back()
+  }
 
   let stitle = title?.slice(1)
   return (
@@ -47,61 +47,71 @@ const DashboardNew = ({
             <Stack
               direction="row"
               justifyContent="space-between"
-            // alignItems={"center"}
+              // alignItems={"center"}
             >
-              <Box sx={{
-                display: "flex",
-                justifyContent: 'space-between',
-                alignItems: "center",
-                mb: 2
-              }}>
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  mb: 2,
+                }}
+              >
+                {stitle === "Dashboard" ? null : (
+                  <Box
+                    sx={{
+                      width: "80px",
+                      height: "35px",
+                      borderRadius: "5px",
+                      border: " 1px solid #fafafce8",
+                      backgroundColor: "#5d87ff",
+                      display: "flex",
+                      justifyContent: "center",
 
-                {stitle === "Dashboard" ? null : <Box
-                  sx={{
-                    width: "80px",
-                    height: "40px",
-                    borderRadius: '5px',
-                    border: " 1px solid #fafafce8",
-                    backgroundColor: "#5d87ff",
-                    display: 'flex',
-                    justifyContent: 'center',
-                 
-                    alignItems: 'center',
-                    mr: 2,
-                    fontSize: '14px',
-                    fontWeight: 'bold',
-                    color:"white",
-                  }}
-
-                  onClick={goBack}
-                >
-                  <ArrowBackIosIcon sx={{
-                    color: "white",
-                    mr: -2
-                  }} />
-                  <ArrowBackIosIcon sx={{
-                    color: "white",
-                    mr: -1
-                  }} />
-                  Back
-                </Box>}
-
-
-                <Box> {title ? (
-                  <Typography variant={titleVariant ? titleVariant : "h5"}>
-                    {title}
-                  </Typography>
-                ) : (
-                  ""
+                      alignItems: "center",
+                      mr: 2,
+                      fontSize: "14px",
+                      fontWeight: "bold",
+                      color: "white",
+                      cursor: "pointer",
+                    }}
+                    onClick={goBack}
+                  >
+                    <ArrowBackIosIcon
+                      sx={{
+                        color: "white",
+                        mr: -2,
+                        height: "15px",
+                      }}
+                    />
+                    <ArrowBackIosIcon
+                      sx={{
+                        color: "white",
+                        mr: -1,
+                        height: "15px",
+                      }}
+                    />
+                    Back
+                  </Box>
                 )}
 
+                <Box>
+                  {" "}
+                  {title ? (
+                    <Typography variant={titleVariant ? titleVariant : "h5"}>
+                      {title}
+                    </Typography>
+                  ) : (
+                    ""
+                  )}
                   {subtitle ? (
                     <Typography variant="subtitle2" color="textSecondary">
                       {subtitle}
                     </Typography>
                   ) : (
                     ""
-                  )}</Box>
+                  )}
+                </Box>
               </Box>
               {action}
             </Stack>
