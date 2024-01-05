@@ -22,6 +22,26 @@ import Pagination from "../components/Pagination/Pagination"
 import axiosApi from "@/Util/axiosApi"
 import { useAuth } from "@/context/JWTContext/AuthContext.provider"
 
+import { DataGrid, GridColDef } from "@mui/x-data-grid";
+
+import { useDemoData } from '@mui/x-data-grid-generator';
+
+// ... (Other imports remain unchanged)
+
+// Define the columns for the DataGrid
+const columns: GridColDef[] = [
+  { field: "sNo", headerName: "S.No", width: 100 },
+  { field: "diaryNumber", headerName: "Diary No.", width: 150 },
+  { field: "name", headerName: "Name", width: 200 },
+  { field: "type", headerName: "Type", width: 150 },
+  { field: "claimedAmount", headerName: "Claimed Amount", width: 180 },
+  { field: "admissibleAmount", headerName: "Admissible Amount", width: 200 },
+  { field: "sanctionedAmount", headerName: "Sanctioned Amount", width: 200 },
+  { field: "status", headerName: "Status", width: 150 },
+  { field: "lastUpdated", headerName: "Last Updated", width: 180 },
+  { field: "action", headerName: "Action", width: 150 },
+];
+
 const BILLS_HEADERS = [
   "S.No",
   "Diary No.",
@@ -77,9 +97,15 @@ const Bills = () => {
 
   const authCtx: any = useAuth()
 
+  const { data } = useDemoData({
+    dataSet: 'Commodity',
+    rowLength: 100,
+    maxColumns: 6,
+  });
+
   const handleFetchBills = async () => {
     const config = {
-      url: `/api/claim/getall?limit=10&page=${pageNo}&name=${filterInputs.name}&diaryNumber=${filterInputs.diaryNumber}`,
+      url: `/api/claim/getall`,
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -185,92 +211,49 @@ const Bills = () => {
             </OptionsWrapper>
           </Box>
           <Box>
-            <Table
-              sx={{
-                display: "block",
-                overflowX: "auto",
-                minWidth: "500px",
-                width: "100%",
+            {/* Replace Table with DataGrid */}
+            <DataGrid
+              rows={billList.map((bill: any, i: number) => ({
+                id: bill._id,
+                sNo: (pageNo - 1) * 10 + (i + 1),
+                diaryNumber: bill.diaryNumber,
+                name: bill.former.name,
+                type: bill.billType,
+                claimedAmount: bill.totalClaimedAmount,
+                admissibleAmount: bill.totalAdmissibleAmount,
+                sanctionedAmount: bill.sanctionedAmount,
+                status: bill.currentStatus,
+                lastUpdated: dayjs(bill.updatedAt).format("YYYY-MM-DD"),
+                action: bill.pendingBranch ? (
+      <Link href={`/Bills/ManageBill?bill_id=${bill._id}&mode=${BILL_MODES.update}`}>
+        <a style={{ color: "#4C7AFF", textDecoration: "none" }}>Update</a>
+      </Link>
+    ) : (
+      <button
+        style={{
+          background: "none",
+          border: "none",
+          color: "#4C7AFF",
+          fontSize: "13px",
+          padding: 0,
+          cursor: "pointer",
+        }}
+        onClick={() => handleViewBill(bill._id)}
+      >
+        View
+      </button>
+    ),
+              }))}
+              columns={columns}
+              // pageSize={10}
+             
+              // onPageChange={(newPage:any) => setPageNo(newPage + 1)}
+              initialState={{
+                ...data.initialState,
+                pagination: { paginationModel: { pageSize: 5 } },
               }}
-            >
-              <TableHead sx={{ width: "100%" }}>
-                <TableRow sx={{ background: "#4C7AFF", width: "100%" }}>
-                  {BILLS_HEADERS.map((header, i) => (
-                    <TableCell
-                      key={i}
-                      sx={{
-                        color: "white",
-                        padding: "5px",
-                        whiteSpace: "nowrap",
-                      }}
-                    >
-                      {header}
-                    </TableCell>
-                  ))}
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {billList.map((bill: any, i: any) => {
-                  const rowColor = (i + 1) % 2 === 0 ? "#eee" : "#fff"
-
-                  const itemNumber = (pageNo - 1) * 10 + (i + 1)
-
-                  return (
-                    <TableRow key={bill._id} sx={{ background: rowColor }}>
-                      <TabelCellStyled>{`${itemNumber}.`}</TabelCellStyled>
-                      <TabelCellStyled>{bill.diaryNumber}</TabelCellStyled>
-                      <TabelCellStyled>{bill.former.name}</TabelCellStyled>
-                      <TabelCellStyled>{bill.billType}</TabelCellStyled>
-                      <TabelCellStyled>
-                        {bill.totalClaimedAmount}
-                      </TabelCellStyled>
-                      <TabelCellStyled>
-                        {bill.totalAdmissibleAmount}
-                      </TabelCellStyled>
-                      <TabelCellStyled>{bill.sanctionedAmount}</TabelCellStyled>
-                      <TabelCellStyled
-                        sx={{
-                          color:
-                            bill.currentStatus === "Open" ? "green" : "red",
-                        }}
-                      >
-                        {bill.currentStatus}
-                      </TabelCellStyled>
-                      <TabelCellStyled>
-                        {dayjs(bill.updatedAt).format("YYYY-MM-DD")}
-                      </TabelCellStyled>
-                      <TabelCellStyled>
-                        {bill.pendingBranch ? (
-                          <Link
-                            style={{
-                              color: "#4C7AFF",
-                              textDecoration: "none",
-                            }}
-                            href={`/Bills/ManageBill?bill_id=${bill._id}&mode=${BILL_MODES.update}`}
-                          >
-                            Update
-                          </Link>
-                        ) : (
-                          <button
-                            style={{
-                              background: "none",
-                              border: "none",
-                              color: "#4C7AFF",
-                              fontSize: "13px",
-                              padding: 0,
-                              cursor: "pointer",
-                            }}
-                            onClick={() => handleViewBill(bill._id)}
-                          >
-                            View
-                          </button>
-                        )}
-                      </TabelCellStyled>
-                    </TableRow>
-                  )
-                })}
-              </TableBody>
-            </Table>
+              autoHeight
+            />
           </Box>
           <Pagination
             url={`/api/claim/getall?name=${filterInputs.name}&diaryNumber=${filterInputs.diaryNumber}`}
