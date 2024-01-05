@@ -519,8 +519,14 @@ const ManageBill = () => {
 
   return (
     <>
-      <PageContainer title="Add Bill" description="Add bills here">
-        <DashboardNew title="Add New Bill" titleVariant="h5">
+      <PageContainer
+        title={paramMode === BILL_MODES.add ? "Add Bill" : "Update Bill"}
+        description="Add bills here"
+      >
+        <DashboardNew
+          title={paramMode === BILL_MODES.add ? "Add New Bill" : "Update Bill"}
+          titleVariant="h5"
+        >
           <Box mt={2}>
             <form
               style={{
