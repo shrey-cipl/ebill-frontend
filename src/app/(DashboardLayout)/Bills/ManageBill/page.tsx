@@ -101,11 +101,6 @@ const DATA_FIELDS = [
     selectOptions: ["Open", "Closed", "Forwarded To Bank", "Rejected"],
   },
   {
-    id: "currentremark",
-    fieldName: "Comments",
-    type: "text",
-  },
-  {
     id: "lastForwardedTo",
     fieldName: "Forward To",
     type: "select",
@@ -133,6 +128,11 @@ const DATA_FIELDS = [
       "Chairman Office",
       "Forwarded To Bank",
     ],
+  },
+  {
+    id: "currentremark",
+    fieldName: "Comments",
+    type: "text",
   },
 ]
 
@@ -482,7 +482,7 @@ const ManageBill = () => {
     if (name === "name") {
       const selectedEmp = formerEmp.find((emp: any) => emp.name === value)
       const empId = selectedEmp ? selectedEmp._id : null
-      console.log(selectedEmp, "selectedEmp")
+
       setDataFields((prevDataFields: any) => ({
         ...prevDataFields,
         [name]: value,
@@ -530,6 +530,13 @@ const ManageBill = () => {
               }}
             >
               {DATA_FIELDS.map((field, i) => {
+                // Permanantly disabled fields
+                const permanantDisable = ["phone", "email"]
+
+                const disabledPermananty = permanantDisable.includes(field.id)
+                  ? true
+                  : false
+
                 // Fields to be editable in 'update' mode
                 const enabledUpdateFields = [
                   "currentStatus",
@@ -567,7 +574,7 @@ const ManageBill = () => {
                           handleFieldChange(event, formerEmp)
                         }
                         sx={{ width: "100%" }}
-                        disabled={disabledUpdateFields}
+                        disabled={disabledPermananty || disabledUpdateFields}
                       >
                         {field.id === "name"
                           ? formerEmp.map((emp: any) => (
@@ -589,8 +596,9 @@ const ManageBill = () => {
                         value={dataFields[field.id]}
                         onChange={(event) => handleFieldChange(event, {})}
                         sx={{ width: "100%" }}
-                        disabled={disabledUpdateFields}
-                        // disabled={!!dataFields.name}
+                        disabled={disabledPermananty || disabledUpdateFields}
+                        multiline={field.id === "currentremark" ? true : false}
+                        rows={4}
                       />
                     )}
                   </FormControl>
