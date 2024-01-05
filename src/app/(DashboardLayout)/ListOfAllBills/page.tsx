@@ -1,29 +1,29 @@
-"use client";
-import { useEffect, useState } from "react";
+"use client"
+import { useEffect, useState } from "react"
 
-import axios from "axios";
-import dayjs from "dayjs";
+import axios from "axios"
+import dayjs from "dayjs"
 
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
-import Box from "@mui/material/Box";
-import Fab from "@mui/material/Fab";
-import { styled } from "@mui/system";
+import Table from "@mui/material/Table"
+import TableBody from "@mui/material/TableBody"
+import TableCell from "@mui/material/TableCell"
+import TableHead from "@mui/material/TableHead"
+import TableRow from "@mui/material/TableRow"
+import Box from "@mui/material/Box"
+import Fab from "@mui/material/Fab"
+import { styled } from "@mui/system"
 
-import PageContainer from "../components/container/PageContainer";
-import DashboardNew from "../components/shared/DashboardNew";
-import Pagination from "../components/Pagination/Pagination";
-import { useAuth } from "@/context/JWTContext/AuthContext.provider";
-import axiosApi from "@/Util/axiosApi";
-import Link from "next/link";
+import PageContainer from "../components/container/PageContainer"
+import DashboardNew from "../components/shared/DashboardNew"
+import Pagination from "../components/Pagination/Pagination"
+import { useAuth } from "@/context/JWTContext/AuthContext.provider"
+import axiosApi from "@/Util/axiosApi"
+import Link from "next/link"
 
 const LIST_OF_BILLS_HEADERS = [
   "S.No",
   "Name",
-  "Bill No.",
+  "Diary No.",
   "Bill Type",
   "Receiving Date",
   "Claimed Amount",
@@ -33,18 +33,18 @@ const LIST_OF_BILLS_HEADERS = [
   "Updated on",
   "Forward To",
   "Channel Log",
-];
+]
 
 const TabelCellStyled = styled(TableCell)(() => ({
   fontSize: "12px",
   padding: "10px 5px",
-}));
+}))
 
 const ListOfAllBills = () => {
-  const [billList, setBillList] = useState([]);
-  const [pageNo, setPageNo] = useState(1);
+  const [billList, setBillList] = useState([])
+  const [pageNo, setPageNo] = useState(1)
 
-  const authCtx: any = useAuth();
+  const authCtx: any = useAuth()
 
   const handleFetchListOfBills = async () => {
     const config = {
@@ -54,26 +54,23 @@ const ListOfAllBills = () => {
         "Content-Type": "application/json",
         authorization: `Bearer ${authCtx.user.token}`,
       },
-    };
+    }
 
     try {
-      const res = await axiosApi(config.url, config.method, config.headers);
-
-      setBillList(res.data);
+      const res = await axiosApi(config.url, config.method, config.headers)
+      console.log(res)
+      setBillList(res.data)
     } catch (err: any) {
-      console.log(err.message);
+      console.log(err.message)
     }
-  };
+  }
 
   useEffect(() => {
-    handleFetchListOfBills();
-  }, [pageNo, authCtx.user.token]);
+    handleFetchListOfBills()
+  }, [pageNo, authCtx.user.token])
 
   return (
-    <PageContainer
-      title="List"
-      description="List"
-    >
+    <PageContainer title="List" description="List">
       <DashboardNew title="All Bills Report" titleVariant="h5">
         <>
           <Table sx={{ marginTop: "20px" }}>
@@ -95,15 +92,15 @@ const ListOfAllBills = () => {
             </TableHead>
             <TableBody>
               {billList?.map((bill: any, i) => {
-                const rowColor = (i + 1) % 2 === 0 ? "#eee" : "#fff";
+                const rowColor = (i + 1) % 2 === 0 ? "#eee" : "#fff"
 
-                const itemNumber = (pageNo - 1) * 10 + (i + 1);
+                const itemNumber = (pageNo - 1) * 10 + (i + 1)
 
                 return (
                   <TableRow key={bill._id} sx={{ background: rowColor }}>
                     <TabelCellStyled>{`${itemNumber}.`}</TabelCellStyled>
                     <TabelCellStyled>{bill.name}</TabelCellStyled>
-                    <TabelCellStyled>{bill.billNumber}</TabelCellStyled>
+                    <TabelCellStyled>{bill.diaryNumber}</TabelCellStyled>
                     <TabelCellStyled>{bill.billType}</TabelCellStyled>
                     <TabelCellStyled>
                       {dayjs(bill.claimReceivingDate).format("YYYY-MM-DD")}
@@ -165,7 +162,7 @@ const ListOfAllBills = () => {
                       )}
                     </TabelCellStyled>
                   </TableRow>
-                );
+                )
               })}
             </TableBody>
           </Table>
@@ -177,7 +174,7 @@ const ListOfAllBills = () => {
         </>
       </DashboardNew>
     </PageContainer>
-  );
-};
+  )
+}
 
-export default ListOfAllBills;
+export default ListOfAllBills
