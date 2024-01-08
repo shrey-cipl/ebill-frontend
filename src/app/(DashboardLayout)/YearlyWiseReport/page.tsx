@@ -22,6 +22,7 @@ import TableContainer from "@mui/material/TableContainer"
 import TableHead from "@mui/material/TableHead"
 import TableRow from "@mui/material/TableRow"
 import { useAuth } from "@/context/JWTContext/AuthContext.provider"
+import ReimbursementRecord from "@/types/ReimbursementRecord"
 
 const DashboardNew = dynamic(() => import("../components/shared/DashboardNew"))
 const PageContainer = dynamic(
@@ -51,8 +52,8 @@ const YearlyWiseReport = () => {
   const auth: any = useAuth()
 
   const [get, setGet]: any = useState(false)
-  const [allReports, setAllReports]: any = useState([])
-  const [allReportsByfilter, setAllReportsByfilter]: any = useState([])
+  const [allReports, setAllReports] = useState<ReimbursementRecord[]>([])
+  const [allReportsByfilter, setAllReportsByfilter] = useState<ReimbursementRecord[]>([])
   const [formData, setFormData] = useState<any>({
     name: "",
     billtype: "",

@@ -235,7 +235,7 @@ const ManageBill = () => {
 
   const authCtx: any = useAuth()
 
-  // Populates form fields with bill data
+  console.log(formerEmp,"formerEmp");
   useEffect(() => {
     if (paramBillId) {
       getBillData(paramBillId, authCtx.user.token).then((billData: any) => {
@@ -370,6 +370,8 @@ const ManageBill = () => {
                 fileNumber: dataFields.fileNumber,
               }
 
+
+              console.log(obj);
         const config = {
           url: `/api/claim/create`,
           method: "POST",

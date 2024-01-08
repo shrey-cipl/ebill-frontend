@@ -24,6 +24,8 @@ import Pagination from "../components/Pagination/Pagination"
 import axiosApi from "@/Util/axiosApi"
 import { useAuth } from "@/context/JWTContext/AuthContext.provider"
 
+import ReimbursementRecord from "@/types/ReimbursementRecord"
+
 const BILLS_HEADERS = [
   "S.No",
   "Diary No.",
@@ -66,7 +68,8 @@ const TabelCellStyled = styled(TableCell)(() => ({
 let tempCounter = 0
 
 const Bills = () => {
-  const [billList, setBillList] = useState<any>([])
+ 
+const [billList, setBillList] = useState<ReimbursementRecord[]>([]);
   const [filterInputs, setFilterInputs] = useState({
     name: "",
     diaryNumber: "",
@@ -214,7 +217,7 @@ const Bills = () => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {billList.map((bill: any, i: any) => {
+                {billList.map((bill: ReimbursementRecord, i: any) => {
                   const rowColor = (i + 1) % 2 === 0 ? "#eee" : "#fff"
 
                   const itemNumber = (pageNo - 1) * 10 + (i + 1)
