@@ -1,6 +1,6 @@
 "use client"
 
-import { useCallback, useEffect, useState } from "react"
+import { useEffect, useState } from "react"
 
 import { useRouter } from "next/navigation"
 import { useSearchParams } from "next/navigation"
@@ -12,12 +12,7 @@ import MenuItem from "@mui/material/MenuItem"
 import Button from "@mui/material/Button"
 import Box from "@mui/material/Box"
 import { styled } from "@mui/system"
-import Table from "@mui/material/Table"
-import TableBody from "@mui/material/TableBody"
 import TableCell from "@mui/material/TableCell"
-import TableContainer from "@mui/material/TableContainer"
-import TableHead from "@mui/material/TableHead"
-import TableRow from "@mui/material/TableRow"
 import dayjs from "dayjs"
 
 import PageContainer from "../../components/container/PageContainer"
@@ -448,11 +443,11 @@ const ManageBill = () => {
       }
 
       if (res) {
-        if (BILL_MODES.add) {
+        if (paramMode === BILL_MODES.add) {
           alert("Data Added!")
         }
 
-        if (BILL_MODES.update) {
+        if (paramMode === BILL_MODES.update) {
           alert("Data Updated!")
         }
 

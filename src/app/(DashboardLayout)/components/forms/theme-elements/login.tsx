@@ -1,13 +1,12 @@
-
-'use client';
+"use client"
 
 import React from "react"
 import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
 
-import RefreshIcon from "@mui/icons-material/Refresh";
+import RefreshIcon from "@mui/icons-material/Refresh"
 
-import Snackbar, { SnackbarOrigin } from '@mui/material/Snackbar'
+import Snackbar, { SnackbarOrigin } from "@mui/material/Snackbar"
 import {
   Alert,
   Box,
@@ -20,7 +19,7 @@ import {
   Typography,
   styled,
   TextField,
-  Tooltip
+  Tooltip,
 } from "@mui/material"
 import { Visibility, VisibilityOff } from "@mui/icons-material"
 
@@ -122,12 +121,16 @@ function Login() {
   const router = useRouter()
   const [branch, setBranch] = useState<any>("")
   const [userName, setUserName] = useState<any>("")
-  const [inputCaptcha, setInputCaptcha] = useState<any>("");
-  const [captchaCode, SetCaptchaCode] = useState<any>("");
+  const [inputCaptcha, setInputCaptcha] = useState<any>("")
+  const [captchaCode, SetCaptchaCode] = useState<any>("")
   const [allUser, setAllUser] = useState<any>([])
   const [tryagain, setTryagain] = useState<any>(false)
   const [password, setPassword]: any = useState(null)
-  const [toast, setToast] =useState<any>({open: false,severity: "",message: "" });
+  const [toast, setToast] = useState<any>({
+    open: false,
+    severity: "",
+    message: "",
+  })
   // const [alert, setAlert]:any = useState(false);
   const [showPassword, setShowPassword] = useState(false)
   const handleClickShowPassword = () => setShowPassword(!showPassword)
@@ -138,59 +141,55 @@ function Login() {
   )
 
   const refreshCapcha = () => {
-    SetCaptchaCode(Math.random().toString(36).substr(2, 8));
-  };
+    SetCaptchaCode(Math.random().toString(36).substr(2, 8))
+  }
   useEffect(() => {
     SetCaptchaCode(Math.random().toString(36).substr(2, 8))
   }, [])
 
-
   const loginUser = async (email: any) => {
     if (password === "" || inputCaptcha === "") {
-      SetCaptchaCode(Math.random().toString(36).substr(2, 8));
+      SetCaptchaCode(Math.random().toString(36).substr(2, 8))
       setToast({
         message: "Please fill all fields",
         open: true,
         severity: "error",
-      });
-      return;
+      })
+      return
     } else {
       if (captchaCode === inputCaptcha) {
-        console.log(captchaCode, "==", inputCaptcha);
-  
+        console.log(captchaCode, "==", inputCaptcha)
+
         if (emailValidationRegex.test(email)) {
-    
-            let ress:any = await auth.signIn(email, password);
-            console.log(ress, "Response from auth.signIn");
-          
-            console.log(!ress?.success);
-            if(ress?.success==false){
+          let ress: any = await auth.signIn(email, password)
+          console.log(ress, "Response from auth.signIn")
+
+          console.log(!ress?.success)
+          if (ress?.success == false) {
             setToast({
               message: "Incorrect credentials",
               open: true,
               severity: "error",
-            });
-            }
-          
+            })
+          }
         } else {
-          SetCaptchaCode(Math.random().toString(36).substr(2, 8));
+          SetCaptchaCode(Math.random().toString(36).substr(2, 8))
           setToast({
             message: "Please enter a valid email address",
             open: true,
             severity: "error",
-          });
+          })
         }
       } else {
-        SetCaptchaCode(Math.random().toString(36).substr(2, 8));
+        SetCaptchaCode(Math.random().toString(36).substr(2, 8))
         setToast({
           message: "Please enter the correct Captcha",
           open: true,
           severity: "error",
-        });
+        })
       }
     }
-  };
-  
+  }
 
   const handleLogin = async () => {
     let info = allUser.find((ele: any) => {
@@ -366,8 +365,8 @@ function Login() {
       open: false,
       severity: "",
       message: "",
-    });
-  };
+    })
+  }
 
   const userNameOptions = branchOptions[branch] || ["select Branch !!!"]
   console.log(allUser)
@@ -401,7 +400,7 @@ function Login() {
           justifyContent: "left",
           alignItems: "center",
           width: "auto",
-          height: "100vh",
+          // height: "100vh",
           top: "4px",
           backgroundImage: `url(/Banner.png)`,
           backgroundRepeat: "no-repeat",
@@ -412,7 +411,7 @@ function Login() {
           sx={{
             background: "#000000b3",
             width: "auto",
-            height: "100vh",
+            // height: "100vh",
             top: "0",
             left: "0",
             borderRadius: "0",
@@ -604,12 +603,12 @@ function Login() {
                 // variant="outlined"
                 type="text"
                 onPaste={(event: any) => {
-                  event.preventDefault();
-                  return false;
+                  event.preventDefault()
+                  return false
                 }}
                 onDrop={(event: any) => {
-                  event.preventDefault();
-                  return false;
+                  event.preventDefault()
+                  return false
                 }}
                 onKeyDown={(event) => {
                   if (event.key == "Enter") {
@@ -619,7 +618,7 @@ function Login() {
                 value={inputCaptcha}
                 sx={{ width: "55%", background: "white" }}
                 onChange={(event) => {
-                  setInputCaptcha(event.target.value);
+                  setInputCaptcha(event.target.value)
                 }}
                 inputProps={{
                   style: {
