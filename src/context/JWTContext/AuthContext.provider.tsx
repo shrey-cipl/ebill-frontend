@@ -5,7 +5,7 @@ import axios from "../../config/axios"
 import { isValidToken, setSession } from "../../Util/jwt"
 import AuthReducer from "./AuthContext.reducer"
 import { Alert } from "@mui/material"
-
+import { usePathname } from 'next/navigation'
 
 const INITIALIZE = "INITIALIZE"
 const SIGN_IN = "SIGN_IN"
@@ -39,6 +39,10 @@ export default function AuthProvider({ children }: AuthProviderProps) {
   const [state, dispatch] = useReducer(AuthReducer, initialState)
   const router = useRouter()
 
+  const pathname = usePathname()
+
+    console.log("Current Path:", pathname);
+
   useEffect(() => {
     const initialize = async () => {
       try {
@@ -57,6 +61,10 @@ export default function AuthProvider({ children }: AuthProviderProps) {
             },
           })
         } else {
+          //http://localhost:3000/resetpassword
+          // /resetpassword]
+
+         
          
           dispatch({
             type: INITIALIZE,
@@ -66,8 +74,8 @@ export default function AuthProvider({ children }: AuthProviderProps) {
             },
           })
           // console.log("logout");
-        
-          router.push("/login")
+          {pathname=="/Forgot"||pathname=="/resetpassword"?null:router.push("/login")}
+
         }
       } catch (err) {
         dispatch({

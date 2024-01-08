@@ -702,7 +702,7 @@ function Login() {
                 variant="body1"
                 onClick={() => {
                   console.log(branch)
-                  router.push("/login/Forgot")
+                  router.push("/Forgot")
                 }}
               >
                 Forgot Password ?

@@ -13,6 +13,8 @@ import Box from "@mui/material/Box"
 import TextField from "@mui/material/TextField"
 import { styled } from "@mui/system"
 import { useRouter } from "next/navigation"
+
+
 import Link from "next/link"
 
 import PageContainer from "../components/container/PageContainer"
@@ -70,8 +72,10 @@ const Bills = () => {
     diaryNumber: "",
   })
   const [pageNo, setPageNo] = useState(1)
-  const router = useRouter()
-  // Modal states
+  const router:any = useRouter()
+  
+
+ 
   const [modalState, setModalState] = useState(false)
   const [selectedBill, setSelectedBill] = useState<any>({})
 

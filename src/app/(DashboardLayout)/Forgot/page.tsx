@@ -135,7 +135,7 @@ const Forgot = (props: any) => {
     }
 
     try {
-      let res: any = await axios.post("https://bill-monitoring-api.onrender.com/api/user/forgotPassword", {
+      let res: any = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/user/forgotPassword`, {
         email: id,
       });
       setError(res.data.msg);
