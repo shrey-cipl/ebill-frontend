@@ -20,6 +20,13 @@ import Pagination from "../components/Pagination/Pagination"
 import axiosApi from "@/Util/axiosApi"
 import { useAuth } from "@/context/JWTContext/AuthContext.provider"
 
+import {
+  DataGrid,
+  GridRowsProp,
+  GridColDef,
+  GridToolbar,
+} from "@mui/x-data-grid"
+
 const USERS_HEADERS = ["S.No", "Role", "User Name", "E-mail", "Phone", "Action"]
 
 const TabelCellStyled = styled(TableCell)(() => ({
@@ -32,17 +39,12 @@ let tempCounter = 0
 
 const Users = () => {
   const [usersList, setUsersList] = useState([])
-  const [filterInputs, setFilterInputs] = useState({
-    name: "",
-    role: "",
-  })
-  const [pageNo, setPageNo] = useState(1)
 
   const authCtx: any = useAuth()
 
   const handleFetchUsers = async () => {
     const config = {
-      url: `/api/user/getAll?limit=10&page=${pageNo}&name=${filterInputs.name}&role=${filterInputs.role}`,
+      url: `/api/user/getAll`,
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -53,6 +55,12 @@ const Users = () => {
     try {
       const res = await axiosApi(config.url, config.method, config.headers)
 
+      for (let item of res.data) {
+        item.id = item._id
+        // User Name and Role Name both had 'name' as object key
+        item.roleName = item.role[0]?.name
+      }
+
       setUsersList(res.data)
     } catch (err: any) {
       console.log(err.message)
@@ -61,127 +69,86 @@ const Users = () => {
 
   useEffect(() => {
     handleFetchUsers()
-  }, [pageNo, tempCounter, authCtx.user.token])
+  }, [authCtx?.user?.token])
 
-  const handleFilterInputs = (e: any) => {
-    setFilterInputs((prevState) => ({
-      ...prevState,
-      [e.target.name]: e.target.value,
-    }))
-  }
-
-  const handleClearFilters = () => {
-    setFilterInputs({
-      name: "",
-      role: "",
-    })
-
-    handleFetchUsers()
-
-    tempCounter += 1
-  }
+  const columns: GridColDef[] = [
+    {
+      field: "ranodm_1", // confirm this
+      headerName: "S.No",
+      valueGetter: (params) =>
+        params.api.getRowIndexRelativeToVisibleRows(params.id) + 1,
+    },
+    { field: "roleName", headerName: "Role" },
+    { field: "name", headerName: "User Name" },
+    { field: "email", headerName: "E-mail" },
+    { field: "phone", headerName: "Phone" },
+    {
+      field: "random_2",
+      headerName: "Channel Log",
+      renderCell: (params) => {
+        return (
+          <Link
+            href={`/Users/ManageUser?user_id=${params.row._id}&mode=update`}
+            // size="small"
+            style={{ color: "#4C7AFF", textDecoration: "none" }}
+          >
+            Update
+          </Link>
+        )
+      },
+    },
+  ]
 
   return (
     <PageContainer title="All Users" description="List of all the Users">
       <DashboardNew title="All Users" titleVariant="h5">
         <>
-          <Box sx={{ marginTop: "10px" }}>
-            <Box
-              sx={{
-                display: "flex",
-                gap: "10px",
-                justifyContent: "flex-end",
-                alignItems: "center",
-                marginBottom: "10px",
-                // border: "2px solid red",
-                // height: "35px",
-              }}
-            >
-              <Typography>Search By:</Typography>
-              <TextField
-                name="name"
-                size="small"
-                placeholder="Name"
-                value={filterInputs.name}
-                onChange={handleFilterInputs}
-                sx={{ width: "125px" }}
-              />
-              <TextField
-                name="role"
-                size="small"
-                placeholder="Role"
-                value={filterInputs.role}
-                onChange={handleFilterInputs}
-                sx={{ width: "125px" }}
-              />
-              <Button
-                variant="contained"
-                size="small"
-                sx={{ background: "#9C27B0", height: "100%" }}
-                onClick={() => {
-                  setPageNo(1)
-                  handleFetchUsers()
-                }}
-              >
-                Search
-              </Button>
-              <Button
-                variant="contained"
-                sx={{ background: "#9C27B0", height: "100%" }}
-                size="small"
-                onClick={handleClearFilters}
-              >
-                Clear
-              </Button>
-            </Box>
-            <Table>
-              <TableHead>
-                <TableRow sx={{ background: "#4C7AFF" }}>
-                  {USERS_HEADERS.map((header, i) => (
-                    <TableCell
-                      key={i}
-                      sx={{
-                        color: "white",
-                        padding: "5px",
-                      }}
-                    >
-                      {header}
-                    </TableCell>
-                  ))}
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {usersList?.map((user: any, i: any) => {
-                  const rowColor = (i + 1) % 2 === 0 ? "#eee" : "#fff"
+          <DataGrid
+            rows={usersList}
+            columns={columns}
+            density="compact"
+            sx={{
+              ".bg-light": {
+                bgcolor: "#eee",
+                // "&:hover": {
+                //   bgcolor: "darkgrey",
+                // },
+              },
+              ".bg-dark": {
+                bgcolor: "#fff",
+              },
+              ".text-green": {
+                color: "green",
+              },
+              ".text-red": {
+                color: "red",
+              },
+              "& .MuiDataGrid-columnHeaders": {
+                backgroundColor: "#4C7AFF",
+                color: "#ffffff",
+                // fontWeight: "600",
+                // fontSize: "16px",
+              },
+            }}
+            getRowClassName={(params) => {
+              return (params.indexRelativeToCurrentPage + 1) % 2 === 0
+                ? "bg-light"
+                : "bg-dark"
+            }}
+            getCellClassName={(params) => {
+              if (params.field === "currentStatus") {
+                return params.row.currentStatus === "Open"
+                  ? "text-green"
+                  : "text-red"
+              }
 
-                  const itemNumber = (pageNo - 1) * 10 + (i + 1)
-
-                  return (
-                    <TableRow key={user._id} sx={{ background: rowColor }}>
-                      <TabelCellStyled>{`${itemNumber}.`}</TabelCellStyled>
-                      <TabelCellStyled>{user?.role[0]?.name}</TabelCellStyled>
-                      <TabelCellStyled>{user.name}</TabelCellStyled>
-                      <TabelCellStyled>{user.email}</TabelCellStyled>
-                      <TabelCellStyled>{user.phone}</TabelCellStyled>
-                      <TabelCellStyled>
-                        <Link
-                          href={`/Users/ManageUser?user_id=${user._id}&mode=update`}
-                          // size="small"
-                          style={{ color: "#4C7AFF", textDecoration: "none" }}
-                        >
-                          Update
-                        </Link>
-                      </TabelCellStyled>
-                    </TableRow>
-                  )
-                })}
-              </TableBody>
-            </Table>
-          </Box>
-          <Pagination
-            url={`/api/user/getAll?name=${filterInputs.name}&role=${filterInputs.role}`}
-            data={usersList}
-            setPageNo={setPageNo}
+              return ""
+            }}
+            slots={{ toolbar: GridToolbar }}
+            initialState={{
+              pagination: { paginationModel: { pageSize: 25 } },
+            }}
+            pageSizeOptions={[25, 50, 100]}
           />
         </>
       </DashboardNew>

@@ -2,11 +2,6 @@
 
 import { useEffect, useState } from "react"
 
-import Table from "@mui/material/Table"
-import TableBody from "@mui/material/TableBody"
-import TableCell from "@mui/material/TableCell"
-import TableHead from "@mui/material/TableHead"
-import TableRow from "@mui/material/TableRow"
 import Button from "@mui/material/Button"
 import Typography from "@mui/material/Typography"
 import Box from "@mui/material/Box"
@@ -26,50 +21,24 @@ import Pagination from "../components/Pagination/Pagination"
 import axiosApi from "@/Util/axiosApi"
 import { useAuth } from "@/context/JWTContext/AuthContext.provider"
 
-const FORMERS_HEADERS = [
-  "S.No",
-  "Name",
-  "Status",
-  "Designation",
-  "E-mail",
-  "Bank A/C",
-  "Active",
-  "Action",
-]
+import {
+  DataGrid,
+  GridRowsProp,
+  GridColDef,
+  GridToolbar,
+} from "@mui/x-data-grid"
 
 const FORMER_MODES = { add: "add_former", update: "update_former" }
 
-const TabelCellStyled = styled(TableCell)(() => ({
-  fontSize: "12px",
-  padding: "10px 5px",
-  // wordBreak: "break-all",
-}))
-
-const OptionsWrapper = styled("div")(() => ({
-  display: "flex",
-  flexDirection: "column",
-  alignItems: "flex-end",
-  gap: "10px",
-  marginBottom: "10px",
-}))
-
-let tempCounter = 1
-
 const Formers = () => {
   const [formersList, setFormersList] = useState([])
-  const [filterInputs, setFilterInputs] = useState({
-    name: "",
-    isActive: "",
-    status: "",
-  })
-  const [pageNo, setPageNo] = useState(1)
 
   const router = useRouter()
   const authCtx: any = useAuth()
 
   const handleFetchFormers = async () => {
     const config = {
-      url: `/api/former/getAll?limit=10&page=${pageNo}&name=${filterInputs.name}&isActive=${filterInputs.isActive}&status=${filterInputs.status}`,
+      url: `/api/former/getAll`,
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -79,6 +48,12 @@ const Formers = () => {
 
     try {
       const res = await axiosApi(config.url, config.method, config.headers)
+
+      for (let item of res.data) {
+        item.id = item._id
+        item.bankAccountNumber = item.bankDetails.bankAccountNumber
+      }
+
       setFormersList(res.data)
       // if (String(res.status).charAt(0) === "2") {
       // }
@@ -89,32 +64,47 @@ const Formers = () => {
 
   useEffect(() => {
     handleFetchFormers()
-  }, [pageNo, tempCounter, authCtx.user.token])
+  }, [authCtx.user.token])
 
-  const handleFilterInputs = (e: any) => {
-    setFilterInputs((prevState) => ({
-      ...prevState,
-      [e.target.name]: e.target.value,
-    }))
-  }
-
-  const handleClearFilters = () => {
-    setFilterInputs({
-      name: "",
-      isActive: "",
-      status: "",
-    })
-
-    tempCounter += 1
-  }
+  const columns: GridColDef[] = [
+    {
+      field: "random_1", // confirm this
+      headerName: "S.No",
+      valueGetter: (params) =>
+        params.api.getRowIndexRelativeToVisibleRows(params.id) + 1,
+    },
+    { field: "name", headerName: "Name" },
+    { field: "status", headerName: "Status" },
+    { field: "designation", headerName: "Designation" },
+    { field: "email", headerName: "E-mail" },
+    {
+      field: "bankAccountNumber",
+      headerName: "Bank A/C",
+    },
+    { field: "isActive", headerName: "Active" },
+    {
+      field: "random_2",
+      headerName: "Action",
+      renderCell: (params) => {
+        return (
+          <Link
+            href={`/Formers/ManageFormer?former_id=${params.row._id}&mode=${FORMER_MODES.update}`}
+            style={{ color: "#4C7AFF", textDecoration: "none" }}
+          >
+            Update
+          </Link>
+        )
+      },
+    },
+  ]
 
   return (
     <PageContainer title="Former Employees" description="List of all the bills">
       <DashboardNew title="Hon'ble Ex-Chairman & Ex-Members" titleVariant="h5">
         <>
-          <OptionsWrapper>
+          <div style={{ display: "flex", justifyContent: "flex-end" }}>
             <Button
-              sx={{ marginTop: "-23px", fontSize: "12px" }}
+              sx={{ background: "#9C27B0" }}
               variant="contained"
               size="small"
               onClick={() =>
@@ -123,143 +113,53 @@ const Formers = () => {
             >
               Add New
             </Button>
-            <Box sx={{ display: "flex", gap: "10px", alignItems: "center" }}>
-              <Typography>Search By:</Typography>
-              <TextField
-                name="name"
-                size="small"
-                placeholder="Name"
-                value={filterInputs.name}
-                onChange={handleFilterInputs}
-                sx={{ width: "125px", "::placeholder": { fontSize: "5px" } }}
-              />
-              <FormControl>
-                <InputLabel
-                  size="small"
-                  id="demo-simple-select-label"
-                  sx={{
-                    fontSize: "12px",
-                  }}
-                >
-                  Status
-                </InputLabel>
-                <Select
-                  name="isActive"
-                  size="small"
-                  value={filterInputs.isActive}
-                  label="Status"
-                  onChange={handleFilterInputs}
-                  sx={{ width: "125px" }}
-                >
-                  <MenuItem value="active">Active</MenuItem>
-                  <MenuItem value="inactive">In-active</MenuItem>
-                </Select>
-              </FormControl>
-              <FormControl>
-                <InputLabel
-                  size="small"
-                  id="demo-simple-select-label"
-                  sx={{
-                    fontSize: "12px",
-                  }}
-                >
-                  Present Status
-                </InputLabel>
-                <Select
-                  name="status"
-                  size="small"
-                  placeholder="asdv"
-                  label="Present Status"
-                  value={filterInputs.status}
-                  onChange={handleFilterInputs}
-                  sx={{ width: "125px" }}
-                >
-                  <MenuItem disabled>
-                    <em>Present Status</em>
-                  </MenuItem>
-                  <MenuItem value="ex">Ex</MenuItem>
-                  <MenuItem value="present">Present</MenuItem>
-                </Select>
-              </FormControl>
-              <Button
-                variant="contained"
-                size="small"
-                sx={{ background: "#9C27B0 " }}
-                onClick={() => {
-                  setPageNo(1)
-                  handleFetchFormers()
-                }}
-              >
-                Search
-              </Button>
-              <Button
-                variant="contained"
-                sx={{ background: "#9C27B0 " }}
-                size="small"
-                onClick={handleClearFilters}
-              >
-                Clear
-              </Button>
-            </Box>
-          </OptionsWrapper>
-          <Box>
-            <Table>
-              <TableHead>
-                <TableRow sx={{ background: "#4C7AFF" }}>
-                  {FORMERS_HEADERS.map((header, i) => (
-                    <TableCell
-                      key={i}
-                      sx={{
-                        color: "white",
-                        padding: "5px",
-                      }}
-                    >
-                      {header}
-                    </TableCell>
-                  ))}
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {formersList.map((former: any, i: any) => {
-                  const rowColor = (i + 1) % 2 === 0 ? "#eee" : "#fff"
+          </div>
+          <DataGrid
+            rows={formersList}
+            columns={columns}
+            density="compact"
+            sx={{
+              ".bg-light": {
+                bgcolor: "#eee",
+                // "&:hover": {
+                //   bgcolor: "darkgrey",
+                // },
+              },
+              ".bg-dark": {
+                bgcolor: "#fff",
+              },
+              ".text-green": {
+                color: "green",
+              },
+              ".text-red": {
+                color: "red",
+              },
+              "& .MuiDataGrid-columnHeaders": {
+                backgroundColor: "#4C7AFF",
+                color: "#ffffff",
+                // fontWeight: "600",
+                // fontSize: "16px",
+              },
+            }}
+            getRowClassName={(params) => {
+              return (params.indexRelativeToCurrentPage + 1) % 2 === 0
+                ? "bg-light"
+                : "bg-dark"
+            }}
+            getCellClassName={(params) => {
+              if (params.field === "isActive") {
+                return params.row.isActive === "Active"
+                  ? "text-green"
+                  : "text-red"
+              }
 
-                  const itemNumber = (pageNo - 1) * 10 + (i + 1)
-
-                  return (
-                    <TableRow key={former._id} sx={{ background: rowColor }}>
-                      <TabelCellStyled>{`${itemNumber}.`}</TabelCellStyled>
-                      <TabelCellStyled>{former.name}</TabelCellStyled>
-                      <TabelCellStyled>{former.status}</TabelCellStyled>
-                      <TabelCellStyled>{former.designation}</TabelCellStyled>
-                      <TabelCellStyled>{former.email}</TabelCellStyled>
-                      <TabelCellStyled>
-                        {former.bankDetails.bankAccountNumber}
-                      </TabelCellStyled>
-                      <TabelCellStyled
-                        sx={{
-                          color: former.isActive === "Active" ? "green" : "red",
-                        }}
-                      >
-                        {former.isActive}
-                      </TabelCellStyled>
-                      <TabelCellStyled>
-                        <Link
-                          href={`/Formers/ManageFormer?former_id=${former._id}&mode=${FORMER_MODES.update}`}
-                          style={{ color: "#4C7AFF", textDecoration: "none" }}
-                        >
-                          Update
-                        </Link>
-                      </TabelCellStyled>
-                    </TableRow>
-                  )
-                })}
-              </TableBody>
-            </Table>
-          </Box>
-          <Pagination
-            url={`/api/former/getAll?name=${filterInputs.name}&isActive=${filterInputs.isActive}&status=${filterInputs.status}`}
-            data={formersList}
-            setPageNo={setPageNo}
+              return ""
+            }}
+            slots={{ toolbar: GridToolbar }}
+            initialState={{
+              pagination: { paginationModel: { pageSize: 25 } },
+            }}
+            pageSizeOptions={[25, 50, 100]}
           />
         </>
       </DashboardNew>
