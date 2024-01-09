@@ -32,8 +32,8 @@ export default function RootLayout({
   const [isMobileSidebarOpen, setMobileSidebarOpen] = useState(false)
   const path = usePathname()
   return (
-    <>
-      {path === "/login" || path ==="/Forgot"||path==="/resetpassword"?  (
+    <>"
+      {path === "/login" || path ==="/Forgot"||path==="/resetpassword"||path==="/FormersLogin"?  (
         <>
           <Box sx={{ minHeight: "calc(100vh - 170px)" }}>{children}</Box>
         </>

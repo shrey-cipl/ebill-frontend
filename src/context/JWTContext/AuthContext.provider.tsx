@@ -74,7 +74,7 @@ export default function AuthProvider({ children }: AuthProviderProps) {
             },
           })
           // console.log("logout");
-          {pathname=="/Forgot"||pathname=="/resetpassword"?null:router.push("/login")}
+          {pathname=="/Forgot"||pathname=="/resetpassword"||pathname=="/FormersLogin"?null:router.push("/login")}
 
         }
       } catch (err) {
