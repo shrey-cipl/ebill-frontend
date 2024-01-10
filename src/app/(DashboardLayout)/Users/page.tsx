@@ -27,16 +27,6 @@ import {
   GridToolbar,
 } from "@mui/x-data-grid"
 
-const USERS_HEADERS = ["S.No", "Role", "User Name", "E-mail", "Phone", "Action"]
-
-const TabelCellStyled = styled(TableCell)(() => ({
-  fontSize: "12px",
-  padding: "10px 5px",
-  // wordBreak: "break-all",
-}))
-
-let tempCounter = 0
-
 const Users = () => {
   const [usersList, setUsersList] = useState([])
 
@@ -75,8 +65,7 @@ const Users = () => {
     {
       field: "ranodm_1", // confirm this
       headerName: "S.No",
-      valueGetter: (params) =>
-        params.api.getRowIndexRelativeToVisibleRows(params.id) + 1,
+      valueGetter: (params) => params.api.getAllRowIds().indexOf(params.id) + 1,
     },
     { field: "roleName", headerName: "Role" },
     { field: "name", headerName: "User Name" },
@@ -117,12 +106,6 @@ const Users = () => {
               ".bg-dark": {
                 bgcolor: "#fff",
               },
-              ".text-green": {
-                color: "green",
-              },
-              ".text-red": {
-                color: "red",
-              },
               "& .MuiDataGrid-columnHeaders": {
                 backgroundColor: "#4C7AFF",
                 color: "#ffffff",
@@ -134,15 +117,6 @@ const Users = () => {
               return (params.indexRelativeToCurrentPage + 1) % 2 === 0
                 ? "bg-light"
                 : "bg-dark"
-            }}
-            getCellClassName={(params) => {
-              if (params.field === "currentStatus") {
-                return params.row.currentStatus === "Open"
-                  ? "text-green"
-                  : "text-red"
-              }
-
-              return ""
             }}
             slots={{ toolbar: GridToolbar }}
             initialState={{

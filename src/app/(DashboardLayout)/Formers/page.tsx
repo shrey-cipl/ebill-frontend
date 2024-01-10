@@ -70,8 +70,7 @@ const Formers = () => {
     {
       field: "random_1", // confirm this
       headerName: "S.No",
-      valueGetter: (params) =>
-        params.api.getRowIndexRelativeToVisibleRows(params.id) + 1,
+      valueGetter: (params) => params.api.getAllRowIds().indexOf(params.id) + 1,
     },
     { field: "name", headerName: "Name" },
     { field: "status", headerName: "Status" },
