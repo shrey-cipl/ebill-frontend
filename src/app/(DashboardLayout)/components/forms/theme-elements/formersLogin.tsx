@@ -32,11 +32,11 @@ function Formers() {
   const handleClickShowPassword = () => setShowPassword(!showPassword)
   const loginUser = () => {
     if (emailValidationRegex.test(email)) {
-      auth.signIn("/api/former/login", email, password)
+      auth.signInfor(email, password)
     } else if (mobileValidationRegex.test(email)) {
-      auth.signIn("/api/former/login", email, password)
+      auth.signInfor( email, password)
     } else {
-      auth.signIn("/api/former/login", email, password)
+      auth.signInfor( email, password)
     }
   }
 

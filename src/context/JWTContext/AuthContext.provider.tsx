@@ -10,6 +10,8 @@ import { usePathname } from 'next/navigation'
 const INITIALIZE = "INITIALIZE"
 const SIGN_IN = "SIGN_IN"
 const SIGN_OUT = "SIGN_OUT"
+const SIGN_IN_FOR = "SIGN_IN_FOR"
+
 
 const illegalStateFunction = (...args: any) => {
   throw new Error("You must wrap your components in <AuthProvider />")
@@ -25,6 +27,7 @@ const initialState = {
   signIn: illegalStateFunction,
   signOut: illegalStateFunction,
   signUp: illegalStateFunction,
+  signInfor: illegalStateFunction,
   resetPassword: illegalStateFunction,
 }
 
@@ -124,7 +127,39 @@ export default function AuthProvider({ children }: AuthProviderProps) {
         return  err;
       }
     }
+    const signInfor = async (email: any, password: any) => {
+      try {
+        const response = await axios.post("/api/former/login", {
+          email,
+          password,
+        })
 
+        const { token, data } = response.data
+        localStorage.setItem("login", JSON.stringify(response.data))
+        setSession(token)
+        dispatch({
+          type: SIGN_IN_FOR,  
+          payload: {
+            user: {data ,token},
+            isAuthenticated: true,
+          },
+        })
+
+        //  response;
+        return router.push("/")
+      } catch (err: any) {
+      //   console.log(err, "errrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr")
+      // alert("Invalid email or invalid password please try again");
+        dispatch({
+          type: SIGN_IN,
+          payload: {
+            isAuthenticated: false,
+            validationErrors: err.error,
+          },
+        })
+        return  err;
+      }
+    }
   const signOut = async () => {
     setSession(null)
     dispatch({ type: SIGN_OUT })
@@ -140,6 +175,7 @@ export default function AuthProvider({ children }: AuthProviderProps) {
           method: "jwt",
           signIn,
           signOut,
+          signInfor
         }),
         [state]
       )}
