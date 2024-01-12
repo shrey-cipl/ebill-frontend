@@ -1,5 +1,5 @@
 "use client"
-import { useEffect, useState } from "react"
+import { useEffect, useState, useContext } from "react"
 
 import dayjs from "dayjs"
 import Button from "@mui/material/Button"
@@ -22,6 +22,8 @@ import PageContainer from "@/app/(DashboardLayout)/components/container/PageCont
 import DashboardNew from "@/app/(DashboardLayout)/components/shared/DashboardNew"
 import CustomModal from "@/app/(DashboardLayout)/components/CustomModal/CustomModal"
 
+import { CosmeticContext, useCosmetic } from "@/context/CosmeticContext/UseCosmetic.Provider"
+import { CircularProgress } from "@mui/material"
 const BILL_MODES = { add: "add_bill", update: "update_bill" }
 
 const BoxWrapper = styled("div")(() => ({
@@ -35,11 +37,17 @@ const BoxWrapper = styled("div")(() => ({
 }))
 
 const Bills = () => {
+  const backendBaseUrl = process.env.NEXT_PUBLIC_BACKEND_BASE_URL
   const [billList, setBillList] = useState([])
   const [claim, setClaim] = useState([])
   // Modal states
   const [modalState, setModalState] = useState(false)
   const [selectedBill, setSelectedBill] = useState<any>({})
+ 
+
+
+  const cosmeticContext = useContext(CosmeticContext);
+  const { modalLoading, setModalLoading } = cosmeticContext;
 
   const router = useRouter()
   const authCtx: any = useAuth()
@@ -71,6 +79,7 @@ const id =authCtx?.user?.data?._id;
   }
 
   const handleFetchSingleBills = async (id:any) => {
+    setModalLoading(true);
     console.log(id);
     const config = {
       url: `/api/claim/getClaimByBillId/${id}`,
@@ -97,6 +106,8 @@ const id =authCtx?.user?.data?._id;
       console.log("eroror")
       await handleViewBill({nodata:"NO Claim Found"});
       console.log(err.message)
+    }finally {
+      setModalLoading(false); // Set modal loading to false after fetching modal data
     }
   }
   // collect bills and updates list
@@ -165,7 +176,7 @@ const id =authCtx?.user?.data?._id;
            color: "#4C7AFF",
           }}/> 
           <a
-            href={downloadLink}
+            href={`${backendBaseUrl}/uploads/${downloadLink}`}
             target="_blank"
             rel="noopener noreferrer"
             style={{
@@ -250,61 +261,66 @@ const id =authCtx?.user?.data?._id;
             pageSizeOptions={[25, 50, 100]}
           />
 
-          {/* BILL MODAL */}
-          <CustomModal modalState={modalState} setModalState={setModalState}>
-            {selectedBill.nodata? <BoxWrapper>
-                {/* <Typography fontWeight={600}>Diary No:</Typography> */}
-                <Typography>{selectedBill.nodata}</Typography>
-              </BoxWrapper>: <>
+        
+          
+        {
+(selectedBill.nodata? 
+              <CustomModal modalState={modalState} setModalState={setModalState}>
               <BoxWrapper>
-                <Typography fontWeight={600}>Diary No:</Typography>
-                <Typography>{selectedBill.diaryNumber}</Typography>
-              </BoxWrapper>
-              <BoxWrapper>
-                <Typography fontWeight={600}>Name:</Typography>
-                <Typography>{selectedBill?.former?.name}</Typography>
-              </BoxWrapper>
-              <BoxWrapper>
-                <Typography fontWeight={600}>Claim Receiving Date:</Typography>
-                <Typography>
-                  {dayjs(selectedBill.claimReceivingDate).format("YYYY-MM-DD")}
-                </Typography>
-              </BoxWrapper>
-              <BoxWrapper>
-                <Typography fontWeight={600}>Claim Period From:</Typography>
-                <Typography>
-                  {dayjs(selectedBill.claimPeriodFrom).format("YYYY-MM-DD")}
-                </Typography>
-              </BoxWrapper>
-              <BoxWrapper>
-                <Typography fontWeight={600}>Claim Period To:</Typography>
-                <Typography>
-                  {dayjs(selectedBill.claimPeriodTo).format("YYYY-MM-DD")}
-                </Typography>
-              </BoxWrapper>
-              <BoxWrapper>
-                <Typography fontWeight={600}>Type:</Typography>
-                <Typography>{selectedBill.billType}</Typography>
-              </BoxWrapper>
-              <BoxWrapper>
-                <Typography fontWeight={600}>Claimed Amount:</Typography>
-                <Typography>{selectedBill.totalClaimedAmount}</Typography>
-              </BoxWrapper>
-              <BoxWrapper>
-                <Typography fontWeight={600}>Admissible Amount:</Typography>
-                <Typography>{selectedBill.totalAdmissibleAmount}</Typography>
-              </BoxWrapper>
-              <BoxWrapper>
-                <Typography fontWeight={600}>Sanctioned Amount:</Typography>
-                <Typography>{selectedBill.sanctionedAmount}</Typography>
-              </BoxWrapper>
-              <BoxWrapper>
-                <Typography fontWeight={600}>Status:</Typography>
-                <Typography>{selectedBill.currentStatus}</Typography>
-              </BoxWrapper>
-            </>}
-           
-          </CustomModal>
+              <Typography>{selectedBill.nodata}</Typography>
+            </BoxWrapper>
+            </CustomModal>: <>
+            <CustomModal modalState={modalState} setModalState={setModalState}>
+            <BoxWrapper>
+              <Typography fontWeight={600}>Diary No:</Typography>
+              <Typography>{selectedBill.diaryNumber}</Typography>
+            </BoxWrapper>
+            <BoxWrapper>
+              <Typography fontWeight={600}>Name:</Typography>
+              <Typography>{selectedBill?.former?.name}</Typography>
+            </BoxWrapper>
+            <BoxWrapper>
+              <Typography fontWeight={600}>Claim Receiving Date:</Typography>
+              <Typography>
+                {dayjs(selectedBill.claimReceivingDate).format("YYYY-MM-DD")}
+              </Typography>
+            </BoxWrapper>
+            <BoxWrapper>
+              <Typography fontWeight={600}>Claim Period From:</Typography>
+              <Typography>
+                {dayjs(selectedBill.claimPeriodFrom).format("YYYY-MM-DD")}
+              </Typography>
+            </BoxWrapper>
+            <BoxWrapper>
+              <Typography fontWeight={600}>Claim Period To:</Typography>
+              <Typography>
+                {dayjs(selectedBill.claimPeriodTo).format("YYYY-MM-DD")}
+              </Typography>
+            </BoxWrapper>
+            <BoxWrapper>
+              <Typography fontWeight={600}>Type:</Typography>
+              <Typography>{selectedBill.billType}</Typography>
+            </BoxWrapper>
+            <BoxWrapper>
+              <Typography fontWeight={600}>Claimed Amount:</Typography>
+              <Typography>{selectedBill.totalClaimedAmount}</Typography>
+            </BoxWrapper>
+            <BoxWrapper>
+              <Typography fontWeight={600}>Admissible Amount:</Typography>
+              <Typography>{selectedBill.totalAdmissibleAmount}</Typography>
+            </BoxWrapper>
+            <BoxWrapper>
+              <Typography fontWeight={600}>Sanctioned Amount:</Typography>
+              <Typography>{selectedBill.sanctionedAmount}</Typography>
+            </BoxWrapper>
+            <BoxWrapper>
+              <Typography fontWeight={600}>Status:</Typography>
+              <Typography>{selectedBill.currentStatus}</Typography>
+            </BoxWrapper>
+            </CustomModal>
+          </>
+          )}
+
         </>
       </DashboardNew>
     </PageContainer>

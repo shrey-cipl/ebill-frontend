@@ -345,7 +345,15 @@ const Menuitems: any = {
       href: "/notfound",
       present: "no",
     },
+    {
+      id: uniqueId(),
+      title: "View Bill",
+      icon: EventIcon,
+      href: "/Formers/ViewBill",
+      present: "no",
+    },
   ]
 }
+// ViewBill
 
 export default Menuitems

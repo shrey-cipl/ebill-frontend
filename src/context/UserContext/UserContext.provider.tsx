@@ -118,7 +118,7 @@ function UserContextProvider({ children }: UserContextProviderProps) {
   }
 
   const Userlogin = (credentials: credentials[]) => {
-    console.log(credentials, "Abhiprops")
+  
     const response = axios.post("/api/user/login", credentials)
     return response
   }

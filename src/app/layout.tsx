@@ -4,6 +4,7 @@ import { ThemeProvider } from "@mui/material/styles"
 import CssBaseline from "@mui/material/CssBaseline"
 import AuthProvider from "../context/JWTContext/AuthContext.provider"
 import UserContextProvider from "@/context/UserContext/UserContext.provider"
+import CosmeticContextProvider from "@/context/CosmeticContext/UseCosmetic.Provider"
 
 export default function RootLayout({
   children,
@@ -15,12 +16,15 @@ export default function RootLayout({
       {/* <meta name="viewport" content="width=device-width, initial-scale=1.0" /> */}
       <body>
         <AuthProvider>
-          <UserContextProvider>
-            <ThemeProvider theme={baselightTheme}>
-              <CssBaseline />
-              {children}
-            </ThemeProvider>
-          </UserContextProvider>
+          <CosmeticContextProvider>
+            <UserContextProvider>
+              <ThemeProvider theme={baselightTheme}>
+                <CssBaseline />
+                {children}
+              </ThemeProvider>
+            </UserContextProvider>
+          </CosmeticContextProvider>
+
         </AuthProvider>
       </body>
     </html>

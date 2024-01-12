@@ -1,7 +1,9 @@
-import React from "react"
+import React ,{useContext}from "react"
 import { Card, CardContent, Typography, Stack, Box } from "@mui/material"
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos"
-
+import { CosmeticContext, useCosmetic } from "@/context/CosmeticContext/UseCosmetic.Provider"
+import { CircularProgress } from "@mui/material"
+import { styled } from '@mui/system';
 type Props = {
   title?: string
   titleVariant?: string | any
@@ -32,16 +34,32 @@ const DashboardNew = ({
   }
 
   let stitle = title?.slice(1)
+
+ 
+  const cosmeticContext = useContext(CosmeticContext);
+  const { modalLoading, setModalLoading } = cosmeticContext;
+
+  const BlurredContainer = styled('div')({
+    position: 'relative',
+    filter: modalLoading?'blur(5px)':'blur(0px)', 
+  });
   return (
+    
     <Card sx={{ padding: 0 }} elevation={9} variant={undefined}>
+     
       {cardheading ? (
+        <>
         <CardContent>
+          
           <Typography variant="h5">{headtitle}</Typography>
           <Typography variant="subtitle2" color="textSecondary">
             {headsubtitle}
           </Typography>
         </CardContent>
+        </>
       ) : (
+        <>
+     
         <CardContent sx={{ p: "10px" }}>
           {title ? (
             <Stack
@@ -52,7 +70,7 @@ const DashboardNew = ({
               <Box
                 sx={{
                   display: "flex",
-                  justifyContent: "space-between",
+                  justifyContent:"space-between",
                   alignItems: "center",
                   mb: 2,
                 }}
@@ -98,7 +116,10 @@ const DashboardNew = ({
                 <Box>
                   {" "}
                   {title ? (
-                    <Typography variant={titleVariant ? titleVariant : "h5"}>
+                    <Typography variant={titleVariant ? titleVariant : "h5"} onClick={()=>{
+                      setModalLoading(true)
+                      console.log(modalLoading)
+                    }}>
                       {title}
                     </Typography>
                   ) : (
@@ -111,19 +132,34 @@ const DashboardNew = ({
                   ) : (
                     ""
                   )}
+                 
                 </Box>
+                
               </Box>
+              <Box>
+                  <Typography sx={{
+                    fontSize:"20px",
+                    color:"#5d87ff",
+                  }}>
+             { modalLoading? <> Loading..... <CircularProgress  size={30}/></>:null}
+                  </Typography></Box>
+                
               {action}
+              
             </Stack>
           ) : null}
-
+ <BlurredContainer>
           {children}
+          </BlurredContainer>
         </CardContent>
+        </>
       )}
 
       {middlecontent}
       {footer}
     </Card>
+   
+ 
   )
 }
 
