@@ -20,7 +20,7 @@ async function axiosApi(
     const response = await axios(config)
 
     if (String(response.status).charAt(0) === "2") {
-      return response
+      return response.data
     }
   } catch (error: any) {
     if (String(error.response.status).charAt(0) === "4") {

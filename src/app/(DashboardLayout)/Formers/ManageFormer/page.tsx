@@ -139,7 +139,7 @@ const ManageFormer = () => {
     if (paramFormerId) {
       getFormerData(paramFormerId, authCtx.user.token).then((formerData) => {
         // console.log(formerData)
-        if (formerData && formerData.data && formerData.data.data) {
+        if (formerData && formerData.data) {
           const {
             name,
             designation,
@@ -151,7 +151,7 @@ const ManageFormer = () => {
             createdAt,
             updatedAt,
             lastUpdatedBy,
-          } = formerData.data.data
+          } = formerData.data
 
           setFormerFields({
             name,
@@ -256,7 +256,7 @@ const ManageFormer = () => {
         )
       }
 
-      enqueueSnackbar(res.data.message, {
+      enqueueSnackbar(res.message, {
         preventDuplicate: true,
         variant: "success",
       })

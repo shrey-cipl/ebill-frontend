@@ -93,8 +93,8 @@ const ManageUser = () => {
   useEffect(() => {
     if (paramUserId) {
       getUserData(paramUserId, authCtx.user.token).then((userData) => {
-        if (userData && userData.data && userData.data.data) {
-          const { name, email, phone, role } = userData.data.data
+        if (userData && userData.data) {
+          const { name, email, phone, role } = userData.data
 
           setUserFieldData({
             role: role.name,
@@ -143,7 +143,7 @@ const ManageUser = () => {
         config.data
       )
 
-      enqueueSnackbar(res.data.message, {
+      enqueueSnackbar(res.message, {
         preventDuplicate: true,
         variant: "success",
       })

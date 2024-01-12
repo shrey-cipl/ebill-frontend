@@ -45,12 +45,12 @@ const ListOfAllBills = () => {
     try {
       const res = await axiosApi(config.url, config.method, config.headers)
 
-      if (res && res.data && res.data.data) {
-        for (let item of res.data.data) {
+      if (res && res.data) {
+        for (let item of res.data) {
           item.id = item._id
         }
 
-        setBillList(res.data.data)
+        setBillList(res.data)
       }
     } catch (err: any) {
       console.log(err.message)

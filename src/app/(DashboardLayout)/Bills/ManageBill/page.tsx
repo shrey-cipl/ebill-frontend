@@ -146,11 +146,6 @@ const UPDATE_FIELDS = [
     type: "date",
   },
 ]
-const TabelCellStyled = styled(TableCell)(() => ({
-  fontSize: "12px",
-  padding: "5px",
-  // wordBreak: "break-all",
-}))
 
 // Add to constants folder
 const BILL_MODES = { add: "add_bill", update: "update_bill" }
@@ -239,7 +234,7 @@ const ManageBill = () => {
     if (paramBillId) {
       getBillData(paramBillId, authCtx.user.token).then((billData: any) => {
         // console.log("billDATA: ", billData)
-        if (billData && billData.data && billData.data.data) {
+        if (billData && billData.data) {
           const {
             diaryNumber,
             claimReceivingDate,
@@ -258,7 +253,7 @@ const ManageBill = () => {
             PFMS,
             billProcessingStartDate,
             telephoneNumbers,
-          } = billData.data.data
+          } = billData.data
 
           setDataFields({
             diaryNumber: diaryNumber,
@@ -323,9 +318,9 @@ const ManageBill = () => {
       try {
         const res = await axiosApi(config.url, config.method, config.headers)
 
-        if (res && res.data && res.data.data) {
+        if (res && res.data) {
           // Data transformation
-          for (let item of res.data.data) {
+          for (let item of res.data) {
             transformedArr.push({
               name: item.name,
               _id: item._id,
@@ -341,8 +336,10 @@ const ManageBill = () => {
       }
     }
 
+    // if (paramMode === BILL_MODES.add) {
     getFormerEmp()
-  }, [authCtx.user.token])
+    // }
+  }, [paramMode, authCtx.user.token])
 
   // Posts form data
   const handleFormSubmit = async (e: any) => {
@@ -443,7 +440,7 @@ const ManageBill = () => {
         )
       }
 
-      enqueueSnackbar(res.data.message, {
+      enqueueSnackbar(res.message, {
         preventDuplicate: true,
         variant: "success",
       })

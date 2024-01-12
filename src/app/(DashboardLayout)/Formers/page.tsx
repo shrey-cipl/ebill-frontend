@@ -42,12 +42,12 @@ const Formers = () => {
     try {
       const res = await axiosApi(config.url, config.method, config.headers)
 
-      if (res && res.data && res.data.data) {
-        for (let item of res.data.data) {
+      if (res && res.data) {
+        for (let item of res.data) {
           item.id = item._id
           item.bankAccountNumber = item.bankDetails.bankAccountNumber
         }
-        setFormersList(res.data.data)
+        setFormersList(res.data)
       }
     } catch (err) {
       console.log(err)
