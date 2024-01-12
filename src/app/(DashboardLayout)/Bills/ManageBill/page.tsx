@@ -4,6 +4,7 @@ import { useEffect, useState } from "react"
 
 import { useRouter } from "next/navigation"
 import { useSearchParams } from "next/navigation"
+import { enqueueSnackbar } from "notistack"
 
 import TextField from "@mui/material/TextField"
 import Typography from "@mui/material/Typography"
@@ -199,6 +200,7 @@ const getBillData = async (id: any, token: any) => {
     console.log(err.message)
   }
 }
+
 interface TableRowData {
   phone: string
   periodFrom: string
@@ -236,8 +238,8 @@ const ManageBill = () => {
   useEffect(() => {
     if (paramBillId) {
       getBillData(paramBillId, authCtx.user.token).then((billData: any) => {
-        console.log("billDATA: ", billData)
-        if (billData && billData.data) {
+        // console.log("billDATA: ", billData)
+        if (billData && billData.data && billData.data.data) {
           const {
             diaryNumber,
             claimReceivingDate,
@@ -256,7 +258,7 @@ const ManageBill = () => {
             PFMS,
             billProcessingStartDate,
             telephoneNumbers,
-          } = billData.data
+          } = billData.data.data
 
           setDataFields({
             diaryNumber: diaryNumber,
@@ -298,7 +300,6 @@ const ManageBill = () => {
           }
 
           setTableData(telephoneNumbers)
-
           cachedTableData = telephoneNumbers
         }
       })
@@ -321,17 +322,20 @@ const ManageBill = () => {
 
       try {
         const res = await axiosApi(config.url, config.method, config.headers)
-        // Data transformation
-        for (let item of res.data) {
-          transformedArr.push({
-            name: item.name,
-            _id: item._id,
-            email: item.email,
-            phone: item.phone,
-          })
-        }
 
-        setFormerEmp(transformedArr)
+        if (res && res.data && res.data.data) {
+          // Data transformation
+          for (let item of res.data.data) {
+            transformedArr.push({
+              name: item.name,
+              _id: item._id,
+              email: item.email,
+              phone: item.phone,
+            })
+          }
+
+          setFormerEmp(transformedArr)
+        }
       } catch (err: any) {
         console.log(err.message)
       }
@@ -439,33 +443,16 @@ const ManageBill = () => {
         )
       }
 
-      if (res) {
-        if (paramMode === BILL_MODES.add) {
-          alert("Data Added!")
-        }
+      enqueueSnackbar(res.data.message, {
+        preventDuplicate: true,
+        variant: "success",
+      })
 
-        if (paramMode === BILL_MODES.update) {
-          alert("Data Updated!")
-        }
-
-        // view mode -> redirect instead && update mode -> redirect
-        router.push("/Bills")
-      }
+      router.push("/Bills")
     } catch (err: any) {
-      console.log(err.message)
+      console.log("ManageBill Error:", err)
     }
   }
-
-  // Updates field values
-  // const handleFieldChange = (e: any) => {
-
-  //   setDataFields((prevState: any) => ({
-  //     ...prevState,
-
-  //     [e.target.name]: e.target.value,
-
-  //   }))
-  // }
 
   const handleFieldChange = (event: any, formerEmp: any) => {
     const { name, value } = event.target

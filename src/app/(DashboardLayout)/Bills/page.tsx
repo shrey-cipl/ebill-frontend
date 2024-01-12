@@ -8,6 +8,7 @@ import Box from "@mui/material/Box"
 import TextField from "@mui/material/TextField"
 import { styled } from "@mui/system"
 import { useRouter } from "next/navigation"
+import { enqueueSnackbar } from "notistack"
 
 import Link from "next/link"
 
@@ -58,13 +59,10 @@ const Bills = () => {
     try {
       const res = await axiosApi(config.url, config.method, config.headers)
 
-      for (let item of res.data) {
+      for (let item of res?.data?.data) {
         item.id = item._id
       }
-
-      setBillList(res.data)
-      // if (String(res.status).charAt(0) === "2") {
-      // }
+      setBillList(res.data.data)
     } catch (err: any) {
       console.log(err.message)
     }

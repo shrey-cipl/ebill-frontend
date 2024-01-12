@@ -1,4 +1,6 @@
 import axios, { AxiosRequestConfig } from "axios"
+import { enqueueSnackbar } from "notistack"
+
 const backendBaseUrl = process.env.NEXT_PUBLIC_BACKEND_BASE_URL
 
 async function axiosApi(
@@ -16,9 +18,20 @@ async function axiosApi(
 
   try {
     const response = await axios(config)
-    return response.data
-  } catch (erro: any) {
-    throw new Error("An error occurred during the API call: ")
+
+    if (String(response.status).charAt(0) === "2") {
+      return response
+    }
+  } catch (error: any) {
+    if (String(error.response.status).charAt(0) === "4") {
+      // prevents 'enqueueSnackbar' error
+      if (error.response.data.message) {
+        enqueueSnackbar(error.response.data.message, {
+          preventDuplicate: true,
+          variant: "error",
+        })
+      }
+    }
   }
 }
 
