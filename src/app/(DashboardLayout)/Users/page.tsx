@@ -45,13 +45,15 @@ const Users = () => {
     try {
       const res = await axiosApi(config.url, config.method, config.headers)
 
-      for (let item of res.data) {
-        item.id = item._id
-        // User Name and Role Name both had 'name' as object key
-        item.roleName = item.role[0]?.name
-      }
+      if (res && res.data) {
+        for (let item of res.data) {
+          item.id = item._id
+          // 'User Name' and 'Role Name' both had 'name' as key
+          item.roleName = item.role[0]?.name
+        }
 
-      setUsersList(res.data)
+        setUsersList(res.data)
+      }
     } catch (err: any) {
       console.log(err.message)
     }

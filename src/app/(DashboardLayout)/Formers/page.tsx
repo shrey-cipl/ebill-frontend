@@ -3,23 +3,16 @@
 import { useEffect, useState } from "react"
 
 import Button from "@mui/material/Button"
-import Typography from "@mui/material/Typography"
-import Box from "@mui/material/Box"
-import TextField from "@mui/material/TextField"
-import Select from "@mui/material/Select"
-import MenuItem from "@mui/material/MenuItem"
-import InputLabel from "@mui/material/InputLabel"
-import FormControl from "@mui/material/FormControl"
 
-import { styled } from "@mui/system"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
 
 import PageContainer from "../components/container/PageContainer"
 import DashboardNew from "../components/shared/DashboardNew"
-import Pagination from "../components/Pagination/Pagination"
 import axiosApi from "@/Util/axiosApi"
 import { useAuth } from "@/context/JWTContext/AuthContext.provider"
+
+import { enqueueSnackbar } from "notistack"
 
 import {
   DataGrid,
@@ -49,14 +42,13 @@ const Formers = () => {
     try {
       const res = await axiosApi(config.url, config.method, config.headers)
 
-      for (let item of res.data) {
-        item.id = item._id
-        item.bankAccountNumber = item.bankDetails.bankAccountNumber
+      if (res && res.data) {
+        for (let item of res.data) {
+          item.id = item._id
+          item.bankAccountNumber = item.bankDetails.bankAccountNumber
+        }
+        setFormersList(res.data)
       }
-
-      setFormersList(res.data)
-      // if (String(res.status).charAt(0) === "2") {
-      // }
     } catch (err) {
       console.log(err)
     }

@@ -19,6 +19,8 @@ import DashboardNew from "../../components/shared/DashboardNew"
 import { useAuth } from "@/context/JWTContext/AuthContext.provider"
 import axiosApi from "@/Util/axiosApi"
 
+import { enqueueSnackbar } from "notistack"
+
 const FORMER_FIELDS = [
   {
     id: "name",
@@ -99,8 +101,6 @@ for (let arrEl of FORMER_FIELDS) {
   if (!initialFieldState[arrEl.id]) initialFieldState[arrEl.id] = ""
 }
 
-// const tempCOntainer
-
 const getFormerData = async (id: any, token: any) => {
   const config = {
     url: `/api/former/get/${id}`,
@@ -114,9 +114,7 @@ const getFormerData = async (id: any, token: any) => {
   try {
     const res = await axiosApi(config.url, config.method, config.headers)
 
-    return res.data
-    // if (String(res.status).charAt(0) === "2") {
-    // }
+    return res
   } catch (err) {
     console.log(err)
   }
@@ -141,37 +139,50 @@ const ManageFormer = () => {
     if (paramFormerId) {
       getFormerData(paramFormerId, authCtx.user.token).then((formerData) => {
         // console.log(formerData)
-        if (formerData) {
+        if (formerData && formerData.data) {
+          const {
+            name,
+            designation,
+            status,
+            isActive,
+            phone,
+            email,
+            bankDetails,
+            createdAt,
+            updatedAt,
+            lastUpdatedBy,
+          } = formerData.data
+
           setFormerFields({
-            name: formerData.name,
-            designation: formerData.designation,
-            status: formerData.status,
-            isActive: formerData.isActive,
-            phone: formerData.phone,
-            email: formerData.email,
-            bankAccountNumber: formerData.bankDetails.bankAccountNumber,
-            bankName: formerData.bankDetails.bankName,
-            branchName: formerData.bankDetails.branchName,
-            ifscCode: formerData.bankDetails.ifscCode,
-            createdAt: formerData.createdAt,
-            updatedAt: formerData.updatedAt,
-            lastUpdatedBy: formerData.lastUpdatedBy,
+            name,
+            designation,
+            status,
+            isActive,
+            phone,
+            email,
+            bankAccountNumber: bankDetails.bankAccountNumber,
+            bankName: bankDetails.bankName,
+            branchName: bankDetails.branchName,
+            ifscCode: bankDetails.ifscCode,
+            createdAt,
+            updatedAt,
+            lastUpdatedBy,
           })
 
           cachedFormerFields = {
-            name: formerData.name,
-            designation: formerData.designation,
-            status: formerData.status,
-            isActive: formerData.isActive,
-            phone: formerData.phone,
-            email: formerData.email,
-            bankAccountNumber: formerData.bankDetails.bankAccountNumber,
-            bankName: formerData.bankDetails.bankName,
-            branchName: formerData.bankDetails.branchName,
-            ifscCode: formerData.bankDetails.ifscCode,
-            createdAt: formerData.createdAt,
-            updatedAt: formerData.updatedAt,
-            lastUpdatedBy: formerData.lastUpdatedBy,
+            name,
+            designation,
+            status,
+            isActive,
+            phone,
+            email,
+            bankAccountNumber: bankDetails.bankAccountNumber,
+            bankName: bankDetails.bankName,
+            branchName: bankDetails.branchName,
+            ifscCode: bankDetails.ifscCode,
+            createdAt,
+            updatedAt,
+            lastUpdatedBy,
           }
         }
       })
@@ -245,10 +256,12 @@ const ManageFormer = () => {
         )
       }
 
-      if (res) {
-        alert("Data Added!")
-        router.push("/Formers")
-      }
+      enqueueSnackbar(res.message, {
+        preventDuplicate: true,
+        variant: "success",
+      })
+
+      router.push("/Formers")
     } catch (err) {
       console.log(err)
     }

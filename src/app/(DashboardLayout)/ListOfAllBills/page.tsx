@@ -27,26 +27,6 @@ import {
   GridToolbar,
 } from "@mui/x-data-grid"
 
-const LIST_OF_BILLS_HEADERS = [
-  "S.No",
-  "Name",
-  "Diary No.",
-  "Bill Type",
-  "Receiving Date",
-  "Claimed Amount",
-  "Sanctioned Amount",
-  "Bill Status",
-  "Pending Branch",
-  "Updated on",
-  "Forward To",
-  "Channel Log",
-]
-
-const TabelCellStyled = styled(TableCell)(() => ({
-  fontSize: "12px",
-  padding: "10px 5px",
-}))
-
 const ListOfAllBills = () => {
   const [billList, setBillList] = useState([])
 
@@ -65,13 +45,13 @@ const ListOfAllBills = () => {
     try {
       const res = await axiosApi(config.url, config.method, config.headers)
 
-      for (let item of res.data) {
-        item.id = item._id
-      }
+      if (res && res.data) {
+        for (let item of res.data) {
+          item.id = item._id
+        }
 
-      setBillList(res.data)
-      // if (String(res.status).charAt(0) === "2") {
-      // }
+        setBillList(res.data)
+      }
     } catch (err: any) {
       console.log(err.message)
     }

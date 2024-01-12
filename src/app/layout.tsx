@@ -2,6 +2,8 @@
 import { baselightTheme } from "@/utils/theme/DefaultColors"
 import { ThemeProvider } from "@mui/material/styles"
 import CssBaseline from "@mui/material/CssBaseline"
+import { SnackbarProvider } from "notistack"
+
 import AuthProvider from "../context/JWTContext/AuthContext.provider"
 import UserContextProvider from "@/context/UserContext/UserContext.provider"
 import CosmeticContextProvider from "@/context/CosmeticContext/UseCosmetic.Provider"
@@ -19,9 +21,11 @@ export default function RootLayout({
           <CosmeticContextProvider>
             <UserContextProvider>
               <ThemeProvider theme={baselightTheme}>
+                <SnackbarProvider>
                 <CssBaseline />
-                {children}
-              </ThemeProvider>
+                  {children}
+                </SnackbarProvider>
+            </ThemeProvider>
             </UserContextProvider>
           </CosmeticContextProvider>
 

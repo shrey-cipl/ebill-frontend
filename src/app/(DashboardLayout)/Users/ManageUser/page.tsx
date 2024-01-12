@@ -15,6 +15,7 @@ import PageContainer from "../../components/container/PageContainer"
 import DashboardNew from "../../components/shared/DashboardNew"
 import { useAuth } from "@/context/JWTContext/AuthContext.provider"
 import axiosApi from "@/Util/axiosApi"
+import { enqueueSnackbar } from "notistack"
 
 const USER_FIELDS = [
   {
@@ -60,6 +61,24 @@ for (let arrEl of USER_FIELDS) {
 // to reset to initial field state
 let cachedUserFields: any
 
+const getUserData = async (id: any, token: any) => {
+  const config = {
+    url: `/api/user/get/${id}`,
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      authorization: `Bearer ${token}`,
+    },
+  }
+
+  try {
+    const res = await axiosApi(config.url, config.method, config.headers)
+    return res
+  } catch (err) {
+    console.log(err)
+  }
+}
+
 const ManageUser = () => {
   const [userFieldData, setUserFieldData] = useState(initialFieldState)
   const router = useRouter()
@@ -72,40 +91,27 @@ const ManageUser = () => {
   // console.log(authCtx)
 
   useEffect(() => {
-    const getData = async () => {
-      const config = {
-        url: `/api/user/get/${paramUserId}`,
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          authorization: `Bearer ${authCtx.user.token}`,
-        },
-      }
+    if (paramUserId) {
+      getUserData(paramUserId, authCtx.user.token).then((userData) => {
+        if (userData && userData.data) {
+          const { name, email, phone, role } = userData.data
 
-      try {
-        const res = await axiosApi(config.url, config.method, config.headers)
+          setUserFieldData({
+            role: role.name,
+            name,
+            email,
+            phone,
+          })
 
-        const { name, email, phone, role } = res.data
-
-        setUserFieldData({
-          role: role.name,
-          name,
-          email,
-          phone,
-        })
-
-        cachedUserFields = {
-          role: role.name,
-          name,
-          email,
-          phone,
+          cachedUserFields = {
+            role: role.name,
+            name,
+            email,
+            phone,
+          }
         }
-      } catch (err) {
-        console.log(err)
-      }
+      })
     }
-
-    getData()
   }, [paramUserId, authCtx.user.token])
 
   const handleFormSubmit = async (e: any) => {
@@ -137,14 +143,13 @@ const ManageUser = () => {
         config.data
       )
 
-      alert("Data Updated")
+      enqueueSnackbar(res.message, {
+        preventDuplicate: true,
+        variant: "success",
+      })
       router.push("/Users")
-
-      // if (String(res.status).charAt(0) === "2") {
-      // }
     } catch (err: any) {
-      alert("Could not Update the data")
-      // console.log(err.response.data.message)
+      console.log(err)
     }
   }
 

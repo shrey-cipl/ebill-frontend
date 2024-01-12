@@ -8,6 +8,7 @@ import Box from "@mui/material/Box"
 import TextField from "@mui/material/TextField"
 import { styled } from "@mui/system"
 import { useRouter } from "next/navigation"
+import { enqueueSnackbar } from "notistack"
 
 import Link from "next/link"
 
@@ -58,13 +59,12 @@ const Bills = () => {
     try {
       const res = await axiosApi(config.url, config.method, config.headers)
 
-      for (let item of res.data) {
-        item.id = item._id
+      if (res && res.data) {
+        for (let item of res?.data) {
+          item.id = item._id
+        }
+        setBillList(res.data)
       }
-
-      setBillList(res.data)
-      // if (String(res.status).charAt(0) === "2") {
-      // }
     } catch (err: any) {
       console.log(err.message)
     }
@@ -91,6 +91,7 @@ const Bills = () => {
       valueGetter: (params) => params.api.getAllRowIds().indexOf(params.id) + 1,
     },
     { field: "diaryNumber", headerName: "Diary No." },
+    // { field: "billNumber", headerName: "Bill No." },
     { field: "name", headerName: "Name" },
     { field: "billType", headerName: "Type" },
     { field: "totalClaimedAmount", headerName: "Claimed Amount" },

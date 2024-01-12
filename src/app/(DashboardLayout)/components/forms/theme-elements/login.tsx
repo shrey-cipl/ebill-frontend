@@ -26,7 +26,6 @@ import { Visibility, VisibilityOff } from "@mui/icons-material"
 import { useUser } from "../../../../../context/UserContext/UserContext.provider"
 import { useAuth } from "../../../../../context/JWTContext/AuthContext.provider"
 import callApi from "@/Util/axiosApi"
-import axios from "axios"
 
 const GreenBox = styled(Box)`
   width: 874px;
@@ -212,10 +211,9 @@ function Login() {
         "Content-Type": "application/json",
       }
       const posts = await callApi(url, method, headers)
-
       setAllUser([...posts.data])
-      // console.log(posts,"abhi props");
-      if (posts.success != true || !posts) {
+
+      if (posts.data.success != true || !posts.data) {
         console.log("Bad Request")
       } else {
         console.log("200")
