@@ -11,12 +11,12 @@ const SidebarItems = ({ toggleMobileSidebar }: any) => {
   const pathDirect = pathname
 
   const auth: any = useAuth()
- 
+  const role: any = auth?.user?.data?.role?.name
   // const [state ,setstate] =useState(auth?.user?.role?.name);
-  const [allData, setItems] = useState<any>(
-    Menuitems["Joint Secretary Admin"]
-  )
-
+  const [allData, setItems] = useState(
+    role ? Menuitems["Joint Secretary Admin"]: Menuitems["former"] 
+  );
+  console.log(   auth?.user?.role,"ll");
   return (
     <Box sx={{ px: 3 }}>
       <List sx={{ pt: 0 }} className="sidebarNav" component="div">

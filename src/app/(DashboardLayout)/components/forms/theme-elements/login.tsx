@@ -134,11 +134,7 @@ function Login() {
   const [showPassword, setShowPassword] = useState(false)
   const handleClickShowPassword = () => setShowPassword(!showPassword)
   const user = useUser()
-  console.log(
-    auth,
-    "---------------------------------------------------------------------------s-s-----------"
-  )
-
+  
   const refreshCapcha = () => {
     SetCaptchaCode(Math.random().toString(36).substr(2, 8))
   }
@@ -205,38 +201,6 @@ function Login() {
         setTryagain(false)
       }, 2000)
     }
-
-    // postData({
-    //   name: "Abhijeet Kumar",
-    //   email: "abhijezxet@gmail.com",
-    //   designation: "Member",
-    //   status: "Ex",
-    //   isActive: "Active",
-    //   bankAccountNumber: "255482871374",
-    //   phone: "95676993725",
-    // })
-    // async function postData(postData: any) {
-    //   try {
-    //     const url = "/api/former/create"
-    //     const method = "POST"
-    //     const headers = {
-    //       "Content-Type": "application/json",
-    //       Authorization:
-
-    //         "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjp7Il9pZCI6IjY0ZDQ4Yjg5OTA3ZjRmZmU0NGZiMmYyMSIsIm5hbWUiOiJUYXJ1biIsInBob25lIjoiODgyNjEwNzkzNiIsImVtYWlsIjoidGFydW5AZ21haWwuY29tIiwicGFzc3dvcmQiOiIkMmEkMTIkalFtRENkbmlPT2kxNElQcmJIeVFsT1Vxay94bkt6ZERlSFdTdDBUUVh3c3kyeDVzd1JtUy4iLCJicmFuY2giOiJTeXN0ZW0gQWRtaW4iLCJyb2xlIjp7Il9pZCI6IjY0ZDQ3M2I0MTk2ZGIyODA1M2FiYTcxNSIsImlkIjoxNywibmFtZSI6IlN5c3RlbSBBZG1pbiJ9LCJjcmVhdGVkQXQiOiIyMDIzLTA4LTEwVDA3OjAyOjMzLjM1NVoiLCJ1cGRhdGVkQXQiOiIyMDIzLTA4LTEwVDA3OjAyOjMzLjM1NVoiLCJfX3YiOjB9LCJpYXQiOjE2OTIxMzYwMTgsImV4cCI6MTY5Mjc0MDgxOH0.hVuNM-dRL-uuEBYXSijuty2TThIFaMWbpItIMGu0k0Y",
-    //     }
-    //     const response = await callApi(url, method, headers, postData)
-
-    //     console.log(response, "abhi props")
-    //     if (response.success != true || !response) {
-    //       console.log("Bad Request")
-    //     } else {
-    //       console.log("200")
-    //     }
-    //   } catch (error) {
-    //     console.error("Error fetching ", error)
-    //   }
-    // }
   }
 
   async function getData() {
@@ -682,6 +646,21 @@ function Login() {
             >
               Login
             </LoginButton>
+            <ResendOTP
+                sx={{
+                  color: "#fff900",
+                  fontSize: "12px",
+                  textDecoration: "none",
+                  mt: 2,
+                }}
+                variant="body1"
+                onClick={() => {
+                  console.log(branch)
+                  router.push("/FormersLogin")
+                }}
+              >
+                Former Login
+              </ResendOTP>
             <Box
               sx={{
                 display: "flex",
@@ -705,6 +684,7 @@ function Login() {
               >
                 Forgot Password ?
               </ResendOTP>
+              
             </Box>
             {tryagain && (
               <Typography

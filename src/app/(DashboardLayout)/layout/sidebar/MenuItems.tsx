@@ -330,6 +330,22 @@ const Menuitems: any = {
       present: "no",
     },
   ],
+  "former":[
+    {
+      id: uniqueId(),
+      title: "Add Bill",
+      icon: AssessmentIcon,
+      href: "/Formers/AddBills",
+      present: "no",
+    },
+    {
+      id: uniqueId(),
+      title: "All Bills",
+      icon: EventIcon,
+      href: "/notfound",
+      present: "no",
+    },
+  ]
 }
 
 export default Menuitems

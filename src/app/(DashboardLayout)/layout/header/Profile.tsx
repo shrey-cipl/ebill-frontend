@@ -32,7 +32,7 @@ const Profile = () => {
 
   const data: any = auth?.user?.data?.name
   const role: any = auth?.user?.data?.role?.name
-
+   const mail:any=auth?.user?.data?.email
   return (
     <Box>
       <IconButton
@@ -89,7 +89,7 @@ const Profile = () => {
               width: "200px",
             }}
           >
-            {role}
+            {role?role:mail}
           </ListItemText>
         </MenuItem>
         <Box mt={1} py={1} px={2}>
