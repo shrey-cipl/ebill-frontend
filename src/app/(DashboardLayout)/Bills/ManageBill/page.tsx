@@ -45,9 +45,20 @@ const DATA_FIELDS = [
     ],
   },
   {
+    id: "billNumber",
+    fieldName: "Bill No.",
+    type: "select",
+    // selectOptions: [
+    //   "Domestic Help",
+    //   "Medical Reimbursement",
+    //   "F&Reimbursement for Defraying the Services of Orderly",
+    //   "Resident Telephone/Mobile charges Reimbursement",
+    // ],
+  },
+  {
     id: "name",
     fieldName: "Name",
-    type: "select",
+    type: "text",
   },
   {
     id: "email",
@@ -204,9 +215,14 @@ interface TableRowData {
   admissibleAmount: string
 }
 
+// Used to later store selectedBill id
+let selectedBillId: any
+let selectedFormerId: any
+
 const ManageBill = () => {
   const [dataFields, setDataFields] = useState(initialFieldState)
-  const [formerEmp, setFormerEmp] = useState([])
+  const [BillList, setBillList] = useState([])
+
   const [tableData, setTableData] = useState<TableRowData[]>([
     {
       phone: "",
@@ -233,12 +249,13 @@ const ManageBill = () => {
   useEffect(() => {
     if (paramBillId) {
       getBillData(paramBillId, authCtx.user.token).then((billData: any) => {
-        // console.log("billDATA: ", billData)
+        console.log("billDATA: ", billData)
         if (billData && billData.data) {
           const {
             diaryNumber,
             claimReceivingDate,
             billType,
+            bill,
             former,
             fileNumber,
             claimPeriodFrom,
@@ -259,6 +276,7 @@ const ManageBill = () => {
             diaryNumber: diaryNumber,
             claimReceivingDate: dayjs(claimReceivingDate).format("YYYY-MM-DD"),
             billType,
+            billNumber: bill.billNumber,
             name: former?.name,
             email: former?.email,
             phone: former?.phone,
@@ -301,13 +319,10 @@ const ManageBill = () => {
     }
   }, [paramBillId, authCtx.user.token])
 
-  // Fetches list of former emoloyee
   useEffect(() => {
-    const getFormerEmp = async () => {
-      const transformedArr: any = []
-
+    const getBills = async () => {
       const config = {
-        url: `/api/former/getAll`,
+        url: `/api/bill/getAll`,
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -317,27 +332,14 @@ const ManageBill = () => {
 
       try {
         const res = await axiosApi(config.url, config.method, config.headers)
-
-        if (res && res.data) {
-          // Data transformation
-          for (let item of res.data) {
-            transformedArr.push({
-              name: item.name,
-              _id: item._id,
-              email: item.email,
-              phone: item.phone,
-            })
-          }
-
-          setFormerEmp(transformedArr)
-        }
+        setBillList(res.data)
       } catch (err: any) {
         console.log(err.message)
       }
     }
 
     // if (paramMode === BILL_MODES.add) {
-    getFormerEmp()
+    getBills()
     // }
   }, [paramMode, authCtx.user.token])
 
@@ -352,19 +354,27 @@ const ManageBill = () => {
         // creates a copy of the state
         const fieldsCopy: any = { ...dataFields }
 
+        delete fieldsCopy.name
+        delete fieldsCopy.email
+        delete fieldsCopy.phone
+        delete fieldsCopy.billNumber
+
         let obj =
           tableData[0]?.phone !== ""
             ? {
                 ...fieldsCopy,
+                bill: selectedBillId,
+
                 lastForwardedBy: authCtx.user.data.role.name,
-                // former: dataFields.name,
+                former: selectedFormerId,
                 fileNumber: dataFields.fileNumber,
                 telephoneNumbers: tableData,
               }
             : {
                 ...fieldsCopy,
+                bill: selectedBillId,
                 lastForwardedBy: authCtx.user.data.role.name,
-                // former: dataFields.name,
+                former: selectedFormerId,
                 fileNumber: dataFields.fileNumber,
               }
 
@@ -451,26 +461,30 @@ const ManageBill = () => {
     }
   }
 
-  const handleFieldChange = (event: any, formerEmp: any) => {
-    const { name, value } = event.target
+  const handleFieldChange = (e: any) => {
+    // 'value' extracted here is uniquie billNumber
+    const { name, value } = e.target
 
-    // If the field is 'name', find the corresponding emp object and set its _id
-    if (name === "name") {
-      const selectedEmp = formerEmp.find((emp: any) => emp.name === value)
-      const empId = selectedEmp ? selectedEmp._id : null
+    if (name === "billNumber") {
+      const selectedBill: any = BillList.find(
+        (bill: any) => bill.billNumber === value
+      )
+      // used only in add-mode
+      selectedBillId = selectedBill._id
+      selectedFormerId = selectedBill.former._id
 
-      setDataFields((prevDataFields: any) => ({
-        ...prevDataFields,
+      setDataFields((prevState: any) => ({
+        ...prevState,
         [name]: value,
-        // Set emp._id in dataFields
-        email: selectedEmp.email,
-        phone: selectedEmp.phone,
-        former: empId,
+        name: selectedBill.former.name,
+        email: selectedBill.former.email,
+        phone: selectedBill.former.phone,
+        // former: empId,
       }))
     } else {
       // For other fields, directly set the value
-      setDataFields((prevDataFields: any) => ({
-        ...prevDataFields,
+      setDataFields((prevState: any) => ({
+        ...prevState,
         [name]: value,
       }))
     }
@@ -513,7 +527,7 @@ const ManageBill = () => {
             >
               {DATA_FIELDS.map((field, i) => {
                 // Permanantly disabled fields
-                const permanantDisable = ["phone", "email"]
+                const permanantDisable = ["name", "phone", "email"]
 
                 const disabledPermananty = permanantDisable.includes(field.id)
                   ? true
@@ -552,16 +566,14 @@ const ManageBill = () => {
                         name={field.id}
                         size="small"
                         value={dataFields[field.id]}
-                        onChange={(event) =>
-                          handleFieldChange(event, formerEmp)
-                        }
+                        onChange={(e) => handleFieldChange(e)}
                         sx={{ width: "100%" }}
                         disabled={disabledPermananty || disabledUpdateFields}
                       >
-                        {field.id === "name"
-                          ? formerEmp.map((emp: any) => (
-                              <MenuItem value={emp.name} key={emp._id}>
-                                {emp.name}
+                        {field.id === "billNumber"
+                          ? BillList.map((bill: any) => (
+                              <MenuItem value={bill.billNumber} key={bill._id}>
+                                {bill.billNumber}
                               </MenuItem>
                             ))
                           : field.selectOptions?.map((option, i) => (
@@ -576,7 +588,7 @@ const ManageBill = () => {
                         type={field.type}
                         size="small"
                         value={dataFields[field.id]}
-                        onChange={(event) => handleFieldChange(event, {})}
+                        onChange={(e) => handleFieldChange(e)}
                         sx={{ width: "100%" }}
                         disabled={disabledPermananty || disabledUpdateFields}
                         multiline={field.id === "currentremark" ? true : false}
