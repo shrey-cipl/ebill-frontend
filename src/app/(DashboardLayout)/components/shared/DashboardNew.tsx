@@ -3,7 +3,7 @@ import { Card, CardContent, Typography, Stack, Box } from "@mui/material"
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos"
 import { CosmeticContext, useCosmetic } from "@/context/CosmeticContext/UseCosmetic.Provider"
 import { CircularProgress } from "@mui/material"
-import { styled } from '@mui/system';
+// import { styled } from '@mui/system';
 type Props = {
   title?: string
   titleVariant?: string | any
@@ -39,10 +39,7 @@ const DashboardNew = ({
   const cosmeticContext = useContext(CosmeticContext);
   const { modalLoading, setModalLoading } = cosmeticContext;
 
-  const BlurredContainer = styled('div')({
-    position: 'relative',
-    filter: modalLoading?'blur(5px)':'blur(0px)', 
-  });
+
   return (
     
     <Card sx={{ padding: 0 }} elevation={9} variant={undefined}>
@@ -148,9 +145,15 @@ const DashboardNew = ({
               
             </Stack>
           ) : null}
- <BlurredContainer>
-          {children}
-          </BlurredContainer>
+ <Box
+ sx={{
+  position: 'relative',
+  filter: modalLoading?'blur(5px)':'blur(0px)', 
+ }}
+ >
+  <>{children}</>
+          
+          </Box>
         </CardContent>
         </>
       )}
