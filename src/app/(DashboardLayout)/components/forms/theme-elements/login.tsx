@@ -211,7 +211,7 @@ function Login() {
         "Content-Type": "application/json",
       }
       const posts = await callApi(url, method, headers)
-      setAllUser([...posts.data.data])
+      setAllUser([...posts.data])
 
       if (posts.data.success != true || !posts.data) {
         console.log("Bad Request")

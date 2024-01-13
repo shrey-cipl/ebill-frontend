@@ -6,6 +6,7 @@ import { SnackbarProvider } from "notistack"
 
 import AuthProvider from "../context/JWTContext/AuthContext.provider"
 import UserContextProvider from "@/context/UserContext/UserContext.provider"
+import CosmeticContextProvider from "@/context/CosmeticContext/UseCosmetic.Provider"
 
 export default function RootLayout({
   children,
@@ -17,14 +18,17 @@ export default function RootLayout({
       {/* <meta name="viewport" content="width=device-width, initial-scale=1.0" /> */}
       <body>
         <AuthProvider>
-          <UserContextProvider>
-            <ThemeProvider theme={baselightTheme}>
-              <SnackbarProvider>
+          <CosmeticContextProvider>
+            <UserContextProvider>
+              <ThemeProvider theme={baselightTheme}>
+                <SnackbarProvider>
                 <CssBaseline />
-                {children}
-              </SnackbarProvider>
+                  {children}
+                </SnackbarProvider>
             </ThemeProvider>
-          </UserContextProvider>
+            </UserContextProvider>
+          </CosmeticContextProvider>
+
         </AuthProvider>
       </body>
     </html>
