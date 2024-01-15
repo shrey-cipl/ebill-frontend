@@ -241,6 +241,8 @@ const ManageBill = () => {
 
   const paramBillId = searchParams.get("bill_id")
   const paramMode = searchParams.get("mode")
+  // re-direct from 'UserBills' page
+  const paramUserpageId = searchParams.get("id_from_userpage")
 
   const authCtx: any = useAuth()
 
@@ -248,7 +250,7 @@ const ManageBill = () => {
   useEffect(() => {
     if (paramBillId) {
       getBillData(paramBillId, authCtx.user.token).then((billData: any) => {
-        console.log("billDATA: ", billData)
+        // console.log("billDATA: ", billData)
         if (billData && billData.data) {
           const {
             diaryNumber,
@@ -341,6 +343,31 @@ const ManageBill = () => {
     getBills()
     // }
   }, [paramMode, authCtx.user.token])
+
+  // Auto selects bill number and its corresponding data
+  // when re-directed from 'UserBills page'
+  useEffect(() => {
+    if (paramUserpageId) {
+      const selectedBill: any = BillList.find(
+        (bill: any) => bill._id === paramUserpageId
+      )
+
+      if (selectedBill) {
+        // used only in add-mode
+        selectedBillId = selectedBill._id
+        selectedFormerId = selectedBill.former._id
+
+        setDataFields((prevState: any) => ({
+          ...prevState,
+          billNumber: selectedBill.billNumber,
+          name: selectedBill.former.name,
+          email: selectedBill.former.email,
+          phone: selectedBill.former.phone,
+          // former: empId,
+        }))
+      }
+    }
+  }, [paramUserpageId, BillList])
 
   // Posts form data
   const handleFormSubmit = async (e: any) => {
@@ -465,9 +492,11 @@ const ManageBill = () => {
     const { name, value } = e.target
 
     if (name === "billNumber") {
+      // here 'value' contains bill number
       const selectedBill: any = BillList.find(
         (bill: any) => bill.billNumber === value
       )
+
       // used only in add-mode
       selectedBillId = selectedBill._id
       selectedFormerId = selectedBill.former._id
