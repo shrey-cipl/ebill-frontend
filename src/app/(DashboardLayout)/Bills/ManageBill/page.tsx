@@ -75,7 +75,6 @@ const DATA_FIELDS = [
     fieldName: "File Number",
     type: "number",
   },
-
   {
     id: "claimPeriodFrom",
     fieldName: "Claimed Period From",

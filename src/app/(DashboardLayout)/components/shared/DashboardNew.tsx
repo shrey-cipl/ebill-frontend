@@ -113,10 +113,7 @@ const DashboardNew = ({
                 <Box>
                   {" "}
                   {title ? (
-                    <Typography variant={titleVariant ? titleVariant : "h5"} onClick={()=>{
-                      setModalLoading(true)
-                      console.log(modalLoading)
-                    }}>
+                    <Typography variant={titleVariant ? titleVariant : "h5"} >
                       {title}
                     </Typography>
                   ) : (

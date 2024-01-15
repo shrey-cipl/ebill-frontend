@@ -42,6 +42,7 @@ const Menuitems: any = {
       href: "/Bills",
       present: "yes",
     },
+    
     {
       id: uniqueId(),
       title: "Ex Chairman & Members",
@@ -70,6 +71,13 @@ const Menuitems: any = {
       icon: FormatListBulletedIcon,
       href: "/ListOfAllBills",
       present: "no",
+    },
+    {
+      id: uniqueId(),
+      title: "User Bills",
+      icon: EditNoteIcon,
+      href: "/UserBills",
+      present: "yes",
     },
     {
       id: uniqueId(),
