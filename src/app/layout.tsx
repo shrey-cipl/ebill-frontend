@@ -22,13 +22,12 @@ export default function RootLayout({
             <UserContextProvider>
               <ThemeProvider theme={baselightTheme}>
                 <SnackbarProvider>
-                <CssBaseline />
+                  <CssBaseline />
                   {children}
                 </SnackbarProvider>
-            </ThemeProvider>
+              </ThemeProvider>
             </UserContextProvider>
           </CosmeticContextProvider>
-
         </AuthProvider>
       </body>
     </html>
