@@ -42,6 +42,7 @@ const Menuitems: any = {
       href: "/Bills",
       present: "yes",
     },
+    
     {
       id: uniqueId(),
       title: "Bill Routing",
@@ -77,6 +78,13 @@ const Menuitems: any = {
       icon: FormatListBulletedIcon,
       href: "/ListOfAllBills",
       present: "no",
+    },
+    {
+      id: uniqueId(),
+      title: "User Bills",
+      icon: EditNoteIcon,
+      href: "/UserBills",
+      present: "yes",
     },
     {
       id: uniqueId(),
