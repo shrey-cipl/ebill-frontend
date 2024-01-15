@@ -44,6 +44,13 @@ const Menuitems: any = {
     },
     {
       id: uniqueId(),
+      title: "Bill Routing",
+      icon: EditNoteIcon,
+      href: "/BillRouting",
+      present: "yes",
+    },
+    {
+      id: uniqueId(),
       title: "Ex Chairman & Members",
       icon: StarBorderPurple500Icon,
       href: "/Formers",
@@ -330,7 +337,7 @@ const Menuitems: any = {
       present: "no",
     },
   ],
-  "former":[
+  former: [
     {
       id: uniqueId(),
       title: "Add Bill",
@@ -352,7 +359,7 @@ const Menuitems: any = {
       href: "/Formers/ViewBill",
       present: "no",
     },
-  ]
+  ],
 }
 // ViewBill
 

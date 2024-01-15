@@ -75,7 +75,6 @@ const DATA_FIELDS = [
     fieldName: "File Number",
     type: "number",
   },
-
   {
     id: "claimPeriodFrom",
     fieldName: "Claimed Period From",
@@ -462,8 +461,6 @@ const ManageBill = () => {
   }
 
   const handleFieldChange = (e: any) => {
-    console.log("HC1:", e.target.value)
-    console.log("HC2:", e.target.name)
     // 'value' extracted here is uniquie billNumber
     const { name, value } = e.target
 
