@@ -16,6 +16,8 @@ async function axiosApi(
     data: data,
   }
 
+  console.log(data,"hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh")
+
   try {
     const response = await axios(config)
 
