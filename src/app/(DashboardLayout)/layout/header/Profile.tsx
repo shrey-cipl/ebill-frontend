@@ -13,6 +13,8 @@ import {
 import { useAuth } from "../../../../context/JWTContext/AuthContext.provider"
 import { IconMail, IconUser } from "@tabler/icons-react"
 
+import Marquee from "react-fast-marquee";
+
 const Profile = () => {
   const [anchorEl2, setAnchorEl2] = useState(null)
   const auth: any = useAuth()
@@ -33,6 +35,7 @@ const Profile = () => {
   const data: any = auth?.user?.data?.name
   const role: any = auth?.user?.data?.role?.name
    const mail:any=auth?.user?.data?.email
+   const space :any="      "
   return (
     <Box>
       <IconButton
@@ -89,7 +92,13 @@ const Profile = () => {
               width: "200px",
             }}
           >
-            {role?role:mail}
+            <Marquee>
+      <p>{role?role:mail}</p>
+      <Box sx={{
+        width:"40px"
+      }}></Box>
+</Marquee>
+
           </ListItemText>
         </MenuItem>
         <Box mt={1} py={1} px={2}>

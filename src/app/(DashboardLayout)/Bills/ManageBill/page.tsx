@@ -277,7 +277,7 @@ const ManageBill = () => {
             billProcessingStartDate,
             telephoneNumbers,
           } = billData.data
-          
+
           setlastForwardedTo(lastForwardedTo);
           setlastForwardedBy(lastForwardedBy);
 
@@ -548,7 +548,7 @@ const ManageBill = () => {
   // if(BILL_MODES.update=="update_bill"){
 
   // }
- 
+
     useEffect(() => {
       if(BILL_MODES.add=="add_bill"){
       if (dataFields.billType) {
@@ -560,10 +560,10 @@ const ManageBill = () => {
         setBillSequence([]);
         getData(dataFields.billType)
       }
-    
+
     }
     }, [dataFields.billType])
-  
+
     const getData = async (selectedBillType: any) => {
       const config = {
         url: `/api/billRouting/getall?billType=${selectedBillType}`,
@@ -573,23 +573,26 @@ const ManageBill = () => {
           authorization: `Bearer ${authCtx.user.token}`,
         },
       }
-  
+
       try {
         const res = await axiosApi(config.url, config.method, config.headers)
         //   console.log(res)
         if (res && res.data) {
           // console.log(res.data[0],"plplplllp");
-  
+
           console.log(res.data[0].sequence[1],"role==res.data[0].sequence[0]")
           if (BILL_MODES.add == "add_bill"&&role==res.data[0].sequence[0]) {
             let fg=res.data[0].sequence[1];
             setBillSequence([fg])
           }
+          console.log(role, lastForwardedTo,"pppppppppppppppppppppppppppppppppppppppppppppp")
+          console.log(role==lastForwardedTo ,"role==lastForwardedTo");
           if (BILL_MODES.update == "update_bill") {
-            console.log(res.data[0].sequence);
-           {role==lastForwardedBy? findNextItem(res.data[0].sequence,lastForwardedBy,lastForwardedTo):null} 
-     
-          
+            console.log(role==lastForwardedTo ,"role==lastForwardedTo");
+
+           {role==lastForwardedTo? findNextItem(res.data[0].sequence,lastForwardedBy,lastForwardedTo):setBillSequence([])}
+
+
           }
           // setBillSequence(res.data[0].sequence)
           // sequenceOptions = res.data[0]
@@ -598,14 +601,14 @@ const ManageBill = () => {
         console.log(err.message)
       }
     }
-  
+
     function findNextItem(array:any, item1:any, item2:any) {
       const index = array.findIndex((item:any, i:any) => item === item2 && array[i - 1] === item1);
-    
+
       if (index !== -1 && index < array.length - 1) {
         const nextItem = array[index + 1];
         console.log("Next item:", nextItem);
-        
+
         setBillSequence([nextItem])
         // return nextItem;
       } else {
@@ -613,7 +616,7 @@ const ManageBill = () => {
         return null;
       }
     }
-  
+
 console.log(lastForwardedBy);
 console.log(lastForwardedTo);
 
@@ -684,7 +687,7 @@ console.log(lastForwardedTo);
                             {bill}
                           </MenuItem>
                         ))}
-                        
+
                     </Select> : field.type === "select" ? (
                       <Select
                         name={field.id}
