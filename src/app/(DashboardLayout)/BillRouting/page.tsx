@@ -221,6 +221,9 @@ const BillRouting = () => {
                               backgroundColor: "red",
                               height: "30px",
                               px: 3,
+                              "&:hover": {
+                                backgroundColor: "#e68282", // Change the color on hover
+                              },
                             }}
                             onClick={() => {
                               removeItemAtIndex(array, i)
@@ -249,6 +252,7 @@ const BillRouting = () => {
                       sx={{
                         height: "30px",
                         px: 3,
+
                       }}
                       onClick={handleFormSubmit}
                     >

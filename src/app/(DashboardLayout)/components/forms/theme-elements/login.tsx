@@ -134,7 +134,7 @@ function Login() {
   const [showPassword, setShowPassword] = useState(false)
   const handleClickShowPassword = () => setShowPassword(!showPassword)
   const user = useUser()
-  
+
   const refreshCapcha = () => {
     SetCaptchaCode(Math.random().toString(36).substr(2, 8))
   }
@@ -308,7 +308,6 @@ function Login() {
       // Add more options for General branch
     ],
     "Super Access": [
-      "Secretary Office",
       "Secretary Office",
       "Chairman Office",
       // Add more options for General branch
@@ -684,7 +683,7 @@ function Login() {
               >
                 Forgot Password ?
               </ResendOTP>
-              
+
             </Box>
             {tryagain && (
               <Typography
