@@ -160,6 +160,8 @@ const UPDATE_FIELDS = [
 // Add to constants folder
 const BILL_MODES = { add: "add_bill", update: "update_bill" }
 
+
+
 const FormControl = styled("div")(() => ({
   marginTop: "10px",
 }))
@@ -221,6 +223,9 @@ let selectedFormerId: any
 const ManageBill = () => {
   const [dataFields, setDataFields] = useState(initialFieldState)
   const [BillList, setBillList] = useState([])
+  const [billSequence, setBillSequence] = useState<any>([])
+  const [lastForwardedTo, setlastForwardedTo] = useState<any>("")
+  const [ lastForwardedBy, setlastForwardedBy] = useState<any>("")
   const [tableData, setTableData] = useState<TableRowData[]>([
     {
       phone: "",
@@ -234,11 +239,6 @@ const ManageBill = () => {
   const [updateModeFields, setUpdateModeFields] = useState(
     initialUpdateModeFields
   )
-
-  // check
-  const [billSequence, setBillSequence] = useState<any>([])
-  const [lastForwardedTo, setlastForwardedTo] = useState<any>("")
-  const [lastForwardedBy, setlastForwardedBy] = useState<any>("")
 
   const router = useRouter()
   const searchParams = useSearchParams()
@@ -278,13 +278,8 @@ const ManageBill = () => {
             telephoneNumbers,
           } = billData.data
 
-<<<<<<< HEAD
-          setlastForwardedTo(lastForwardedTo)
-          setlastForwardedBy(lastForwardedBy)
-=======
           setlastForwardedTo(lastForwardedTo);
           setlastForwardedBy(lastForwardedBy);
->>>>>>> de93c7a3e57144e2f33975f8c51ac9a0daab2057
 
           setDataFields({
             diaryNumber: diaryNumber,
@@ -401,21 +396,21 @@ const ManageBill = () => {
         let obj =
           tableData[0]?.phone !== ""
             ? {
-                ...fieldsCopy,
-                bill: selectedBillId,
+              ...fieldsCopy,
+              bill: selectedBillId,
 
-                lastForwardedBy: authCtx.user.data.role.name,
-                former: selectedFormerId,
-                fileNumber: dataFields.fileNumber,
-                telephoneNumbers: tableData,
-              }
+              lastForwardedBy: authCtx.user.data.role.name,
+              former: selectedFormerId,
+              fileNumber: dataFields.fileNumber,
+              telephoneNumbers: tableData,
+            }
             : {
-                ...fieldsCopy,
-                bill: selectedBillId,
-                lastForwardedBy: authCtx.user.data.role.name,
-                former: selectedFormerId,
-                fileNumber: dataFields.fileNumber,
-              }
+              ...fieldsCopy,
+              bill: selectedBillId,
+              lastForwardedBy: authCtx.user.data.role.name,
+              former: selectedFormerId,
+              fileNumber: dataFields.fileNumber,
+            }
 
         const config = {
           url: `/api/claim/create`,
@@ -441,32 +436,32 @@ const ManageBill = () => {
         let obj =
           tableData[0]?.phone !== ""
             ? {
-                claimId: paramBillId,
-                currentStatus,
-                lastForwardedTo,
-                currentremark,
-                lastForwardedBy: authCtx.user.data.role.name,
-                // Update Fields
+              claimId: paramBillId,
+              currentStatus,
+              lastForwardedTo,
+              currentremark,
+              lastForwardedBy: authCtx.user.data.role.name,
+              // Update Fields
 
-                sanctionedAmount: updateModeFields.sanctionedAmount,
-                PFMS: updateModeFields.PFMS,
-                billProcessingStartDate:
-                  updateModeFields.billProcessingStartDate,
-                telephoneNumbers: tableData,
-              }
+              sanctionedAmount: updateModeFields.sanctionedAmount,
+              PFMS: updateModeFields.PFMS,
+              billProcessingStartDate:
+                updateModeFields.billProcessingStartDate,
+              telephoneNumbers: tableData,
+            }
             : {
-                claimId: paramBillId,
-                currentStatus,
-                lastForwardedTo,
-                currentremark,
-                lastForwardedBy: authCtx.user.data.role.name,
-                // Update Fields
+              claimId: paramBillId,
+              currentStatus,
+              lastForwardedTo,
+              currentremark,
+              lastForwardedBy: authCtx.user.data.role.name,
+              // Update Fields
 
-                sanctionedAmount: updateModeFields.sanctionedAmount,
-                PFMS: updateModeFields.PFMS,
-                billProcessingStartDate:
-                  updateModeFields.billProcessingStartDate,
-              }
+              sanctionedAmount: updateModeFields.sanctionedAmount,
+              PFMS: updateModeFields.PFMS,
+              billProcessingStartDate:
+                updateModeFields.billProcessingStartDate,
+            }
 
         const config = {
           url: `/api/claim/approveClaim`,
@@ -548,63 +543,23 @@ const ManageBill = () => {
     }
   }
 
-  console.log(dataFields)
+  console.log(dataFields);
 
   // if(BILL_MODES.update=="update_bill"){
 
   // }
 
-<<<<<<< HEAD
-  useEffect(() => {
-    if (BILL_MODES.add == "add_bill") {
-=======
     useEffect(() => {
       if(BILL_MODES.add=="add_bill"){
->>>>>>> de93c7a3e57144e2f33975f8c51ac9a0daab2057
       if (dataFields.billType) {
-        setBillSequence([])
+        setBillSequence([]);
         getData(dataFields.billType)
       }
-    } else {
+    }else{
       if (dataFields.billType) {
-        setBillSequence([])
+        setBillSequence([]);
         getData(dataFields.billType)
       }
-<<<<<<< HEAD
-    }
-  }, [dataFields.billType])
-
-  const getData = async (selectedBillType: any) => {
-    const config = {
-      url: `/api/billRouting/getall?billType=${selectedBillType}`,
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        authorization: `Bearer ${authCtx.user.token}`,
-      },
-    }
-
-    try {
-      const res = await axiosApi(config.url, config.method, config.headers)
-      //   console.log(res)
-      if (res && res.data) {
-        if (BILL_MODES.add == "add_bill" && role == res.data[0].sequence[0]) {
-          let fg = res.data[0].sequence[1]
-          setBillSequence([fg])
-        }
-
-        if (BILL_MODES.update == "update_bill") {
-          console.log(res.data[0].sequence)
-          {
-            role == lastForwardedBy
-              ? findNextItem(
-                  res.data[0].sequence,
-                  lastForwardedBy,
-                  lastForwardedTo
-                )
-              : null
-          }
-=======
 
     }
     }, [dataFields.billType])
@@ -630,43 +585,19 @@ const ManageBill = () => {
             let fg=res.data[0].sequence[1];
             setBillSequence([fg])
           }
-          console.log(role, lastForwardedTo,"pppppppppppppppppppppppppppppppppppppppppppppp")
-          console.log(role==lastForwardedTo ,"role==lastForwardedTo");
           if (BILL_MODES.update == "update_bill") {
-            console.log(role==lastForwardedTo ,"role==lastForwardedTo");
-
-           {role==lastForwardedTo? findNextItem(res.data[0].sequence,lastForwardedBy,lastForwardedTo):setBillSequence([])}
+            console.log(res.data[0].sequence);
+           {role==lastForwardedTo? findNextItem(res.data[0].sequence,lastForwardedBy,lastForwardedTo):null}
 
 
           }
           // setBillSequence(res.data[0].sequence)
           // sequenceOptions = res.data[0]
->>>>>>> de93c7a3e57144e2f33975f8c51ac9a0daab2057
         }
+      } catch (err: any) {
+        console.log(err.message)
       }
-    } catch (err: any) {
-      console.log(err.message)
     }
-<<<<<<< HEAD
-  }
-
-  function findNextItem(array: any, item1: any, item2: any) {
-    const index = array.findIndex(
-      (item: any, i: any) => item === item2 && array[i - 1] === item1
-    )
-
-    if (index !== -1 && index < array.length - 1) {
-      const nextItem = array[index + 1]
-      console.log("Next item:", nextItem)
-
-      setBillSequence([nextItem])
-      // return nextItem;
-    } else {
-      console.log("No matching sequence found or it's the last item.")
-      return null
-    }
-  }
-=======
 
     function findNextItem(array:any, item1:any, item2:any) {
       const index = array.findIndex((item:any, i:any) => item === item2 && array[i - 1] === item1);
@@ -685,7 +616,6 @@ const ManageBill = () => {
 
 console.log(lastForwardedBy);
 console.log(lastForwardedTo);
->>>>>>> de93c7a3e57144e2f33975f8c51ac9a0daab2057
 
   return (
     <>
@@ -722,7 +652,7 @@ console.log(lastForwardedTo);
 
                 const disabledUpdateFields =
                   paramMode === BILL_MODES.update &&
-                  !enabledUpdateFields.includes(field.id)
+                    !enabledUpdateFields.includes(field.id)
                     ? true
                     : false
 
@@ -741,27 +671,21 @@ console.log(lastForwardedTo);
                       {field.fieldName}
                     </Typography>
 
-                    {field.fieldName == "Forward To" ? (
-                      <Select
-                        name={field.id}
-                        size="small"
-                        value={dataFields[field.id]}
-                        onChange={(e) => handleFieldChange(e)}
-                        sx={{ width: "100%" }}
-                        disabled={disabledPermananty || disabledUpdateFields}
-                      >
-                        {billSequence.map((bill: any, i: any) => (
-                          <MenuItem value={bill} key={i}>
+                    {field.fieldName == "Forward To" ? <Select
+                      name={field.id}
+                      size="small"
+                      value={dataFields[field.id]}
+                      onChange={(e) => handleFieldChange(e)}
+                      sx={{ width: "100%" }}
+                      disabled={disabledPermananty || disabledUpdateFields}
+                    >
+                     { billSequence.map((bill: any,i:any) => (
+                          <MenuItem value={bill} key={i} >
                             {bill}
                           </MenuItem>
                         ))}
-<<<<<<< HEAD
-                      </Select>
-                    ) : field.type === "select" ? (
-=======
 
                     </Select> : field.type === "select" ? (
->>>>>>> de93c7a3e57144e2f33975f8c51ac9a0daab2057
                       <Select
                         name={field.id}
                         size="small"
@@ -772,15 +696,15 @@ console.log(lastForwardedTo);
                       >
                         {field.id === "billNumber"
                           ? BillList.map((bill: any) => (
-                              <MenuItem value={bill.billNumber} key={bill._id}>
-                                {bill.billNumber}
-                              </MenuItem>
-                            ))
+                            <MenuItem value={bill.billNumber} key={bill._id}>
+                              {bill.billNumber}
+                            </MenuItem>
+                          ))
                           : field.selectOptions?.map((option, i) => (
-                              <MenuItem value={option} key={i}>
-                                {option}
-                              </MenuItem>
-                            ))}
+                            <MenuItem value={option} key={i}>
+                              {option}
+                            </MenuItem>
+                          ))}
                       </Select>
                     ) : (
                       <TextField
@@ -795,6 +719,8 @@ console.log(lastForwardedTo);
                         rows={4}
                       />
                     )}
+
+
                   </FormControl>
                 )
               })}
@@ -821,7 +747,7 @@ console.log(lastForwardedTo);
                       onChange={handleUpdatedModeFields}
                       sx={{ width: "100%" }}
                       size="small"
-                      // disabled={disabledUpdateFields}
+                    // disabled={disabledUpdateFields}
                     />
                   </FormControl>
                 ))}
@@ -834,7 +760,7 @@ console.log(lastForwardedTo);
               }}
             >
               {dataFields.billType ===
-              "Resident Telephone/Mobile charges Reimbursement" ? (
+                "Resident Telephone/Mobile charges Reimbursement" ? (
                 <DynamicTable
                   tableData={tableData}
                   setTableData={setTableData}
