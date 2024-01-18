@@ -580,14 +580,19 @@ const ManageBill = () => {
         if (res && res.data) {
           // console.log(res.data[0],"plplplllp");
 
-          console.log(res.data[0].sequence[1],"role==res.data[0].sequence[0]")
-          if (BILL_MODES.add == "add_bill"&&role==res.data[0].sequence[0]) {
+          console.log(role==res.data[0].sequence[0],role, res.data[0].sequence[0],"role==res.data[0].sequence[0]")
+          if (paramMode == "add_bill"&&role==res.data[0].sequence[0]) {
+            console.log("add route")
             let fg=res.data[0].sequence[1];
+            console.log(fg);
             setBillSequence([fg])
           }
-          if (BILL_MODES.update == "update_bill") {
-            console.log(res.data[0].sequence);
-           {role==lastForwardedTo? findNextItem(res.data[0].sequence,lastForwardedBy,lastForwardedTo):null}
+          console.log(BILL_MODES,BILL_MODES.update == "update_bill","assadsa");
+
+          if (paramMode == "update_bill") {
+
+            console.log(res.data[0].sequence,"sdds");
+           {role==lastForwardedTo? findNextItem(res.data[0].sequence,lastForwardedBy,lastForwardedTo): setBillSequence([]) }
 
 
           }
@@ -616,7 +621,7 @@ const ManageBill = () => {
 
 console.log(lastForwardedBy);
 console.log(lastForwardedTo);
-
+console.log(paramMode,"paramModeparamModeparamModeparamMode");
   return (
     <>
       <PageContainer
