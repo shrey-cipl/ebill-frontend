@@ -97,7 +97,7 @@ const Profile = () => {
       <Box sx={{
         width:"40px"
       }}></Box>
-</Marquee>
+         </Marquee>
 
           </ListItemText>
         </MenuItem>
