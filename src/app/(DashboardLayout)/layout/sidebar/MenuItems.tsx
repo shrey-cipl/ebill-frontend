@@ -348,6 +348,13 @@ const Menuitems: any = {
   former: [
     {
       id: uniqueId(),
+      title: "Dashboard",
+      icon: IconLayoutDashboard,
+      href: "/Home",
+      present: "no",
+    },
+    {
+      id: uniqueId(),
       title: "Add Bill",
       icon: AssessmentIcon,
       href: "/Formers/AddBills",
