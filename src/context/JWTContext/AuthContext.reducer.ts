@@ -2,7 +2,7 @@ const INITIALIZE = 'INITIALIZE';
 const SIGN_IN = 'SIGN_IN';
 const SIGN_OUT = 'SIGN_OUT';
 const SIGN_UP = 'SIGN_UP';
-
+const SIGN_IN_FOR = "SIGN_IN_FOR"
 const AuthReducer = (state: any, action: any) => {
     console.log(action.type, "payload")
     switch (action.type) {
@@ -13,6 +13,18 @@ const AuthReducer = (state: any, action: any) => {
                 user: action.payload.user,
             };
         case SIGN_IN:
+            return {
+                ...state,
+                isAuthenticated: true,
+                user: action.payload.user,
+            };
+        case SIGN_IN:
+            return {
+                ...state,
+                isAuthenticated: true,
+                user: action.payload.user,
+            };
+        case SIGN_IN_FOR:
             return {
                 ...state,
                 isAuthenticated: true,
@@ -29,5 +41,6 @@ const AuthReducer = (state: any, action: any) => {
             return state;
     }
 };
+
 
 export default AuthReducer;

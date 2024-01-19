@@ -27,7 +27,7 @@ const initialState = {
   signIn: illegalStateFunction,
   signOut: illegalStateFunction,
   signUp: illegalStateFunction,
-  signInfor: illegalStateFunction,
+  signInFor: illegalStateFunction,
   resetPassword: illegalStateFunction,
 }
 
@@ -52,7 +52,7 @@ export default function AuthProvider({ children }: AuthProviderProps) {
         // localStorage.getItem('login')
         if (localStorage.getItem("login")) {
           const info: any = JSON.parse(localStorage.getItem("login") || "")
-
+console.log("ds");
           const { token, data } = info
 
           dispatch({
@@ -60,15 +60,15 @@ export default function AuthProvider({ children }: AuthProviderProps) {
             payload: {
               isInitialized: true,
               user: {data ,token},
-            
+
             },
           })
         } else {
           //http://localhost:3000/resetpassword
           // /resetpassword]
 
-         
-         
+
+
           dispatch({
             type: INITIALIZE,
             payload: {
@@ -105,7 +105,7 @@ export default function AuthProvider({ children }: AuthProviderProps) {
         localStorage.setItem("login", JSON.stringify(response.data))
         setSession(token)
         dispatch({
-          type: SIGN_IN,  
+          type: SIGN_IN,
           payload: {
             user: {data ,token},
             isAuthenticated: true,
@@ -127,7 +127,7 @@ export default function AuthProvider({ children }: AuthProviderProps) {
         return  err;
       }
     }
-    const signInfor = async (email: any, password: any) => {
+    const signInFor = async (email: any, password: any) => {
       try {
         const response = await axios.post("/api/former/login", {
           email,
@@ -138,7 +138,7 @@ export default function AuthProvider({ children }: AuthProviderProps) {
         localStorage.setItem("login", JSON.stringify(response.data))
         setSession(token)
         dispatch({
-          type: SIGN_IN_FOR,  
+          type: SIGN_IN_FOR,
           payload: {
             user: {data ,token},
             isAuthenticated: true,
@@ -163,7 +163,7 @@ export default function AuthProvider({ children }: AuthProviderProps) {
   const signOut = async () => {
     setSession(null)
     dispatch({ type: SIGN_OUT })
-    
+
     // localStorage.setItem("login", "logout")
     localStorage.removeItem("login");
   }
@@ -175,7 +175,7 @@ export default function AuthProvider({ children }: AuthProviderProps) {
           method: "jwt",
           signIn,
           signOut,
-          signInfor
+          signInFor
         }),
         [state]
       )}

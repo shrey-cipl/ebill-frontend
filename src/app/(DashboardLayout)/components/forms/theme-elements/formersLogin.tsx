@@ -32,11 +32,11 @@ function Formers() {
   const handleClickShowPassword = () => setShowPassword(!showPassword)
   const loginUser = () => {
     if (emailValidationRegex.test(email)) {
-      auth.signInfor(email, password)
+      auth.signInFor(email, password)
     } else if (mobileValidationRegex.test(email)) {
-      auth.signInfor( email, password)
+      auth.signInFor( email, password)
     } else {
-      auth.signInfor( email, password)
+      auth.signInFor( email, password)
     }
   }
 
@@ -86,11 +86,11 @@ function Formers() {
   }
 
   return (
-  
 
-  
 
-    
+
+
+
     <Box>
       <Box
         sx={{
@@ -305,7 +305,7 @@ function Formers() {
         </Box>
       </Box>
     </Box>
- 
+
   )
 }
 
