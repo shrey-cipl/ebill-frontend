@@ -25,7 +25,7 @@ import CustomModal from "../components/CustomModal/CustomModal"
 import axiosApi from "@/Util/axiosApi"
 import { useAuth } from "@/context/JWTContext/AuthContext.provider"
 
-const BILL_MODES = { add: "add_bill", update: "update_bill" }
+import { BILL_MODES } from "../../../config/constants"
 
 const BoxWrapper = styled("div")(() => ({
   display: "grid",

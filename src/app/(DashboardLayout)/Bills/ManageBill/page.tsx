@@ -13,7 +13,6 @@ import MenuItem from "@mui/material/MenuItem"
 import Button from "@mui/material/Button"
 import Box from "@mui/material/Box"
 import { styled } from "@mui/system"
-import TableCell from "@mui/material/TableCell"
 import dayjs from "dayjs"
 
 import PageContainer from "../../components/container/PageContainer"
@@ -22,145 +21,11 @@ import { useAuth } from "@/context/JWTContext/AuthContext.provider"
 import axiosApi from "@/Util/axiosApi"
 import DynamicTable from "../../components/dynamicTable/DynamicTable"
 
-const DATA_FIELDS = [
-  {
-    id: "diaryNumber",
-    fieldName: "Diary Number",
-    type: "number",
-  },
-  {
-    id: "claimReceivingDate",
-    fieldName: "Claim Receiving Date (YYYY-MM-DD)",
-    type: "date",
-  },
-  {
-    id: "billType",
-    fieldName: "Bill Type",
-    type: "select",
-    selectOptions: [
-      "Domestic Help",
-      "Medical Reimbursement",
-      "F&Reimbursement for Defraying the Services of Orderly",
-      "Resident Telephone/Mobile charges Reimbursement",
-    ],
-  },
-  {
-    id: "billNumber",
-    fieldName: "Bill No.",
-    type: "select",
-    // selectOptions: [
-    //   "Domestic Help",
-    //   "Medical Reimbursement",
-    //   "F&Reimbursement for Defraying the Services of Orderly",
-    //   "Resident Telephone/Mobile charges Reimbursement",
-    // ],
-  },
-  {
-    id: "name",
-    fieldName: "Name",
-    type: "text",
-  },
-  {
-    id: "email",
-    fieldName: "E-mail",
-    type: "text",
-  },
-  {
-    id: "phone",
-    fieldName: "Phone",
-    type: "number",
-  },
-  {
-    id: "fileNumber",
-    fieldName: "File Number",
-    type: "number",
-  },
-  {
-    id: "claimPeriodFrom",
-    fieldName: "Claimed Period From",
-    type: "date",
-  },
-  {
-    id: "claimPeriodTo",
-    fieldName: "Claimed Period To",
-    type: "date",
-  },
-  {
-    id: "totalClaimedAmount",
-    fieldName: "Total Claimed Amount",
-    type: "number",
-  },
-  {
-    id: "totalAdmissibleAmount",
-    fieldName: "Total Amissible Amount",
-    type: "number",
-  },
-  {
-    id: "maxAdmissibleAmount",
-    fieldName: "Max Amissible Amount",
-    type: "number",
-  },
-  {
-    id: "currentStatus",
-    fieldName: "Status",
-    type: "select",
-    selectOptions: ["Open", "Closed", "Forwarded To Bank", "Rejected"],
-  },
-  {
-    id: "lastForwardedTo",
-    fieldName: "Forward To",
-    type: "select",
-    selectOptions: [
-      "Asst. Section Officer Admin I",
-      "Asst. Section Officer Admin IV",
-      "Section Officer Admin I",
-      "Section Officer Admin IV",
-      "Under Secretary O&M",
-      "Deputy Secretary Admin",
-      "Joint Secretary Admin",
-      "Asst. Section Officer General II",
-      "Section Officer General II",
-      "Under Secretary General II",
-      "Deputy Secretary General",
-      "Joint Secretary General",
-      "Accounts I",
-      "Accounts II",
-      "Accounts IV",
-      "F&BO",
-      "System Admin",
-      "PAO",
-      "Forwarded To Bank",
-    ],
-  },
-  {
-    id: "currentremark",
-    fieldName: "Comments",
-    type: "text",
-  },
-]
-
-const UPDATE_FIELDS = [
-  {
-    id: "sanctionedAmount",
-    fieldName: "Sanctioned Amount",
-    type: "number",
-  },
-  {
-    id: "PFMS",
-    fieldName: "PFMS",
-    type: "number",
-  },
-  {
-    id: "billProcessingStartDate",
-    fieldName: "Bill Processing Start Date",
-    type: "date",
-  },
-]
-
-// Add to constants folder
-const BILL_MODES = { add: "add_bill", update: "update_bill" }
-
-
+import {
+  MANAGEBILL_DATA_FIELDS,
+  MANAGEBILL_UPDATE_FIELDS,
+  BILL_MODES,
+} from "../../../../config/constants"
 
 const FormControl = styled("div")(() => ({
   marginTop: "10px",
@@ -175,20 +40,15 @@ const ButtonWrapper = styled("div")(() => ({
 
 const initialFieldState: any = {}
 // Creates an initial state object (uses 'id')
-for (let arrEl of DATA_FIELDS) {
+for (let arrEl of MANAGEBILL_DATA_FIELDS) {
   if (!initialFieldState[arrEl.id]) initialFieldState[arrEl.id] = ""
 }
 
 const initialUpdateModeFields: any = {}
 // Creates an initial state object (uses 'id')
-for (let arrEl of UPDATE_FIELDS) {
+for (let arrEl of MANAGEBILL_UPDATE_FIELDS) {
   if (!initialUpdateModeFields[arrEl.id]) initialUpdateModeFields[arrEl.id] = ""
 }
-
-// Stores a cached data for UpdateModeFields and TableData field
-// to reset to initial field state IF IN UPDATE MODE
-let cachedUpdateModeField: any
-let cachedTableData: any
 
 const getBillData = async (id: any, token: any) => {
   const config = {
@@ -216,6 +76,11 @@ interface TableRowData {
   admissibleAmount: string
 }
 
+// Stores a cached data for UpdateModeFields and TableData field
+// to reset to initial field state IF IN UPDATE MODE
+let cachedUpdateModeField: any
+let cachedTableData: any
+
 // Used to later store selectedBill id
 let selectedBillId: any
 let selectedFormerId: any
@@ -225,7 +90,7 @@ const ManageBill = () => {
   const [BillList, setBillList] = useState([])
   const [billSequence, setBillSequence] = useState<any>([])
   const [lastForwardedTo, setlastForwardedTo] = useState<any>("")
-  const [ lastForwardedBy, setlastForwardedBy] = useState<any>("")
+  const [lastForwardedBy, setlastForwardedBy] = useState<any>("")
   const [tableData, setTableData] = useState<TableRowData[]>([
     {
       phone: "",
@@ -250,6 +115,7 @@ const ManageBill = () => {
 
   const authCtx: any = useAuth()
   const role: any = authCtx?.user?.data?.role?.name
+
   // Populates form fields with bill data
   useEffect(() => {
     if (paramBillId) {
@@ -278,8 +144,8 @@ const ManageBill = () => {
             telephoneNumbers,
           } = billData.data
 
-          setlastForwardedTo(lastForwardedTo);
-          setlastForwardedBy(lastForwardedBy);
+          setlastForwardedTo(lastForwardedTo)
+          setlastForwardedBy(lastForwardedBy)
 
           setDataFields({
             diaryNumber: diaryNumber,
@@ -396,21 +262,21 @@ const ManageBill = () => {
         let obj =
           tableData[0]?.phone !== ""
             ? {
-              ...fieldsCopy,
-              bill: selectedBillId,
+                ...fieldsCopy,
+                bill: selectedBillId,
 
-              lastForwardedBy: authCtx.user.data.role.name,
-              former: selectedFormerId,
-              fileNumber: dataFields.fileNumber,
-              telephoneNumbers: tableData,
-            }
+                lastForwardedBy: authCtx.user.data.role.name,
+                former: selectedFormerId,
+                fileNumber: dataFields.fileNumber,
+                telephoneNumbers: tableData,
+              }
             : {
-              ...fieldsCopy,
-              bill: selectedBillId,
-              lastForwardedBy: authCtx.user.data.role.name,
-              former: selectedFormerId,
-              fileNumber: dataFields.fileNumber,
-            }
+                ...fieldsCopy,
+                bill: selectedBillId,
+                lastForwardedBy: authCtx.user.data.role.name,
+                former: selectedFormerId,
+                fileNumber: dataFields.fileNumber,
+              }
 
         const config = {
           url: `/api/claim/create`,
@@ -436,32 +302,32 @@ const ManageBill = () => {
         let obj =
           tableData[0]?.phone !== ""
             ? {
-              claimId: paramBillId,
-              currentStatus,
-              lastForwardedTo,
-              currentremark,
-              lastForwardedBy: authCtx.user.data.role.name,
-              // Update Fields
+                claimId: paramBillId,
+                currentStatus,
+                lastForwardedTo,
+                currentremark,
+                lastForwardedBy: authCtx.user.data.role.name,
+                // Update Fields
 
-              sanctionedAmount: updateModeFields.sanctionedAmount,
-              PFMS: updateModeFields.PFMS,
-              billProcessingStartDate:
-                updateModeFields.billProcessingStartDate,
-              telephoneNumbers: tableData,
-            }
+                sanctionedAmount: updateModeFields.sanctionedAmount,
+                PFMS: updateModeFields.PFMS,
+                billProcessingStartDate:
+                  updateModeFields.billProcessingStartDate,
+                telephoneNumbers: tableData,
+              }
             : {
-              claimId: paramBillId,
-              currentStatus,
-              lastForwardedTo,
-              currentremark,
-              lastForwardedBy: authCtx.user.data.role.name,
-              // Update Fields
+                claimId: paramBillId,
+                currentStatus,
+                lastForwardedTo,
+                currentremark,
+                lastForwardedBy: authCtx.user.data.role.name,
+                // Update Fields
 
-              sanctionedAmount: updateModeFields.sanctionedAmount,
-              PFMS: updateModeFields.PFMS,
-              billProcessingStartDate:
-                updateModeFields.billProcessingStartDate,
-            }
+                sanctionedAmount: updateModeFields.sanctionedAmount,
+                PFMS: updateModeFields.PFMS,
+                billProcessingStartDate:
+                  updateModeFields.billProcessingStartDate,
+              }
 
         const config = {
           url: `/api/claim/approveClaim`,
@@ -543,85 +409,74 @@ const ManageBill = () => {
     }
   }
 
-  console.log(dataFields);
-
-  // if(BILL_MODES.update=="update_bill"){
-
-  // }
-
-    useEffect(() => {
-      if(BILL_MODES.add=="add_bill"){
+  useEffect(() => {
+    if (paramMode === BILL_MODES.add) {
       if (dataFields.billType) {
-        setBillSequence([]);
+        setBillSequence([])
         getData(dataFields.billType)
       }
-    }else{
+    } else {
       if (dataFields.billType) {
-        setBillSequence([]);
+        setBillSequence([])
         getData(dataFields.billType)
       }
-
     }
-    }, [dataFields.billType])
+  }, [dataFields.billType])
 
-    const getData = async (selectedBillType: any) => {
-      const config = {
-        url: `/api/billRouting/getall?billType=${selectedBillType}`,
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          authorization: `Bearer ${authCtx.user.token}`,
-        },
-      }
+  const getData = async (selectedBillType: any) => {
+    const config = {
+      url: `/api/billRouting/getall?billType=${selectedBillType}`,
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        authorization: `Bearer ${authCtx.user.token}`,
+      },
+    }
 
-      try {
-        const res = await axiosApi(config.url, config.method, config.headers)
-        //   console.log(res)
-        if (res && res.data) {
-          // console.log(res.data[0],"plplplllp");
+    try {
+      const res = await axiosApi(config.url, config.method, config.headers)
 
-          console.log(role==res.data[0].sequence[0],role, res.data[0].sequence[0],"role==res.data[0].sequence[0]")
-          if (paramMode == "add_bill"&&role==res.data[0].sequence[0]) {
-            console.log("add route")
-            let fg=res.data[0].sequence[1];
-            console.log(fg);
-            setBillSequence([fg])
-          }
-          console.log(BILL_MODES,BILL_MODES.update == "update_bill","assadsa");
-
-          if (paramMode == "update_bill") {
-
-            console.log(res.data[0].sequence,"sdds");
-           {role==lastForwardedTo? findNextItem(res.data[0].sequence,lastForwardedBy,lastForwardedTo): setBillSequence([]) }
-
-
-          }
-          // setBillSequence(res.data[0].sequence)
-          // sequenceOptions = res.data[0]
+      if (res && res.data) {
+        if (paramMode == BILL_MODES.add && role == res.data[0].sequence[0]) {
+          let fg = res.data[0].sequence[1]
+          setBillSequence([fg])
         }
-      } catch (err: any) {
-        console.log(err.message)
+
+        if (paramMode == "update_bill") {
+          {
+            role == lastForwardedTo
+              ? findNextItem(
+                  res.data[0].sequence,
+                  lastForwardedBy,
+                  lastForwardedTo
+                )
+              : setBillSequence([])
+          }
+        }
+        // setBillSequence(res.data[0].sequence)
+        // sequenceOptions = res.data[0]
       }
+    } catch (err: any) {
+      console.log(err.message)
     }
+  }
 
-    function findNextItem(array:any, item1:any, item2:any) {
-      const index = array.findIndex((item:any, i:any) => item === item2 && array[i - 1] === item1);
+  function findNextItem(array: any, item1: any, item2: any) {
+    const index = array.findIndex(
+      (item: any, i: any) => item === item2 && array[i - 1] === item1
+    )
 
-      if (index !== -1 && index < array.length - 1) {
-        const nextItem = array[index + 1];
-        console.log("Next item:", nextItem);
+    if (index !== -1 && index < array.length - 1) {
+      const nextItem = array[index + 1]
 
-        setBillSequence([nextItem])
-        // return nextItem;
-      } else {
-        console.log("No matching sequence found or it's the last item.");
-        return null;
-      }
+      setBillSequence([nextItem])
+      // return nextItem;
+    } else {
+      console.log("No matching sequence found or it's the last item.")
+      return null
     }
+  }
 
-console.log(lastForwardedBy);
-console.log(lastForwardedTo);
-console.log(paramMode,"paramModeparamModeparamModeparamMode");
   return (
     <>
       <PageContainer
@@ -640,7 +495,7 @@ console.log(paramMode,"paramModeparamModeparamModeparamMode");
                 gap: "10px",
               }}
             >
-              {DATA_FIELDS.map((field, i) => {
+              {MANAGEBILL_DATA_FIELDS.map((field, i) => {
                 // Permanantly disabled fields
                 const permanantDisable = ["name", "phone", "email"]
 
@@ -657,7 +512,7 @@ console.log(paramMode,"paramModeparamModeparamModeparamMode");
 
                 const disabledUpdateFields =
                   paramMode === BILL_MODES.update &&
-                    !enabledUpdateFields.includes(field.id)
+                  !enabledUpdateFields.includes(field.id)
                     ? true
                     : false
 
@@ -676,21 +531,22 @@ console.log(paramMode,"paramModeparamModeparamModeparamMode");
                       {field.fieldName}
                     </Typography>
 
-                    {field.fieldName == "Forward To" ? <Select
-                      name={field.id}
-                      size="small"
-                      value={dataFields[field.id]}
-                      onChange={(e) => handleFieldChange(e)}
-                      sx={{ width: "100%" }}
-                      disabled={disabledPermananty || disabledUpdateFields}
-                    >
-                     { billSequence.map((bill: any,i:any) => (
-                          <MenuItem value={bill} key={i} >
+                    {field.fieldName == "Forward To" ? (
+                      <Select
+                        name={field.id}
+                        size="small"
+                        value={dataFields[field.id]}
+                        onChange={(e) => handleFieldChange(e)}
+                        sx={{ width: "100%" }}
+                        disabled={disabledPermananty || disabledUpdateFields}
+                      >
+                        {billSequence.map((bill: any, i: any) => (
+                          <MenuItem value={bill} key={i}>
                             {bill}
                           </MenuItem>
                         ))}
-
-                    </Select> : field.type === "select" ? (
+                      </Select>
+                    ) : field.type === "select" ? (
                       <Select
                         name={field.id}
                         size="small"
@@ -701,15 +557,15 @@ console.log(paramMode,"paramModeparamModeparamModeparamMode");
                       >
                         {field.id === "billNumber"
                           ? BillList.map((bill: any) => (
-                            <MenuItem value={bill.billNumber} key={bill._id}>
-                              {bill.billNumber}
-                            </MenuItem>
-                          ))
+                              <MenuItem value={bill.billNumber} key={bill._id}>
+                                {bill.billNumber}
+                              </MenuItem>
+                            ))
                           : field.selectOptions?.map((option, i) => (
-                            <MenuItem value={option} key={i}>
-                              {option}
-                            </MenuItem>
-                          ))}
+                              <MenuItem value={option} key={i}>
+                                {option}
+                              </MenuItem>
+                            ))}
                       </Select>
                     ) : (
                       <TextField
@@ -724,14 +580,12 @@ console.log(paramMode,"paramModeparamModeparamModeparamMode");
                         rows={4}
                       />
                     )}
-
-
                   </FormControl>
                 )
               })}
 
               {paramMode === BILL_MODES.update &&
-                UPDATE_FIELDS.map((field, i) => (
+                MANAGEBILL_UPDATE_FIELDS.map((field, i) => (
                   <FormControl key={i}>
                     <Typography
                       fontWeight={600}
@@ -752,7 +606,7 @@ console.log(paramMode,"paramModeparamModeparamModeparamMode");
                       onChange={handleUpdatedModeFields}
                       sx={{ width: "100%" }}
                       size="small"
-                    // disabled={disabledUpdateFields}
+                      // disabled={disabledUpdateFields}
                     />
                   </FormControl>
                 ))}
@@ -765,7 +619,7 @@ console.log(paramMode,"paramModeparamModeparamModeparamMode");
               }}
             >
               {dataFields.billType ===
-                "Resident Telephone/Mobile charges Reimbursement" ? (
+              "Resident Telephone/Mobile charges Reimbursement" ? (
                 <DynamicTable
                   tableData={tableData}
                   setTableData={setTableData}

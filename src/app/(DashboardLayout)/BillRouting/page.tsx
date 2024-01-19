@@ -22,34 +22,7 @@ import axiosApi from "@/Util/axiosApi"
 import { enqueueSnackbar } from "notistack"
 import { InputLabel } from "@mui/material"
 
-const billType = [
-  "Domestic Help",
-  "Medical Reimbursement",
-  "F&Reimbursement for Defraying the Services of Orderly",
-  "Resident Telephone/Mobile charges Reimbursement",
-]
-
-const selectOptions = [
-  "Asst. Section Officer Admin I",
-  "Asst. Section Officer Admin IV",
-  "Section Officer Admin I",
-  "Section Officer Admin IV",
-  "Under Secretary O&M",
-  "Deputy Secretary Admin",
-  "Joint Secretary Admin",
-  "Asst. Section Officer General II",
-  "Section Officer General II",
-  "Under Secretary General II",
-  "Deputy Secretary General",
-  "Joint Secretary General",
-  "Accounts I",
-  "Accounts II",
-  "Accounts IV",
-  "F&BO",
-  "System Admin", // remove this for only bill routing page
-  "PAO",
-  "Forwarded To Bank",
-]
+import { BILL_TYPE, ROLES } from "../../../../src/config/constants"
 
 const BillRouting = () => {
   const [selectedBillType, setSelectedBillType] = useState("")
@@ -163,7 +136,7 @@ const BillRouting = () => {
                 onChange={(e: any) => setSelectedBillType(e?.target?.value)}
                 sx={{ width: "100%" }}
               >
-                {billType?.map((item, i) => (
+                {BILL_TYPE?.map((item, i) => (
                   <MenuItem key={i} value={item}>
                     {item}
                   </MenuItem>
@@ -196,7 +169,7 @@ const BillRouting = () => {
                             onChange={(e: any) => handleSequence(e, i)}
                             sx={{ width: "100%" }}
                           >
-                            {selectOptions?.map((item: any, i: any) => (
+                            {ROLES?.map((item: any, i: any) => (
                               <MenuItem key={i} value={item}>
                                 {item}
                               </MenuItem>
@@ -252,7 +225,6 @@ const BillRouting = () => {
                       sx={{
                         height: "30px",
                         px: 3,
-
                       }}
                       onClick={handleFormSubmit}
                     >
