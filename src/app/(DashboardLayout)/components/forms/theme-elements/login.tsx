@@ -27,90 +27,6 @@ import { useUser } from "../../../../../context/UserContext/UserContext.provider
 import { useAuth } from "../../../../../context/JWTContext/AuthContext.provider"
 import callApi from "@/Util/axiosApi"
 
-const GreenBox = styled(Box)`
-  width: 874px;
-  height: 64px;
-  background: #3e7d60;
-  border: 0.5px solid #3e7d60;
-  display: flex;
-`
-
-const Heading = styled(Typography)`
-  width: 221px;
-  font-family: "Nunito", sans-serif;
-  font-style: normal;
-  font-weight: 800;
-  font-size: 24px;
-  line-height: 20px;
-  letter-spacing: 0.1px;
-  color: #eaf2f9;
-  margin-top: 22px;
-  margin-left: auto;
-  margin-right: auto;
-`
-
-const SBox = styled(Box)`
-  padding: 25px 35px;
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  & > div,
-  & > button,
-  & > p {
-    margin-top: 40px;
-  }
-  margin-left: 47px;
-`
-
-const NewRegistration = styled(Button)`
-  width: 254px;
-  height: 62px;
-  background: #e15a11 !important;
-  box-shadow: 0px 0px 19px -10px rgba(215, 215, 215, 0.25) !important;
-  color: white;
-  margin-right: 280px;
-  font-family: "Nunito", sans-serif;
-  font-weight: 600;
-  font-size: 18px;
-  &:hover {
-    background-color: #e15a11 !important;
-  }
-`
-
-const LoginButton = styled(Button)`
-  width: 131px;
-  height: 62px;
-  background: #e15a11 !important;
-  font-weight: 600;
-  font-family: "Nunito", sans-serif;
-  font-size: 20px;
-  box-shadow: 0px 0px 19px -10px rgba(215, 215, 215, 0.25) !important;
-  color: white !important;
-  &:hover {
-    background-color: #e15a11 !important;
-  }
-`
-
-const ResendOTP = styled(Typography)`
-  width: 150px;
-  height: 22px;
-  font-family: "Nunito", sans-serif;
-  font-style: normal;
-  font-weight: 700;
-  font-size: 16px;
-  line-height: 22px;
-  text-decoration-line: underline;
-  color: #1e88e5;
-  cursor: pointer;
-  margin-left: auto;
-`
-
-const ErrorTypography = styled(Typography)`
-  color: #ff0000;
-  font-size: 12px;
-  margin-top: 10px !important;
-`
-
 const emailValidationRegex = /^[\w-\\.]+@([\w-]+\.)+[\w-]{2,4}$/
 const mobileValidationRegex =
   /^((\+*)((0[ -]*)*|((91 )*))((\d{12})+|(\d{10})+))|\d{5}([- ]*)\d{6}$/
@@ -153,13 +69,9 @@ function Login() {
       return
     } else {
       if (captchaCode === inputCaptcha) {
-        console.log(captchaCode, "==", inputCaptcha)
-
         if (emailValidationRegex.test(email)) {
           let ress: any = await auth.signIn(email, password)
-          console.log(ress, "Response from auth.signIn")
 
-          console.log(!ress?.success)
           if (ress?.success == false) {
             setToast({
               message: "Incorrect credentials",
@@ -330,12 +242,12 @@ function Login() {
   }
 
   const userNameOptions = branchOptions[branch] || ["select Branch !!!"]
-  console.log(allUser)
+
   useEffect(() => {
     getData()
   }, [])
   return (
-    <Box>
+    <Box sx={{ height: "100%" }}>
       <Snackbar
         anchorOrigin={{ vertical: "top", horizontal: "center" }}
         open={toast.open}
@@ -361,7 +273,8 @@ function Login() {
           justifyContent: "left",
           alignItems: "center",
           width: "auto",
-          // height: "100vh",
+          height: "100%",
+          overflow: "auto",
           top: "4px",
           backgroundImage: `url(/Banner.png)`,
           backgroundRepeat: "no-repeat",
@@ -646,20 +559,19 @@ function Login() {
               Login
             </LoginButton>
             <ResendOTP
-                sx={{
-                  color: "#fff900",
-                  fontSize: "12px",
-                  textDecoration: "none",
-                  mt: 2,
-                }}
-                variant="body1"
-                onClick={() => {
-                  console.log(branch)
-                  router.push("/FormersLogin")
-                }}
-              >
-                Former Login
-              </ResendOTP>
+              sx={{
+                color: "#fff900",
+                fontSize: "12px",
+                textDecoration: "none",
+                mt: 2,
+              }}
+              variant="body1"
+              onClick={() => {
+                router.push("/FormersLogin")
+              }}
+            >
+              Former Login
+            </ResendOTP>
             <Box
               sx={{
                 display: "flex",
@@ -677,13 +589,11 @@ function Login() {
                 }}
                 variant="body1"
                 onClick={() => {
-                  console.log(branch)
                   router.push("/Forgot")
                 }}
               >
                 Forgot Password ?
               </ResendOTP>
-
             </Box>
             {tryagain && (
               <Typography
