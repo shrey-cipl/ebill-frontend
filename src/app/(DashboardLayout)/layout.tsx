@@ -33,9 +33,12 @@ export default function RootLayout({
   const path = usePathname()
   return (
     <>
-      {path === "/login" || path ==="/Forgot"||path==="/resetpassword"||path==="/FormersLogin"?  (
+      {path === "/login" ||
+      path === "/Forgot" ||
+      path === "/resetpassword" ||
+      path === "/FormersLogin" ? (
         <>
-          <Box sx={{ minHeight: "calc(100vh - 170px)" }}>{children}</Box>
+          <Box sx={{ height: "100%" }}>{children}</Box>
         </>
       ) : (
         <>
@@ -58,7 +61,7 @@ export default function RootLayout({
                   maxWidth: "1200px",
                 }}
               >
-                <Box sx={{ minHeight: "calc(100vh - 170px)" }}>{children}</Box>
+                <Box>{children}</Box>
               </Container>
             </PageWrapper>
           </MainWrapper>

@@ -86,19 +86,16 @@ function Formers() {
   }
 
   return (
-
-
-
-
-
-    <Box>
+    <Box sx={{ height: "100%" }}>
       <Box
         sx={{
           display: "flex",
           justifyContent: "left",
           alignItems: "center",
           width: "auto",
-          height: "100vh",
+          // height: "100vh",
+          height: "100%",
+          overflow: "auto",
           top: "4px",
           backgroundImage: `url(/Banner.png)`,
           backgroundRepeat: "no-repeat",
@@ -109,7 +106,7 @@ function Formers() {
           sx={{
             background: "#000000b3",
             width: "auto",
-            height: "100vh",
+            // height: "100vh",
             top: "0",
             left: "0",
             borderRadius: "0",
@@ -305,7 +302,6 @@ function Formers() {
         </Box>
       </Box>
     </Box>
-
   )
 }
 
