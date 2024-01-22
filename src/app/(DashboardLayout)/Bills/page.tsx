@@ -26,6 +26,7 @@ import axiosApi from "@/Util/axiosApi"
 import { useAuth } from "@/context/JWTContext/AuthContext.provider"
 
 import { BILL_MODES } from "../../../config/constants"
+import CustomGrid from "../components/CustomGrid"
 
 const BoxWrapper = styled("div")(() => ({
   display: "grid",
@@ -86,7 +87,7 @@ const Bills = () => {
 
   const columns: GridColDef[] = [
     {
-      field: "ranodm_1", // confirm this
+      field: "s.no", // confirm this
       headerName: "S.No",
       valueGetter: (params) => params.api.getAllRowIds().indexOf(params.id) + 1,
     },
@@ -161,39 +162,18 @@ const Bills = () => {
               Add New
             </Button>
           </div>
-          <DataGrid
+          <CustomGrid
             rows={billList}
             columns={columns}
-            density="compact"
             sx={{
-              ".bg-light": {
-                bgcolor: "#eee",
-                // "&:hover": {
-                //   bgcolor: "darkgrey",
-                // },
-              },
-              ".bg-dark": {
-                bgcolor: "#fff",
-              },
               ".text-green": {
                 color: "green",
               },
               ".text-red": {
                 color: "red",
               },
-              "& .MuiDataGrid-columnHeaders": {
-                backgroundColor: "#4C7AFF",
-                color: "#ffffff",
-                // fontWeight: "600",
-                // fontSize: "16px",
-              },
             }}
-            getRowClassName={(params) => {
-              return (params.indexRelativeToCurrentPage + 1) % 2 === 0
-                ? "bg-light"
-                : "bg-dark"
-            }}
-            getCellClassName={(params) => {
+            getCellClassName={(params: any) => {
               if (params.field === "currentStatus") {
                 return params.row.currentStatus === "Open"
                   ? "text-green"
@@ -202,11 +182,6 @@ const Bills = () => {
 
               return ""
             }}
-            slots={{ toolbar: GridToolbar }}
-            initialState={{
-              pagination: { paginationModel: { pageSize: 25 } },
-            }}
-            pageSizeOptions={[25, 50, 100]}
           />
 
           {/* BILL MODAL */}
