@@ -19,7 +19,7 @@ import { useAuth } from "../../../../../context/JWTContext/AuthContext.provider"
 
 const emailValidationRegex = /^[\w-\\.]+@([\w-]+\.)+[\w-]{2,4}$/
 const mobileValidationRegex =
-  /^((\+*)((0[ -]*)*|((91 )*))((\d{12})+|(\d{10})+))|\d{5}([- ]*)\d{6}$/
+  /^((\+*)((0[ -]*)*|((91 )*))((\d{12})+|(\d{10})+))|\{5}([- ]*)\d{6}$/
 
 function Formers() {
   const auth = useAuth()
