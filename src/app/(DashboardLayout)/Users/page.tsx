@@ -1,31 +1,15 @@
 "use client"
 import { useEffect, useState } from "react"
 
-import Table from "@mui/material/Table"
-import TableBody from "@mui/material/TableBody"
-import TableCell from "@mui/material/TableCell"
-import TableHead from "@mui/material/TableHead"
-import TableRow from "@mui/material/TableRow"
-import Button from "@mui/material/Button"
-import Typography from "@mui/material/Typography"
-import Box from "@mui/material/Box"
-import TextField from "@mui/material/TextField"
-
-import { styled } from "@mui/system"
 import Link from "next/link"
 
 import PageContainer from "../components/container/PageContainer"
 import DashboardNew from "../components/shared/DashboardNew"
-import Pagination from "../components/Pagination/Pagination"
 import axiosApi from "@/Util/axiosApi"
 import { useAuth } from "@/context/JWTContext/AuthContext.provider"
 
-import {
-  DataGrid,
-  GridRowsProp,
-  GridColDef,
-  GridToolbar,
-} from "@mui/x-data-grid"
+import { GridRowsProp, GridColDef } from "@mui/x-data-grid"
+import CustomGrid from "../components/CustomGrid"
 
 const Users = () => {
   const [usersList, setUsersList] = useState([])
@@ -65,7 +49,7 @@ const Users = () => {
 
   const columns: GridColDef[] = [
     {
-      field: "ranodm_1", // confirm this
+      field: "s.no", // confirm this
       headerName: "S.No",
       valueGetter: (params) => params.api.getAllRowIds().indexOf(params.id) + 1,
     },
@@ -94,38 +78,7 @@ const Users = () => {
     <PageContainer title="All Users" description="List of all the Users">
       <DashboardNew title="All Users" titleVariant="h5">
         <>
-          <DataGrid
-            rows={usersList}
-            columns={columns}
-            density="compact"
-            sx={{
-              ".bg-light": {
-                bgcolor: "#eee",
-                // "&:hover": {
-                //   bgcolor: "darkgrey",
-                // },
-              },
-              ".bg-dark": {
-                bgcolor: "#fff",
-              },
-              "& .MuiDataGrid-columnHeaders": {
-                backgroundColor: "#4C7AFF",
-                color: "#ffffff",
-                // fontWeight: "600",
-                // fontSize: "16px",
-              },
-            }}
-            getRowClassName={(params) => {
-              return (params.indexRelativeToCurrentPage + 1) % 2 === 0
-                ? "bg-light"
-                : "bg-dark"
-            }}
-            slots={{ toolbar: GridToolbar }}
-            initialState={{
-              pagination: { paginationModel: { pageSize: 25 } },
-            }}
-            pageSizeOptions={[25, 50, 100]}
-          />
+          <CustomGrid rows={usersList} columns={columns} />
         </>
       </DashboardNew>
     </PageContainer>

@@ -20,6 +20,7 @@ import {
   GridColDef,
   GridToolbar,
 } from "@mui/x-data-grid"
+import CustomGrid from "../components/CustomGrid"
 
 const FORMER_MODES = { add: "add_former", update: "update_former" }
 
@@ -60,7 +61,7 @@ const Formers = () => {
 
   const columns: GridColDef[] = [
     {
-      field: "random_1", // confirm this
+      field: "s.no", // confirm this
       headerName: "S.No",
       valueGetter: (params) => params.api.getAllRowIds().indexOf(params.id) + 1,
     },
@@ -105,39 +106,18 @@ const Formers = () => {
               Add New
             </Button>
           </div>
-          <DataGrid
+          <CustomGrid
             rows={formersList}
             columns={columns}
-            density="compact"
             sx={{
-              ".bg-light": {
-                bgcolor: "#eee",
-                // "&:hover": {
-                //   bgcolor: "darkgrey",
-                // },
-              },
-              ".bg-dark": {
-                bgcolor: "#fff",
-              },
               ".text-green": {
                 color: "green",
               },
               ".text-red": {
                 color: "red",
               },
-              "& .MuiDataGrid-columnHeaders": {
-                backgroundColor: "#4C7AFF",
-                color: "#ffffff",
-                // fontWeight: "600",
-                // fontSize: "16px",
-              },
             }}
-            getRowClassName={(params) => {
-              return (params.indexRelativeToCurrentPage + 1) % 2 === 0
-                ? "bg-light"
-                : "bg-dark"
-            }}
-            getCellClassName={(params) => {
+            getCellClassName={(params: any) => {
               if (params.field === "isActive") {
                 return params.row.isActive === "Active"
                   ? "text-green"
@@ -146,11 +126,6 @@ const Formers = () => {
 
               return ""
             }}
-            slots={{ toolbar: GridToolbar }}
-            initialState={{
-              pagination: { paginationModel: { pageSize: 25 } },
-            }}
-            pageSizeOptions={[25, 50, 100]}
           />
         </>
       </DashboardNew>
