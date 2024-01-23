@@ -26,6 +26,7 @@ import {
   GridColDef,
   GridToolbar,
 } from "@mui/x-data-grid"
+import CustomGrid from "../components/CustomGrid"
 
 const ListOfAllBills = () => {
   const [billList, setBillList] = useState([])
@@ -119,39 +120,18 @@ const ListOfAllBills = () => {
     <PageContainer title="List" description="List">
       <DashboardNew title="All Bills Report" titleVariant="h5">
         <>
-          <DataGrid
+          <CustomGrid
             rows={billList}
             columns={columns}
-            density="compact"
             sx={{
-              ".bg-light": {
-                bgcolor: "#eee",
-                // "&:hover": {
-                //   bgcolor: "darkgrey",
-                // },
-              },
-              ".bg-dark": {
-                bgcolor: "#fff",
-              },
               ".text-green": {
                 color: "green",
               },
               ".text-red": {
                 color: "red",
               },
-              "& .MuiDataGrid-columnHeaders": {
-                backgroundColor: "#4C7AFF",
-                color: "#ffffff",
-                // fontWeight: "600",
-                // fontSize: "16px",
-              },
             }}
-            getRowClassName={(params) => {
-              return (params.indexRelativeToCurrentPage + 1) % 2 === 0
-                ? "bg-light"
-                : "bg-dark"
-            }}
-            getCellClassName={(params) => {
+            getCellClassName={(params: any) => {
               if (params.field === "currentStatus") {
                 return params.row.currentStatus === "Open"
                   ? "text-green"
@@ -160,11 +140,6 @@ const ListOfAllBills = () => {
 
               return ""
             }}
-            slots={{ toolbar: GridToolbar }}
-            initialState={{
-              pagination: { paginationModel: { pageSize: 25 } },
-            }}
-            pageSizeOptions={[25, 50, 100]}
           />
         </>
       </DashboardNew>

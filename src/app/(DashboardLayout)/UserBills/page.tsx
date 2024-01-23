@@ -23,6 +23,7 @@ import {
   useCosmetic,
 } from "@/context/CosmeticContext/UseCosmetic.Provider"
 import { Box, CircularProgress } from "@mui/material"
+import CustomGrid from "../components/CustomGrid"
 const BILL_MODES = { add: "add_bill", update: "update_bill" }
 
 const BoxWrapper = styled("div")(() => ({
@@ -203,61 +204,23 @@ const UserBills = () => {
       },
     },
   ]
-  console.log(billList, "billList")
 
   return (
     <PageContainer title="Bills" description="List of all the bills">
       <DashboardNew title="Bills" titleVariant="h5">
         <>
-          {/* <div style={{ display: "flex", justifyContent: "flex-end" }}>
-            <Button
-              sx={{ background: "#9C27B0" }}
-              variant="contained"
-              size="small"
-              onClick={() =>
-                router.push(`/Bills/ManageBill?mode=${BILL_MODES.add}`)
-              }
-            >
-              Add New
-            </Button>
-          </div> */}
-          <DataGrid
-            key={columns.map((column) => column.field).join(",")}
+          <CustomGrid
             rows={billList}
             columns={columns}
-            density="compact"
-            autoHeight
             sx={{
-              justifyContent: "center",
-              ".bg-light": {
-                bgcolor: "#eee",
-                // "&:hover": {
-                //   bgcolor: "darkgrey",
-                // },
-              },
-              ".bg-dark": {
-                bgcolor: "#fff",
-              },
               ".text-green": {
                 color: "green",
               },
               ".text-red": {
                 color: "red",
               },
-
-              "& .MuiDataGrid-columnHeaders": {
-                backgroundColor: "#4C7AFF",
-                color: "#ffffff",
-                // fontWeight: "600",
-                // fontSize: "16px",
-              },
             }}
-            getRowClassName={(params) => {
-              return (params.indexRelativeToCurrentPage + 1) % 2 === 0
-                ? "bg-light"
-                : "bg-dark"
-            }}
-            getCellClassName={(params) => {
+            getCellClassName={(params: any) => {
               if (params.field === "currentStatus") {
                 return params.row.currentStatus === "Open"
                   ? "text-green"
@@ -266,13 +229,7 @@ const UserBills = () => {
 
               return ""
             }}
-            slots={{ toolbar: GridToolbar }}
-            initialState={{
-              pagination: { paginationModel: { pageSize: 25 } },
-            }}
-            pageSizeOptions={[25, 50, 100]}
           />
-
           {selectedBill.nodata ? (
             <CustomModal
               modalState={modalState}

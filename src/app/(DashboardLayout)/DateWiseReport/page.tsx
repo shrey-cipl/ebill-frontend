@@ -380,9 +380,7 @@ const DateWiseReport = () => {
                       return (
                         <TableRow key={bills._id} sx={{ background: rowColor }}>
                           <TabelCellStyled>{bills.diaryNumber}</TabelCellStyled>
-                          <TabelCellStyled>
-                            {bills.former.name}
-                          </TabelCellStyled>
+                          <TabelCellStyled>{bills.former.name}</TabelCellStyled>
                           <TabelCellStyled>{bills.billType}</TabelCellStyled>
                           <TabelCellStyled>
                             {bills.totalClaimedAmount}
