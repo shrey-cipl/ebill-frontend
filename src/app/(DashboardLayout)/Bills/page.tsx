@@ -24,7 +24,7 @@ import DashboardNew from "../components/shared/DashboardNew"
 import CustomModal from "../components/CustomModal/CustomModal"
 import axiosApi from "@/Util/axiosApi"
 import { useAuth } from "@/context/JWTContext/AuthContext.provider"
-
+import DownloadIcon from "@mui/icons-material/Download"
 import { BILL_MODES } from "../../../config/constants"
 import CustomGrid from "../components/CustomGrid"
 
@@ -39,6 +39,7 @@ const BoxWrapper = styled("div")(() => ({
 }))
 
 const Bills = () => {
+  const backendBaseUrl = process.env.NEXT_PUBLIC_BACKEND_BASE_URL
   const [billList, setBillList] = useState([])
   // Modal states
   const [modalState, setModalState] = useState(false)
@@ -63,7 +64,9 @@ const Bills = () => {
       if (res && res.data) {
         for (let item of res?.data) {
           item.id = item._id
+          item.billFilePath = item.bill.billFilePath
         }
+
         setBillList(res.data)
       }
     } catch (err: any) {
@@ -142,6 +145,38 @@ const Bills = () => {
             </button>
           )
         }
+      },
+    },
+    {
+      field: "Download",
+      headerName: "Download",
+      renderCell: (params) => {
+        const downloadLink = params.row.billFilePath
+
+        return downloadLink ? (
+          <>
+            <DownloadIcon
+              sx={{
+                color: "#4C7AFF",
+              }}
+            />
+            <a
+              href={`${backendBaseUrl}/uploads/${downloadLink}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                color: "#4C7AFF",
+                textDecoration: "none",
+                fontSize: "13px",
+                cursor: "pointer",
+              }}
+            >
+              Download
+            </a>
+          </>
+        ) : (
+          <span style={{ color: "gray" }}>No file</span>
+        )
       },
     },
   ]

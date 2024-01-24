@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation"
 import { useSearchParams } from "next/navigation"
 import { enqueueSnackbar } from "notistack"
 
+import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import TextField from "@mui/material/TextField"
 import Typography from "@mui/material/Typography"
 import Select from "@mui/material/Select"
@@ -85,8 +86,10 @@ let cachedTableData: any
 // Used to later store selectedBill id
 let selectedBillId: any
 let selectedFormerId: any
+const backendBaseUrl = process.env.NEXT_PUBLIC_BACKEND_BASE_URL
 
 const ManageBill = () => {
+
   const [dataFields, setDataFields] = useState(initialFieldState)
   const [BillList, setBillList] = useState([])
   const [billSequence, setBillSequence] = useState<any>([])
@@ -375,13 +378,14 @@ const ManageBill = () => {
       // used only in add-mode
       selectedBillId = selectedBill._id
       selectedFormerId = selectedBill.former._id
-
+           console.log(selectedBill,"llllllllllllllllllll");
       setDataFields((prevState: any) => ({
         ...prevState,
         [name]: value,
         name: selectedBill.former.name,
         email: selectedBill.former.email,
         phone: selectedBill.former.phone,
+        billFilePath : selectedBill.billFilePath
         // former: empId,
       }))
     } else {
@@ -620,7 +624,34 @@ const ManageBill = () => {
                     />
                   </FormControl>
                 ))}
+
+{dataFields?.billFilePath?<Button variant="contained" sx={{
+              width:"100px",
+              backgroundColor:"#1eaf1e",
+              "&:hover": {
+                backgroundColor: "#7fcf7f", // Change the color on hover
+              },
+
+            }}> <RemoveRedEyeIcon sx={{
+              mr:1
+            }}/>
+            <a
+              href={`${backendBaseUrl}/uploads/${dataFields.billFilePath}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                // color: "#4C7AFF",
+                textDecoration: "none",
+               color:"#ffff",
+                cursor: "pointer",
+              }}
+            >
+              Perview
+            </a>
+             </Button>:null}
+
             </form>
+
             <br />
             <br />
             <Box
