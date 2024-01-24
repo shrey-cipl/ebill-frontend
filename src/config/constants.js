@@ -1,5 +1,7 @@
 const BILL_MODES = { add: "add_bill", update: "update_bill" }
 
+// Do not change order
+// (used in managebill page)
 const BILL_TYPE = [
   "Domestic Help",
   "Medical Reimbursement",

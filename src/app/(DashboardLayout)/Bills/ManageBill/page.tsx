@@ -25,6 +25,7 @@ import {
   MANAGEBILL_DATA_FIELDS,
   MANAGEBILL_UPDATE_FIELDS,
   BILL_MODES,
+  BILL_TYPE,
 } from "../../../../config/constants"
 
 const FormControl = styled("div")(() => ({
@@ -498,10 +499,15 @@ const ManageBill = () => {
               {MANAGEBILL_DATA_FIELDS.map((field, i) => {
                 // Permanantly disabled fields
                 const permanantDisable = ["name", "phone", "email"]
-
                 const disabledPermananty = permanantDisable.includes(field.id)
                   ? true
                   : false
+
+                let disabledFromUserBills = false
+                // disables 'bill no.' field if re-directed from 'User Bills' page
+                if (field.id === "billNumber" && !!paramUserpageId) {
+                  disabledFromUserBills = true
+                }
 
                 // Fields to be editable in 'update' mode
                 const enabledUpdateFields = [
@@ -531,7 +537,7 @@ const ManageBill = () => {
                       {field.fieldName}
                     </Typography>
 
-                    {field.fieldName == "Forward To" ? (
+                    {field.id == "lastForwardedTo" ? (
                       <Select
                         name={field.id}
                         size="small"
@@ -553,7 +559,11 @@ const ManageBill = () => {
                         value={dataFields[field.id]}
                         onChange={(e) => handleFieldChange(e)}
                         sx={{ width: "100%" }}
-                        disabled={disabledPermananty || disabledUpdateFields}
+                        disabled={
+                          disabledPermananty ||
+                          disabledFromUserBills ||
+                          disabledUpdateFields
+                        }
                       >
                         {field.id === "billNumber"
                           ? BillList.map((bill: any) => (
@@ -618,8 +628,8 @@ const ManageBill = () => {
                 width: "100%",
               }}
             >
-              {dataFields.billType ===
-              "Resident Telephone/Mobile charges Reimbursement" ? (
+              {/* for 'Telephone/Mobile' bill type */}
+              {dataFields.billType === BILL_TYPE[3] ? (
                 <DynamicTable
                   tableData={tableData}
                   setTableData={setTableData}
