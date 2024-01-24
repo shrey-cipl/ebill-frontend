@@ -206,8 +206,8 @@ const UserBills = () => {
   ]
 
   return (
-    <PageContainer title="Bills" description="List of all the bills">
-      <DashboardNew title="Bills" titleVariant="h5">
+    <PageContainer title="User Bills" description="List of all the bills">
+      <DashboardNew title="User Bills" titleVariant="h5">
         <>
           <CustomGrid
             rows={billList}

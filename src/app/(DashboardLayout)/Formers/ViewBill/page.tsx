@@ -43,7 +43,7 @@ const Bills = () => {
   // Modal states
   const [modalState, setModalState] = useState(false)
   const [selectedBill, setSelectedBill] = useState<any>({})
- 
+
 
 
   const cosmeticContext = useContext(CosmeticContext);
@@ -131,7 +131,7 @@ const id =authCtx?.user?.data?._id;
       valueGetter: (params) => params.api.getAllRowIds().indexOf(params.id) + 1,
     },
     { field: "billNumber", headerName: "Bill Number" },
-  
+
     {
       field: "createdAt",
       headerName: "Created At",
@@ -144,7 +144,7 @@ const id =authCtx?.user?.data?._id;
       field: "id",
       headerName: "Action",
       renderCell: (params) => {
-     
+
           return (
             <button
               style={{
@@ -160,7 +160,7 @@ const id =authCtx?.user?.data?._id;
               View
             </button>
           )
-        
+
       },
     },
     {
@@ -171,10 +171,10 @@ const id =authCtx?.user?.data?._id;
 
         return downloadLink ? (
           <>
-          
+
           <DownloadIcon sx={{
            color: "#4C7AFF",
-          }}/> 
+          }}/>
           <a
             href={`${backendBaseUrl}/uploads/${downloadLink}`}
             target="_blank"
@@ -198,8 +198,8 @@ const id =authCtx?.user?.data?._id;
   console.log(billList);
  console.log(claim);
   return (
-    <PageContainer title="Bills" description="List of all the bills">
-      <DashboardNew title="Bills" titleVariant="h5">
+    <PageContainer title="View Bills" description="List of all the bills">
+      <DashboardNew title="View Bills" titleVariant="h5">
         <>
           {/* <div style={{ display: "flex", justifyContent: "flex-end" }}>
             <Button
@@ -261,10 +261,10 @@ const id =authCtx?.user?.data?._id;
             pageSizeOptions={[25, 50, 100]}
           />
 
-        
-          
+
+
         {
-(selectedBill.nodata? 
+(selectedBill.nodata?
               <CustomModal modalState={modalState} setModalState={setModalState}>
               <BoxWrapper>
               <Typography>{selectedBill.nodata}</Typography>

@@ -110,7 +110,7 @@ const Menuitems: any = {
     },
     {
       id: uniqueId(),
-      title: "Montly Report",
+      title: "Monthly Report",
       icon: EventIcon,
       href: "/MonthlyWiseReport",
       present: "no",
