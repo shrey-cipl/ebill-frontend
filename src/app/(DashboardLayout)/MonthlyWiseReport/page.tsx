@@ -1,6 +1,7 @@
 "use client"
 import React, { useEffect, useState } from "react"
 import dynamic from "next/dynamic"
+import { DataGrid, GridColDef, GridToolbar } from "@mui/x-data-grid"
 
 import {
   Box,
@@ -22,6 +23,7 @@ import TableContainer from "@mui/material/TableContainer"
 import TableHead from "@mui/material/TableHead"
 import TableRow from "@mui/material/TableRow"
 import { useAuth } from "@/context/JWTContext/AuthContext.provider"
+import CustomGrid from "../components/CustomGrid"
 
 const DashboardNew = dynamic(() => import("../components/shared/DashboardNew"))
 const PageContainer = dynamic(
@@ -115,6 +117,12 @@ const MonthlyWiseReport = () => {
       }
       const res = await axiosApi(url, method, headers)
       console.log(res, "allReports")
+      for (let item of res.data) {
+        item.id = item._id
+        // item.name = item.former.name
+        // item.designation = item.former.designation
+        // item.phone = item.former.phone
+      }
       setAllReportsByfilter([...res.data])
 
       // console.log(posts,"abhi props");
@@ -137,9 +145,31 @@ const MonthlyWiseReport = () => {
     getReports()
   }, [auth.user.token])
 
+  const columns: GridColDef[] = [
+    {
+      field: "s.no", // confirm this
+      headerName: "S.No",
+      valueGetter: (params:any) => params.api.getAllRowIds().indexOf(params.id) + 1,
+      width: 100,
+    },
+    { field: "diaryNumber", headerName: "Diary No." },
+    { field: "name", headerName: "Name" },
+    { field: "billType", headerName: "Bill Type" },
+    { field: "totalAdmissibleAmount", headerName: "Admissible Amount" },
+    {
+      field: "sanctionedAmount",
+      headerName: "Sanctioned Amount"
+    },
+    {
+      field: "currentStatus",
+      headerName: "Status"
+    },
+
+  ]
+
   return (
     <>
-      <DashboardNew title=" Monthly Report" titleVariant="h5">
+      <DashboardNew title="Monthly Report" titleVariant="h5">
         <>
           <Box
             sx={{
@@ -291,22 +321,22 @@ const MonthlyWiseReport = () => {
                   onChange={handleChange}
                   label="Year"
                 >
-                  {/* <Box
+                  <Box
                     sx={{
                       height: "320px",
                     }}
-                  > */}
+                  >
                   {years.reverse().map((year) => (
                     <MenuItem key={year} value={year}>
                       {year}
                     </MenuItem>
                   ))}
-                  {/* </Box> */}
+                 </Box>
                 </Select>
               </FormControl>
             </Stack>
           </Box>
-          <Box
+           <Box
             sx={{
               display: "flex",
               gap: "10px",
@@ -362,74 +392,82 @@ const MonthlyWiseReport = () => {
               </Typography>
             </Button>
           </Box>
+
+
+
         </>
+
+
+
       </DashboardNew>
 
       <br />
 
       {get && allReportsByfilter.length != 0 && (
-        <DashboardNew>
-          <PageContainer title="Bills" description="List of all the bills">
-            <Box sx={{ overflow: "auto", width: { xs: "600px", sm: "100%" } }}>
-              <TableContainer>
-                <Table
-                  sx={{
-                    // display: "block",
-                    overflowX: "auto",
-                    // maxWidth: 500,
-                    minWidth: "500px",
-                    // "& .MuiTableCell-root": { border: "1px solid #333" },
-                  }}
-                  size="medium"
-                >
-                  {get && allReportsByfilter.length != 0 && (
-                    <TableHead>
-                      <TableRow sx={{ background: "#4C7AFF" }}>
-                        {TABLE_HEADERS.map((header, i) => (
-                          <TableCell
-                            key={i}
-                            sx={{
-                              color: "white",
-                              padding: "15px 10px",
-                            }}
-                          >
-                            {header}
-                          </TableCell>
-                        ))}
-                      </TableRow>
-                    </TableHead>
-                  )}
+        // <DashboardNew>
+        //   <PageContainer title="Bills" description="List of all the bills">
+        //     <Box sx={{ overflow: "auto", width: { xs: "600px", sm: "100%" } }}>
+        //       <TableContainer>
+        //         <Table
+        //           sx={{
+        //             // display: "block",
+        //             overflowX: "auto",
+        //             // maxWidth: 500,
+        //             minWidth: "500px",
+        //             // "& .MuiTableCell-root": { border: "1px solid #333" },
+        //           }}
+        //           size="medium"
+        //         >
+        //           {get && allReportsByfilter.length != 0 && (
+        //             <TableHead>
+        //               <TableRow sx={{ background: "#4C7AFF" }}>
+        //                 {TABLE_HEADERS.map((header, i) => (
+        //                   <TableCell
+        //                     key={i}
+        //                     sx={{
+        //                       color: "white",
+        //                       padding: "15px 10px",
+        //                     }}
+        //                   >
+        //                     {header}
+        //                   </TableCell>
+        //                 ))}
+        //               </TableRow>
+        //             </TableHead>
+        //           )}
 
-                  <TableBody>
-                    {allReportsByfilter.map((bills: any, i: any) => {
-                      const rowColor = (i + 1) % 2 === 0 ? "#eee" : "#fff"
+        //           <TableBody>
+        //             {allReportsByfilter.map((bills: any, i: any) => {
+        //               const rowColor = (i + 1) % 2 === 0 ? "#eee" : "#fff"
 
-                      return (
-                        <TableRow key={bills._id} sx={{ background: rowColor }}>
-                          <TabelCellStyled>{bills.diaryNumber}</TabelCellStyled>
-                          <TabelCellStyled>
-                            {bills.former.name}
-                          </TabelCellStyled>
-                          <TabelCellStyled>{bills.billType}</TabelCellStyled>
-                          <TabelCellStyled>
-                            {bills.totalClaimedAmount}
-                          </TabelCellStyled>
-                          <TabelCellStyled>
-                            {bills.totalAdmissibleAmount}
-                          </TabelCellStyled>
+        //               return (
+        //                 <TableRow key={bills._id} sx={{ background: rowColor }}>
+        //                   <TabelCellStyled>{bills.diaryNumber}</TabelCellStyled>
+        //                   <TabelCellStyled>
+        //                     {bills.former.name}
+        //                   </TabelCellStyled>
+        //                   <TabelCellStyled>{bills.billType}</TabelCellStyled>
+        //                   <TabelCellStyled>
+        //                     {bills.totalClaimedAmount}
+        //                   </TabelCellStyled>
+        //                   <TabelCellStyled>
+        //                     {bills.totalAdmissibleAmount}
+        //                   </TabelCellStyled>
 
-                          <TabelCellStyled>
-                            {bills.currentStatus}
-                          </TabelCellStyled>
-                        </TableRow>
-                      )
-                    })}
-                  </TableBody>
-                </Table>
-              </TableContainer>
-            </Box>
-          </PageContainer>
-        </DashboardNew>
+        //                   <TabelCellStyled>
+        //                     {bills.currentStatus}
+        //                   </TabelCellStyled>
+        //                 </TableRow>
+        //               )
+        //             })}
+        //           </TableBody>
+        //         </Table>
+        //       </TableContainer>
+        //     </Box>
+        //   </PageContainer>
+        // </DashboardNew>
+        <CustomGrid    rows={allReportsByfilter}
+            columns={columns}/>
       )}
       {get && allReportsByfilter.length == 0 && (
         <Typography

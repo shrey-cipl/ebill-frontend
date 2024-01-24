@@ -1,6 +1,7 @@
 "use client"
 import React, { useEffect, useState } from "react"
 import dynamic from "next/dynamic"
+import { DataGrid, GridColDef, GridToolbar } from "@mui/x-data-grid"
 
 import {
   Box,
@@ -22,6 +23,7 @@ import TableContainer from "@mui/material/TableContainer"
 import TableHead from "@mui/material/TableHead"
 import TableRow from "@mui/material/TableRow"
 import { useAuth } from "@/context/JWTContext/AuthContext.provider"
+import CustomGrid from "../components/CustomGrid"
 
 const DashboardNew = dynamic(() => import("../components/shared/DashboardNew"))
 const PageContainer = dynamic(
@@ -94,7 +96,12 @@ const DateWiseReport = () => {
         authorization: `Bearer ${auth.user.token}`,
       }
       const res = await axiosApi(url, method, headers)
-
+      for (let item of res.data) {
+        item.id = item._id
+        // item.name = item.former.name
+        // item.designation = item.former.designation
+        // item.phone = item.former.phone
+      }
       setAllReportsByfilter([...res.data])
       if (res.success != true || !res) {
         console.log("Bad Request")
@@ -114,6 +121,27 @@ const DateWiseReport = () => {
   useEffect(() => {
     getReports()
   }, [auth.user.token])
+
+  const columns: GridColDef[] = [
+    {
+      field: "s.no", // confirm this
+      headerName: "S.No",
+      valueGetter: (params:any) => params.api.getAllRowIds().indexOf(params.id) + 1,
+      width: 100,
+    },
+    { field: "diaryNumber", headerName: "Diary No." },
+    { field: "name", headerName: "Name" },
+    { field: "billType", headerName: "Bill Type" },
+    { field: "totalAdmissibleAmount", headerName: "Admissible Amount" },
+    {
+      field: "sanctionedAmount",
+      headerName: "Sanctioned Amount"
+    },
+    {
+      field: "currentStatus",
+      headerName: "Status"
+    },
+  ]
 
   return (
     <>
@@ -333,73 +361,71 @@ const DateWiseReport = () => {
 
       <br />
 
-      {get && allReportsByfilter.length != 0 && (
-        <DashboardNew>
-          <PageContainer title="Bills" description="List of all the bills">
-            <Box
-              sx={{
-                overflow: "auto",
-                width: { xs: "600px", sm: "100%" },
-                borderRadius: "5px",
-                background:
-                  "linear-gradient(to right, rgba(130, 130, 130, 0.2) 8%, rgba(130, 130, 130, 0.3) 18%, rgba(130, 130, 130, 0.2) 33%)",
-                backgroundSize: "800px 100px",
-                animation: "wave-squares 2s infinite ease-out",
-              }}
-            >
-              <TableContainer>
-                <Table
-                  sx={{
-                    overflowX: "auto",
-                    minWidth: "500px",
-                  }}
-                  size="medium"
-                >
-                  {get && allReportsByfilter.length != 0 && (
-                    <TableHead>
-                      <TableRow sx={{ background: "#4C7AFF" }}>
-                        {TABLE_HEADERS.map((header, i) => (
-                          <TableCell
-                            key={i}
-                            sx={{
-                              color: "white",
-                              padding: "15px 10px",
-                            }}
-                          >
-                            {header}
-                          </TableCell>
-                        ))}
-                      </TableRow>
-                    </TableHead>
-                  )}
+     {get && allReportsByfilter.length != 0 && (
+        // <DashboardNew>
+        //   <PageContainer title="Bills" description="List of all the bills">
+        //     <Box sx={{ overflow: "auto", width: { xs: "600px", sm: "100%" } }}>
+        //       <TableContainer>
+        //         <Table
+        //           sx={{
+        //             // display: "block",
+        //             overflowX: "auto",
+        //             // maxWidth: 500,
+        //             minWidth: "500px",
+        //             // "& .MuiTableCell-root": { border: "1px solid #333" },
+        //           }}
+        //           size="medium"
+        //         >
+        //           {get && allReportsByfilter.length != 0 && (
+        //             <TableHead>
+        //               <TableRow sx={{ background: "#4C7AFF" }}>
+        //                 {TABLE_HEADERS.map((header, i) => (
+        //                   <TableCell
+        //                     key={i}
+        //                     sx={{
+        //                       color: "white",
+        //                       padding: "15px 10px",
+        //                     }}
+        //                   >
+        //                     {header}
+        //                   </TableCell>
+        //                 ))}
+        //               </TableRow>
+        //             </TableHead>
+        //           )}
 
-                  <TableBody>
-                    {allReportsByfilter.map((bills: any, i: any) => {
-                      const rowColor = (i + 1) % 2 === 0 ? "#eee" : "#fff"
+        //           <TableBody>
+        //             {allReportsByfilter.map((bills: any, i: any) => {
+        //               const rowColor = (i + 1) % 2 === 0 ? "#eee" : "#fff"
 
-                      return (
-                        <TableRow key={bills._id} sx={{ background: rowColor }}>
-                          <TabelCellStyled>{bills.diaryNumber}</TabelCellStyled>
-                          <TabelCellStyled>{bills.former.name}</TabelCellStyled>
-                          <TabelCellStyled>{bills.billType}</TabelCellStyled>
-                          <TabelCellStyled>
-                            {bills.totalClaimedAmount}
-                          </TabelCellStyled>
-                          <TabelCellStyled>
-                            {bills.totalAdmissibleAmount}
-                          </TabelCellStyled>
-                          <TabelCellStyled>
-                            {bills.currentStatus}
-                          </TabelCellStyled>
-                        </TableRow>
-                      )
-                    })}
-                  </TableBody>
-                </Table>
-              </TableContainer>
-            </Box>
-          </PageContainer>
-        </DashboardNew>
+        //               return (
+        //                 <TableRow key={bills._id} sx={{ background: rowColor }}>
+        //                   <TabelCellStyled>{bills.diaryNumber}</TabelCellStyled>
+        //                   <TabelCellStyled>
+        //                     {bills.former.name}
+        //                   </TabelCellStyled>
+        //                   <TabelCellStyled>{bills.billType}</TabelCellStyled>
+        //                   <TabelCellStyled>
+        //                     {bills.totalClaimedAmount}
+        //                   </TabelCellStyled>
+        //                   <TabelCellStyled>
+        //                     {bills.totalAdmissibleAmount}
+        //                   </TabelCellStyled>
+
+        //                   <TabelCellStyled>
+        //                     {bills.currentStatus}
+        //                   </TabelCellStyled>
+        //                 </TableRow>
+        //               )
+        //             })}
+        //           </TableBody>
+        //         </Table>
+        //       </TableContainer>
+        //     </Box>
+        //   </PageContainer>
+        // </DashboardNew>
+        <CustomGrid   rows={allReportsByfilter}
+            columns={columns}/>
       )}
       {get && allReportsByfilter.length == 0 && (
         <Typography
