@@ -126,7 +126,8 @@ const DateWiseReport = () => {
     {
       field: "s.no", // confirm this
       headerName: "S.No",
-      valueGetter: (params:any) => params.api.getAllRowIds().indexOf(params.id) + 1,
+      valueGetter: (params: any) =>
+        params.api.getAllRowIds().indexOf(params.id) + 1,
       width: 100,
     },
     { field: "diaryNumber", headerName: "Diary No." },
@@ -135,11 +136,11 @@ const DateWiseReport = () => {
     { field: "totalAdmissibleAmount", headerName: "Admissible Amount" },
     {
       field: "sanctionedAmount",
-      headerName: "Sanctioned Amount"
+      headerName: "Sanctioned Amount",
     },
     {
       field: "currentStatus",
-      headerName: "Status"
+      headerName: "Status",
     },
   ]
 
@@ -361,7 +362,7 @@ const DateWiseReport = () => {
 
       <br />
 
-     {get && allReportsByfilter.length != 0 && (
+      {get && allReportsByfilter.length != 0 && (
         // <DashboardNew>
         //   <PageContainer title="Bills" description="List of all the bills">
         //     <Box sx={{ overflow: "auto", width: { xs: "600px", sm: "100%" } }}>
@@ -424,8 +425,7 @@ const DateWiseReport = () => {
         //     </Box>
         //   </PageContainer>
         // </DashboardNew>
-        <CustomGrid   rows={allReportsByfilter}
-            columns={columns}/>
+        <CustomGrid rows={allReportsByfilter} columns={columns} />
       )}
       {get && allReportsByfilter.length == 0 && (
         <Typography

@@ -39,7 +39,7 @@ const MANAGEBILL_DATA_FIELDS = [
   },
   {
     id: "claimReceivingDate",
-    fieldName: "Claim Receiving Date (YYYY-MM-DD)",
+    fieldName: "Claim Receiving Date (DD-MM-YYYY)",
     type: "date",
   },
   {
