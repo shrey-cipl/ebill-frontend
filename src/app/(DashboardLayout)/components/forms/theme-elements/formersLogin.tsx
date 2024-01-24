@@ -1,8 +1,12 @@
-import React from "react"
+import React, { useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
+import Snackbar, { SnackbarOrigin } from "@mui/material/Snackbar"
+
+import RefreshIcon from "@mui/icons-material/Refresh"
 
 import {
+  Alert,
   Box,
   Button,
   IconButton,
@@ -12,7 +16,23 @@ import {
   MenuItem,
   Typography,
   styled,
+  TextField,
+  Tooltip,
 } from "@mui/material"
+// import {
+//   Alert,
+//   Box,
+//   Button,
+//   IconButton,
+//   InputAdornment,
+//   OutlinedInput,
+//   Select,
+//   MenuItem,
+//   Typography,
+//   styled,
+//   TextField,
+//   Tooltip,
+// } from "@mui/material"
 import { Visibility, VisibilityOff } from "@mui/icons-material"
 
 import { useAuth } from "../../../../../context/JWTContext/AuthContext.provider"
@@ -24,22 +44,63 @@ const mobileValidationRegex =
 function Formers() {
   const auth = useAuth()
   const router = useRouter()
-  const [branch, setBranch] = useState<any>("")
   const [email, setEmail] = useState<any>("")
-  const [tryagain, setTryagain] = useState<any>(false)
   const [password, setPassword]: any = useState(null)
   const [showPassword, setShowPassword] = useState(false)
+  const [inputCaptcha, setInputCaptcha] = useState<any>("")
+  const [captchaCode, SetCaptchaCode] = useState<any>("")
   const handleClickShowPassword = () => setShowPassword(!showPassword)
-  const loginUser = () => {
-    if (emailValidationRegex.test(email)) {
-      auth.signInFor(email, password)
-    } else if (mobileValidationRegex.test(email)) {
-      auth.signInFor( email, password)
+  const [toast, setToast] = useState<any>({
+    open: false,
+    severity: "",
+    message: "",
+  })
+  const loginUser = async () => {
+    if (password === "" || inputCaptcha === "") {
+      SetCaptchaCode(Math.random().toString(36).substr(2, 6))
+      setToast({
+        message: "Please fill all fields",
+        open: true,
+        severity: "error",
+      })
+      return
     } else {
-      auth.signInFor( email, password)
+      if (captchaCode === inputCaptcha) {
+        if (emailValidationRegex.test(email)) {
+          let ress: any = await auth.signInFor(email, password)
+
+          if (ress?.success == false) {
+            setToast({
+              message: "Incorrect credentials",
+              open: true,
+              severity: "error",
+            })
+          }
+        } else {
+          SetCaptchaCode(Math.random().toString(36).substr(2, 6))
+          setToast({
+            message: "Please enter a valid email address",
+            open: true,
+            severity: "error",
+          })
+        }
+      } else {
+        SetCaptchaCode(Math.random().toString(36).substr(2, 6))
+        setToast({
+          message: "Please enter the correct Captcha",
+          open: true,
+          severity: "error",
+        })
+      }
     }
   }
+  useEffect(() => {
+    SetCaptchaCode(Math.random().toString(36).substr(2, 6))
+  }, [])
 
+  const refreshCapcha = () => {
+    SetCaptchaCode(Math.random().toString(36).substr(2, 6))
+  }
   const Heading1 = styled(Typography)(({ theme }) => ({
     padding: theme.spacing(1),
     color: "black",
@@ -84,9 +145,34 @@ function Formers() {
   ) => {
     event.preventDefault()
   }
-
+  const handleClose = () => {
+    setToast({
+      open: false,
+      severity: "",
+      message: "",
+    })
+  }
   return (
     <Box sx={{ height: "100%" }}>
+      <Snackbar
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+        open={toast.open}
+        onClose={handleClose}
+        // message="I love snacks"
+        key={"top" + "center"}
+        autoHideDuration={2000}
+      >
+        <Alert
+          severity={toast.severity}
+          sx={{
+            backgroundColor: toast.severity == "error" ? "#EF5350" : "green",
+            color: "white",
+            fontWeight: 700,
+          }}
+        >
+          <Typography sx={{ fontWeight: 700 }}>{toast.message}</Typography>
+        </Alert>
+      </Snackbar>
       <Box
         sx={{
           display: "flex",
@@ -241,6 +327,95 @@ function Formers() {
                 </InputAdornment>
               }
             />
+            <Box
+              sx={{
+                width: "500px",
+                display: "flex",
+                justifyContent: "space-between",
+                mt: "20px",
+              }}
+            >
+              <Box
+                sx={{
+                  width: "40%",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-around",
+                  borderRadius: "40px",
+                }}
+              >
+                <Box
+                  sx={{
+                    fontWeight: 600,
+                    height: "100%",
+                    width: "80%",
+                    backgroundColor: "grey",
+                    color: "white",
+                    borderRadius: "4px",
+                    cursor: "not-allowed",
+                  }}
+                >
+                  <Typography
+                    variant="body1"
+                    sx={{
+                      fontWeight: 600,
+                      p: 1.2,
+                      fontSize: "20px",
+                      width: "fit-content",
+                      margin: "auto",
+                      height: "45px",
+                      color: "white",
+                      borderRadius: "4px",
+                      cursor: "not-allowed",
+                    }}
+                    fontFamily="Nunito"
+                  >
+                    {captchaCode}
+                  </Typography>
+                </Box>
+                <Tooltip title="Refresh Captcha">
+                  <RefreshIcon
+                    onClick={refreshCapcha}
+                    sx={{
+                      fontSize: "33px",
+                      color: "#E15A11",
+                      cursor: "pointer",
+                    }}
+                  />
+                </Tooltip>
+              </Box>
+              <TextField
+                id="outlined-basic"
+                placeholder="Enter Captcha"
+                autoComplete="off"
+                // variant="outlined"
+                type="text"
+                onPaste={(event: any) => {
+                  event.preventDefault()
+                  return false
+                }}
+                onDrop={(event: any) => {
+                  event.preventDefault()
+                  return false
+                }}
+                onKeyDown={(event) => {
+                  if (event.key == "Enter") {
+                    // handleLogin()
+                  }
+                }}
+                value={inputCaptcha}
+                sx={{ width: "55%", background: "white", borderRadius: "4px" }}
+                onChange={(event) => {
+                  setInputCaptcha(event.target.value)
+                }}
+                inputProps={{
+                  style: {
+                    height: "45px",
+                    padding: "0 14px",
+                  },
+                }}
+              ></TextField>
+            </Box>
             <LoginButton
               onClick={loginUser}
               size="small"
@@ -264,10 +439,6 @@ function Formers() {
                   mt: 2,
                 }}
                 variant="body1"
-                onClick={() => {
-                  console.log(branch)
-                  // router.push("/forgot")
-                }}
               >
                 Forgot Password ?
               </ResendOTP>
@@ -281,23 +452,11 @@ function Formers() {
               }}
               variant="body1"
               onClick={() => {
-                console.log(branch)
                 router.push("/login")
               }}
             >
               Login for User
             </ResendOTP>
-            {tryagain && (
-              <Typography
-                sx={{
-                  textAlign: "center",
-                  color: "red",
-                  fontWeight: "800",
-                }}
-              >
-                Invalid email or invalid password please try again
-              </Typography>
-            )}
           </Box>
         </Box>
       </Box>

@@ -52,15 +52,15 @@ function Login() {
   const user = useUser()
 
   const refreshCapcha = () => {
-    SetCaptchaCode(Math.random().toString(36).substr(2, 8))
+    SetCaptchaCode(Math.random().toString(36).substr(2, 6))
   }
   useEffect(() => {
-    SetCaptchaCode(Math.random().toString(36).substr(2, 8))
+    SetCaptchaCode(Math.random().toString(36).substr(2, 6))
   }, [])
 
   const loginUser = async (email: any) => {
     if (password === "" || inputCaptcha === "") {
-      SetCaptchaCode(Math.random().toString(36).substr(2, 8))
+      SetCaptchaCode(Math.random().toString(36).substr(2, 6))
       setToast({
         message: "Please fill all fields",
         open: true,
@@ -80,7 +80,7 @@ function Login() {
             })
           }
         } else {
-          SetCaptchaCode(Math.random().toString(36).substr(2, 8))
+          SetCaptchaCode(Math.random().toString(36).substr(2, 6))
           setToast({
             message: "Please enter a valid email address",
             open: true,
@@ -88,7 +88,7 @@ function Login() {
           })
         }
       } else {
-        SetCaptchaCode(Math.random().toString(36).substr(2, 8))
+        SetCaptchaCode(Math.random().toString(36).substr(2, 6))
         setToast({
           message: "Please enter the correct Captcha",
           open: true,
@@ -462,6 +462,7 @@ function Login() {
                 </InputAdornment>
               }
             />
+
             <Box
               sx={{
                 width: "500px",
@@ -470,44 +471,13 @@ function Login() {
                 mt: "20px",
               }}
             >
-              <TextField
-                id="outlined-basic"
-                placeholder="Enter Captcha"
-                autoComplete="off"
-                // variant="outlined"
-                type="text"
-                onPaste={(event: any) => {
-                  event.preventDefault()
-                  return false
-                }}
-                onDrop={(event: any) => {
-                  event.preventDefault()
-                  return false
-                }}
-                onKeyDown={(event) => {
-                  if (event.key == "Enter") {
-                    // handleLogin()
-                  }
-                }}
-                value={inputCaptcha}
-                sx={{ width: "55%", background: "white" }}
-                onChange={(event) => {
-                  setInputCaptcha(event.target.value)
-                }}
-                inputProps={{
-                  style: {
-                    height: "45px",
-                    padding: "0 14px",
-                  },
-                }}
-              ></TextField>
-
               <Box
                 sx={{
                   width: "40%",
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "space-around",
+                  borderRadius: "40px",
                 }}
               >
                 <Box
@@ -550,6 +520,37 @@ function Login() {
                   />
                 </Tooltip>
               </Box>
+              <TextField
+                id="outlined-basic"
+                placeholder="Enter Captcha"
+                autoComplete="off"
+                // variant="outlined"
+                type="text"
+                onPaste={(event: any) => {
+                  event.preventDefault()
+                  return false
+                }}
+                onDrop={(event: any) => {
+                  event.preventDefault()
+                  return false
+                }}
+                onKeyDown={(event) => {
+                  if (event.key == "Enter") {
+                    // handleLogin()
+                  }
+                }}
+                value={inputCaptcha}
+                sx={{ width: "55%", background: "white", borderRadius: "4px" }}
+                onChange={(event) => {
+                  setInputCaptcha(event.target.value)
+                }}
+                inputProps={{
+                  style: {
+                    height: "45px",
+                    padding: "0 14px",
+                  },
+                }}
+              ></TextField>
             </Box>
             <LoginButton
               onClick={handleLogin}
