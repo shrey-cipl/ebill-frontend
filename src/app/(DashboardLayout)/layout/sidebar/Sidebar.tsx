@@ -40,6 +40,7 @@ const Sidebar = ({
               // width: sidebarWidth,
               boxSizing: "border-box",
               pt: 3,
+              overflow: "hidden",
             },
           }}
         >
@@ -49,6 +50,13 @@ const Sidebar = ({
           <Box
             sx={{
               height: "100%",
+              overflowY: "scroll", // Enable vertical scrolling
+              "&::-webkit-scrollbar": {
+                width: "0.5em", // Set the width of the scrollbar
+              },
+              "&::-webkit-scrollbar-thumb": {
+                backgroundColor: "transparent", // Set the thumb color to transparent
+              },
             }}
           >
             {/* ------------------------------------------- */}
@@ -118,7 +126,7 @@ const Sidebar = ({
       {/* ------------------------------------------- */}
       {/* Sidebar For Mobile */}
       {/* ------------------------------------------- */}
-      <SidebarItems />
+      {/* <SidebarItems /> */}
     </Drawer>
   )
 }
