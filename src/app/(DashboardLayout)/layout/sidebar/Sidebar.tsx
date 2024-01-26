@@ -50,12 +50,12 @@ const Sidebar = ({
           <Box
             sx={{
               height: "100%",
-              overflowY: "scroll", // Enable vertical scrolling
+              overflowY: "scroll",
               "&::-webkit-scrollbar": {
-                width: "0.5em", // Set the width of the scrollbar
+                width: "0.5em",
               },
               "&::-webkit-scrollbar-thumb": {
-                backgroundColor: "transparent", // Set the thumb color to transparent
+                backgroundColor: "transparent",
               },
             }}
           >
