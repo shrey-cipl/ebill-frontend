@@ -629,38 +629,6 @@ const ManageBill = () => {
                 ))}
               <br />
               <br />
-              {dataFields?.billFilePath ? (
-                <Button
-                  variant="contained"
-                  sx={{
-                    width: "100px",
-                    // backgroundColor: "#1eaf1e",
-                    "&:hover": {
-                      backgroundColor: "#7fcf7f", // Change the color on hover
-                    },
-                  }}
-                >
-                  {" "}
-                  <RemoveRedEyeIcon
-                    sx={{
-                      mr: 1,
-                    }}
-                  />
-                  <a
-                    href={`${backendBaseUrl}/uploads/${dataFields.billFilePath}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    style={{
-                      // color: "#4C7AFF",
-                      textDecoration: "none",
-                      color: "#ffff",
-                      cursor: "pointer",
-                    }}
-                  >
-                    Perview
-                  </a>
-                </Button>
-              ) : null}
             </form>
 
             <br />
@@ -695,6 +663,38 @@ const ManageBill = () => {
               >
                 Cancel
               </Button>
+              {dataFields?.billFilePath && (
+                <Button
+                  variant="contained"
+                  sx={{
+                    width: "100px",
+                    backgroundColor: "#1eaf1e",
+                    "&:hover": {
+                      backgroundColor: "#7fcf7f", // Change the color on hover
+                    },
+                  }}
+                >
+                  {" "}
+                  <RemoveRedEyeIcon
+                    sx={{
+                      mr: 1,
+                    }}
+                  />
+                  <a
+                    href={`${backendBaseUrl}/uploads/${dataFields.billFilePath}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{
+                      // color: "#4C7AFF",
+                      textDecoration: "none",
+                      color: "#ffff",
+                      cursor: "pointer",
+                    }}
+                  >
+                    Perview
+                  </a>
+                </Button>
+              )}
             </ButtonWrapper>
           </Box>
         </DashboardNew>
