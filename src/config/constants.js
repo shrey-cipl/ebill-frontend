@@ -135,10 +135,40 @@ const MANAGEBILL_UPDATE_FIELDS = [
   },
 ]
 
+const FORMER_ADD_BILL_FIELDS = [
+  {
+    id: "billType",
+    fieldName: "Bill Type",
+    type: "select",
+    selectOptions: BILL_TYPE,
+  },
+  {
+    id: "claimedAmount",
+    fieldName: "Amount",
+    type: "number",
+  },
+  {
+    id: "billPeriodFrom",
+    fieldName: "Bill Period From",
+    type: "date",
+  },
+  {
+    id: "billPeriodTo",
+    fieldName: "Bill Period To",
+    type: "date",
+  },
+  {
+    id: "billFilePath",
+    fieldName: "Upload File",
+    type: "file",
+  },
+]
+
 export {
   BILL_MODES,
   BILL_TYPE,
   ROLES,
   MANAGEBILL_DATA_FIELDS,
   MANAGEBILL_UPDATE_FIELDS,
+  FORMER_ADD_BILL_FIELDS,
 }
