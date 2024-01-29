@@ -2,7 +2,6 @@
 import React, { useState, useRef } from "react"
 import {
   Button,
-  Grid,
   Typography,
   Box,
   Select,
@@ -28,12 +27,10 @@ for (let arrEl of FORMER_ADD_BILL_FIELDS) {
 const FormerAddBill = () => {
   const [formerFieldState, setFormerFieldState] = useState(initialFieldState)
 
-  const authCtx: any = useAuth()
   const [selectedFile, setSelectedFile] = useState<any>(null)
   const [previewUrl, setPreviewUrl] = useState<string | null>(null)
-  const [notification, setNotification] = useState(false)
-  const [notificationError, setNotificationError] = useState(false)
 
+  const authCtx: any = useAuth()
   const router = useRouter()
 
   const handleSubmit = async (e: any) => {
@@ -163,28 +160,6 @@ const FormerAddBill = () => {
               </Button>
             </div>{" "}
           </form>
-
-          <Typography
-            sx={{
-              width: "100%",
-              textAlign: "center",
-              display: notificationError ? "inline" : "none",
-              color: "red",
-            }}
-          >
-            Something went wrong. Please try again.
-          </Typography>
-
-          <Typography
-            sx={{
-              width: "100%",
-              textAlign: "center",
-              display: notification ? "inline" : "none",
-              color: "green",
-            }}
-          >
-            File uploaded successfully
-          </Typography>
 
           {previewUrl && (
             <Box
