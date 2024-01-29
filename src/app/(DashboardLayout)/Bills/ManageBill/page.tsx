@@ -367,7 +367,8 @@ const ManageBill = () => {
   }
 
   const handleFieldChange = (e: any) => {
-    // 'value' extracted here is uniquie billNumber
+    // 'value' extracted here is unique billNumber
+    // (only for Bill Number field)
     const { name, value } = e.target
 
     if (name === "billNumber") {

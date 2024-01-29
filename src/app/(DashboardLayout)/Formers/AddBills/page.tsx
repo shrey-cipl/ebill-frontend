@@ -1,73 +1,200 @@
 "use client"
-import React, { useState, useRef } from "react";
-import { Button, Grid, Typography ,Box } from "@mui/material";
-import PageContainer from "../../components/container/PageContainer";
-import DashboardNew from "../../components/shared/DashboardNew";
-import { useAuth } from "@/context/JWTContext/AuthContext.provider";
-import axiosApi from "@/Util/axiosApi";
-import { useRouter } from "next/navigation";
+import React, { useState, useRef } from "react"
+import {
+  Button,
+  Grid,
+  Typography,
+  Box,
+  Select,
+  MenuItem,
+  TextField,
+  FormControl,
+} from "@mui/material"
+import PageContainer from "../../components/container/PageContainer"
+import DashboardNew from "../../components/shared/DashboardNew"
+import { useAuth } from "@/context/JWTContext/AuthContext.provider"
+import axiosApi from "@/Util/axiosApi"
+import { useRouter } from "next/navigation"
 
-const AddBills = () => {
-  const auth: any = useAuth();
-  const [selectedFile, setSelectedFile] = useState<any>(null);
-  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
-  const [notification, setNotification] = useState(false);
-  const [notificationError, setNotificationError] = useState(false);
+import { FORMER_ADD_BILL_FIELDS } from "../../../../config/constants"
 
-  const inputFileRef: any = useRef();
-  const  router =useRouter();
+const initialFieldState: any = {}
+// Creates an initial state object (uses 'id')
+for (let arrEl of FORMER_ADD_BILL_FIELDS) {
+  if (!initialFieldState[arrEl.id]) initialFieldState[arrEl.id] = ""
+}
+
+const FormerAddBill = () => {
+  const [formerFieldState, setFormerFieldState] = useState(initialFieldState)
+
+  const authCtx: any = useAuth()
+  const [selectedFile, setSelectedFile] = useState<any>(null)
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null)
+  const [notification, setNotification] = useState(false)
+  const [notificationError, setNotificationError] = useState(false)
+
+  const inputFileRef: any = useRef()
+  const router = useRouter()
 
   const handleFileChange = (e: any) => {
-    const file = e.target.files[0];
-    setSelectedFile(file);
+    const file = e.target.files[0]
+    setSelectedFile(file)
 
     // Create preview URL
     if (file) {
-      setPreviewUrl(URL.createObjectURL(file));
+      setPreviewUrl(URL.createObjectURL(file))
     } else {
-      setPreviewUrl(null);
+      setPreviewUrl(null)
     }
-  };
+  }
 
   async function fileUpload() {
     if (selectedFile) {
-      const formData = new FormData();
-      formData.append("billFilePath", selectedFile);
+      const formData = new FormData()
+
+      formData.append("billFilePath", selectedFile)
 
       try {
-        const url = `/api/bill/create`;
-        const method = "POST";
+        const url = `/api/bill/create`
+        const method = "POST"
         const headers = {
-          authorization: `Bearer ${auth.user.token}`,
-        };
-
-        const res = await axiosApi(url, method, headers, formData);
-        if (res.success !== true || !res) {
-          console.log("Bad Request");
-          return;
+          // authorization: `Bearer ${auth.user.token}`,
         }
 
-        inputFileRef.current.value = null;
-        setNotification(true);
+        const res = await axiosApi(url, method, headers, formData)
+        if (res.success !== true || !res) {
+          console.log("Bad Request")
+          return
+        }
+
+        inputFileRef.current.value = null
+        setNotification(true)
         setTimeout(() => {
           router.push("/Formers/ViewBill")
-          setNotification(false);
-        }, 10000);
+          setNotification(false)
+        }, 10000)
       } catch (error) {
-        setNotificationError(true);
+        setNotificationError(true)
         setTimeout(() => {
-          setNotificationError(false);
-        }, 10000);
-        setSelectedFile(null);
-        console.error("Error fetching ", error);
+          setNotificationError(false)
+        }, 10000)
+        setSelectedFile(null)
+        console.error("Error fetching ", error)
       }
     }
+  }
+
+  const handleSubmit = async (e: any) => {
+    e.preventDefault()
+
+    // Prepare FormData object for file upload
+    const formDataToSend = new FormData()
+
+    const fieldKeysArr = Object.keys(formerFieldState)
+
+    formDataToSend.append(fieldKeysArr[0], formerFieldState[fieldKeysArr[0]])
+    formDataToSend.append(fieldKeysArr[1], formerFieldState[fieldKeysArr[1]])
+    formDataToSend.append(fieldKeysArr[2], formerFieldState[fieldKeysArr[2]])
+    formDataToSend.append(fieldKeysArr[3], formerFieldState[fieldKeysArr[3]])
+    formDataToSend.append(fieldKeysArr[4], formerFieldState[fieldKeysArr[4]])
+
+    console.log("baka:", formDataToSend)
+
+    try {
+      const config = {
+        url: `/api/bill/create`,
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          authorization: `Bearer ${authCtx.user.token}`,
+        },
+        data: formDataToSend,
+      }
+
+      const res: any = await axiosApi(
+        config.url,
+        config.method,
+        config.headers,
+        config.data
+      )
+    } catch (err) {
+      console.log(err)
+    }
+  }
+
+  const handleFieldChange = (e: any) => {
+    const { name, value, type, files } = e.target
+
+    setFormerFieldState((prevState: any) => ({
+      ...prevState,
+      [name]: type === "file" ? files[0] : value,
+    }))
   }
 
   return (
     <PageContainer title="Add Bills" description="Manage Former data here">
       <DashboardNew title="Add Bills" titleVariant="h5">
         <>
+          <form
+            onSubmit={handleSubmit}
+            style={{
+              display: "grid",
+              gridTemplateColumns: "1fr 1fr",
+              gap: "10px",
+            }}
+          >
+            {FORMER_ADD_BILL_FIELDS.map((field, i) => {
+              return (
+                <FormControl key={i}>
+                  <Typography
+                    fontWeight={600}
+                    component="label"
+                    sx={{
+                      display: "block",
+                      fontSize: "13px",
+                      lineHeight: "12px",
+                    }}
+                    mb={1}
+                  >
+                    {field.fieldName}
+                  </Typography>
+                  {field.type === "select" ? (
+                    <Select
+                      name={field.id}
+                      size="small"
+                      value={formerFieldState[field.id]}
+                      onChange={(e) => handleFieldChange(e)}
+                      sx={{ width: "100%" }}
+                    >
+                      {field.selectOptions?.map((option, i) => (
+                        <MenuItem value={option} key={i}>
+                          {option}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  ) : field.type === "file" ? (
+                    <TextField
+                      name={field.id}
+                      type={field.type}
+                      size="small"
+                      onChange={(e) => handleFieldChange(e)}
+                      sx={{ width: "100%" }}
+                    />
+                  ) : (
+                    <TextField
+                      name={field.id}
+                      type={field.type}
+                      size="small"
+                      value={formerFieldState[field.id]}
+                      onChange={(e) => handleFieldChange(e)}
+                      sx={{ width: "100%" }}
+                    />
+                  )}
+                </FormControl>
+              )
+            })}
+            <button type="submit">Submit</button>
+          </form>
           <Grid sx={{ p: 4 }}>
             <Typography
               sx={{
@@ -89,10 +216,9 @@ const AddBills = () => {
                 borderRadius: "8px",
               }}
               onChange={(e) => {
-                handleFileChange(e);
+                handleFileChange(e)
               }}
             />
-
             <Button
               variant="contained"
               color="primary"
@@ -130,9 +256,9 @@ const AddBills = () => {
 
           {previewUrl && (
             <Box
-            sx={{
-            ml:6,
-            }}
+              sx={{
+                ml: 6,
+              }}
             >
               <h2>Preview:</h2>
               {selectedFile.type.startsWith("image/") ? (
@@ -156,7 +282,7 @@ const AddBills = () => {
         </>
       </DashboardNew>
     </PageContainer>
-  );
-};
+  )
+}
 
-export default AddBills;
+export default FormerAddBill
