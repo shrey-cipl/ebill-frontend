@@ -1,110 +1,168 @@
 "use client"
-import React, { useState, useRef } from "react";
-import { Button, Grid, Typography ,Box } from "@mui/material";
-import PageContainer from "../../components/container/PageContainer";
-import DashboardNew from "../../components/shared/DashboardNew";
-import { useAuth } from "@/context/JWTContext/AuthContext.provider";
-import axiosApi from "@/Util/axiosApi";
-import { useRouter } from "next/navigation";
+import React, { useState, useRef } from "react"
+import {
+  Button,
+  Grid,
+  Typography,
+  Box,
+  Select,
+  MenuItem,
+  TextField,
+  FormControl,
+} from "@mui/material"
+import PageContainer from "../../components/container/PageContainer"
+import DashboardNew from "../../components/shared/DashboardNew"
+import { useAuth } from "@/context/JWTContext/AuthContext.provider"
+import axiosApi from "@/Util/axiosApi"
+import { useRouter } from "next/navigation"
+import { enqueueSnackbar } from "notistack"
 
-const AddBills = () => {
-  const auth: any = useAuth();
-  const [selectedFile, setSelectedFile] = useState<any>(null);
-  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
-  const [notification, setNotification] = useState(false);
-  const [notificationError, setNotificationError] = useState(false);
+import { FORMER_ADD_BILL_FIELDS } from "../../../../config/constants"
 
-  const inputFileRef: any = useRef();
-  const  router =useRouter();
+const initialFieldState: any = {}
+// Creates an initial state object (uses 'id')
+for (let arrEl of FORMER_ADD_BILL_FIELDS) {
+  if (!initialFieldState[arrEl.id]) initialFieldState[arrEl.id] = ""
+}
 
-  const handleFileChange = (e: any) => {
-    const file = e.target.files[0];
-    setSelectedFile(file);
+const FormerAddBill = () => {
+  const [formerFieldState, setFormerFieldState] = useState(initialFieldState)
 
-    // Create preview URL
-    if (file) {
-      setPreviewUrl(URL.createObjectURL(file));
-    } else {
-      setPreviewUrl(null);
-    }
-  };
+  const authCtx: any = useAuth()
+  const [selectedFile, setSelectedFile] = useState<any>(null)
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null)
+  const [notification, setNotification] = useState(false)
+  const [notificationError, setNotificationError] = useState(false)
 
-  async function fileUpload() {
-    if (selectedFile) {
-      const formData = new FormData();
-      formData.append("billFilePath", selectedFile);
+  const router = useRouter()
 
-      try {
-        const url = `/api/bill/create`;
-        const method = "POST";
-        const headers = {
-          authorization: `Bearer ${auth.user.token}`,
-        };
+  const handleSubmit = async (e: any) => {
+    e.preventDefault()
 
-        const res = await axiosApi(url, method, headers, formData);
-        if (res.success !== true || !res) {
-          console.log("Bad Request");
-          return;
-        }
+    // Prepare FormData object for file upload
+    const formDataToSend = new FormData()
 
-        inputFileRef.current.value = null;
-        setNotification(true);
-        setTimeout(() => {
-          router.push("/Formers/ViewBill")
-          setNotification(false);
-        }, 10000);
-      } catch (error) {
-        setNotificationError(true);
-        setTimeout(() => {
-          setNotificationError(false);
-        }, 10000);
-        setSelectedFile(null);
-        console.error("Error fetching ", error);
+    const fieldKeysArr = Object.keys(formerFieldState)
+
+    fieldKeysArr.forEach((key) =>
+      formDataToSend.append(key, formerFieldState[key])
+    )
+
+    try {
+      const config = {
+        url: `/api/bill/create`,
+        method: "POST",
+        headers: {
+          "Content-Type": "multipart/form-data",
+          authorization: `Bearer ${authCtx.user.token}`,
+        },
+        data: formDataToSend,
       }
+
+      const res: any = await axiosApi(
+        config.url,
+        config.method,
+        config.headers,
+        config.data
+      )
+
+      if (res) {
+        enqueueSnackbar(res.message, {
+          preventDuplicate: true,
+          variant: "success",
+        })
+
+        router.push("/Formers/ViewBill")
+      }
+    } catch (err) {
+      console.log(err)
     }
+  }
+
+  const handleFieldChange = (e: any) => {
+    const { name, value, type, files } = e.target
+
+    setFormerFieldState((prevState: any) => ({
+      ...prevState,
+      [name]: type === "file" ? files[0] : value,
+    }))
   }
 
   return (
     <PageContainer title="Add Bills" description="Manage Former data here">
       <DashboardNew title="Add Bills" titleVariant="h5">
         <>
-          <Grid sx={{ p: 4 }}>
-            <Typography
-              sx={{
-                paddingLeft: "5px",
-                color: "black",
-                display: "flex",
-                justifyContent: "left",
-              }}
-            >
-              Upload File
-            </Typography>
-            <input
-              ref={inputFileRef}
-              type="file"
+          <form onSubmit={handleSubmit}>
+            <div
               style={{
-                border: "2px solid #5d87ff",
-                padding: "10px",
-                height: "40px",
-                borderRadius: "8px",
+                display: "grid",
+                gridTemplateColumns: "1fr 1fr",
+                gap: "10px",
               }}
-              onChange={(e) => {
-                handleFileChange(e);
-              }}
-            />
-
-            <Button
-              variant="contained"
-              color="primary"
-              sx={{
-                m: 2,
-                mt: 1.5,
-              }}
-              onClick={fileUpload}
             >
-              Upload
-            </Button>
-          </Grid>
+              {FORMER_ADD_BILL_FIELDS.map((field, i) => {
+                return (
+                  <FormControl key={i}>
+                    <Typography
+                      fontWeight={600}
+                      component="label"
+                      sx={{
+                        display: "block",
+                        fontSize: "13px",
+                        lineHeight: "12px",
+                      }}
+                      mb={1}
+                    >
+                      {field.fieldName}
+                    </Typography>
+                    {field.type === "select" ? (
+                      <Select
+                        name={field.id}
+                        size="small"
+                        value={formerFieldState[field.id]}
+                        onChange={(e) => handleFieldChange(e)}
+                        sx={{ width: "100%" }}
+                      >
+                        {field.selectOptions?.map((option, i) => (
+                          <MenuItem value={option} key={i}>
+                            {option}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    ) : field.type === "file" ? (
+                      <TextField
+                        name={field.id}
+                        type={field.type}
+                        size="small"
+                        onChange={(e) => handleFieldChange(e)}
+                        sx={{ width: "100%" }}
+                      />
+                    ) : (
+                      <TextField
+                        name={field.id}
+                        type={field.type}
+                        size="small"
+                        value={formerFieldState[field.id]}
+                        onChange={(e) => handleFieldChange(e)}
+                        sx={{ width: "100%" }}
+                      />
+                    )}
+                  </FormControl>
+                )
+              })}
+            </div>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                marginTop: "40px",
+              }}
+            >
+              <Button type="submit" size="small" variant="contained">
+                Submit
+              </Button>
+            </div>{" "}
+          </form>
 
           <Typography
             sx={{
@@ -130,9 +188,9 @@ const AddBills = () => {
 
           {previewUrl && (
             <Box
-            sx={{
-            ml:6,
-            }}
+              sx={{
+                ml: 6,
+              }}
             >
               <h2>Preview:</h2>
               {selectedFile.type.startsWith("image/") ? (
@@ -156,7 +214,7 @@ const AddBills = () => {
         </>
       </DashboardNew>
     </PageContainer>
-  );
-};
+  )
+}
 
-export default AddBills;
+export default FormerAddBill
