@@ -26,8 +26,6 @@ for (let arrEl of FORMER_ADD_BILL_FIELDS) {
 
 const FormerAddBill = () => {
   const [formerFieldState, setFormerFieldState] = useState(initialFieldState)
-
-  const [selectedFile, setSelectedFile] = useState<any>(null)
   const [previewUrl, setPreviewUrl] = useState<string | null>(null)
 
   const authCtx: any = useAuth()
@@ -36,7 +34,6 @@ const FormerAddBill = () => {
   const handleSubmit = async (e: any) => {
     e.preventDefault()
 
-    // Prepare FormData object for file upload
     const formDataToSend = new FormData()
 
     const fieldKeysArr = Object.keys(formerFieldState)
@@ -171,14 +168,12 @@ const FormerAddBill = () => {
             >
               <h2>Preview:</h2>
               {formerFieldState.billFilePath.type.startsWith("image/") ? (
-                // Display image preview
                 <img
                   src={previewUrl}
                   alt="File Preview"
                   style={{ maxWidth: "100%", maxHeight: "600px" }}
                 />
               ) : (
-                // Display PDF using iframe
                 <iframe
                   src={previewUrl}
                   title="PDF Preview"
