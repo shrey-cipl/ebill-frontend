@@ -517,13 +517,8 @@ const ManageBill = () => {
                   ? true
                   : false
 
-                // let disabledFromUserBills = false
-                // disables 'bill no.' field if re-directed from 'User Bills' page
-                if (field.id === "billNumber" && !!paramUserpageId) {
-                  // disabledFromUserBills = true
-                }
-
-                const aa = [
+                // disables various fields if re-directed from 'User Bills' page
+                const disableFromUserBills = [
                   "billNumber",
                   "billType",
                   "totalClaimedAmount",
@@ -533,7 +528,9 @@ const ManageBill = () => {
                 ]
 
                 const disabledFromUserBills =
-                  aa.includes(field.id) && !!paramUserpageId ? true : false
+                  disableFromUserBills.includes(field.id) && !!paramUserpageId
+                    ? true
+                    : false
 
                 // Fields to be editable in 'update' mode
                 const enabledUpdateFields = [
