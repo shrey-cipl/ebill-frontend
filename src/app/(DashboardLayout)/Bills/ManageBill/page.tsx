@@ -146,7 +146,7 @@ const ManageBill = () => {
             billProcessingStartDate,
             telephoneNumbers,
           } = billData.data
-          console.log(billData.data, "jkjkjkkjjk")
+
           setlastForwardedTo(lastForwardedTo)
           setlastForwardedBy(lastForwardedBy)
 
@@ -241,7 +241,15 @@ const ManageBill = () => {
           name: selectedBill.former.name,
           email: selectedBill.former.email,
           phone: selectedBill.former.phone,
-
+          billType: selectedBill.billType,
+          totalClaimedAmount: selectedBill.claimedAmount,
+          claimPeriodFrom: dayjs(selectedBill.billPeriodFrom).format(
+            "YYYY-MM-DD"
+          ),
+          claimPeriodTo: dayjs(selectedBill.billPeriodTo).format("YYYY-MM-DD"),
+          claimReceivingDate: dayjs(selectedBill.createdAt).format(
+            "YYYY-MM-DD"
+          ),
           // former: empId,
         }))
       }
@@ -380,7 +388,7 @@ const ManageBill = () => {
       // used only in add-mode
       selectedBillId = selectedBill._id
       selectedFormerId = selectedBill.former._id
-      console.log(selectedBill, "llllllllllllllllllll")
+
       setDataFields((prevState: any) => ({
         ...prevState,
         [name]: value,
@@ -484,8 +492,6 @@ const ManageBill = () => {
     }
   }
 
-  console.log(dataFields?.billFilePath, "hhhhhhhhhhhhhhhhhhsddddddddddh")
-
   return (
     <>
       <PageContainer
@@ -511,11 +517,23 @@ const ManageBill = () => {
                   ? true
                   : false
 
-                let disabledFromUserBills = false
+                // let disabledFromUserBills = false
                 // disables 'bill no.' field if re-directed from 'User Bills' page
                 if (field.id === "billNumber" && !!paramUserpageId) {
-                  disabledFromUserBills = true
+                  // disabledFromUserBills = true
                 }
+
+                const aa = [
+                  "billNumber",
+                  "billType",
+                  "totalClaimedAmount",
+                  "claimPeriodFrom",
+                  "claimPeriodTo",
+                  "claimReceivingDate",
+                ]
+
+                const disabledFromUserBills =
+                  aa.includes(field.id) && !!paramUserpageId ? true : false
 
                 // Fields to be editable in 'update' mode
                 const enabledUpdateFields = [
@@ -552,7 +570,11 @@ const ManageBill = () => {
                         value={dataFields[field.id]}
                         onChange={(e) => handleFieldChange(e)}
                         sx={{ width: "100%" }}
-                        disabled={disabledPermananty || disabledUpdateFields}
+                        disabled={
+                          disabledPermananty ||
+                          disabledFromUserBills ||
+                          disabledUpdateFields
+                        }
                       >
                         {billSequence.map((bill: any, i: any) => (
                           <MenuItem value={bill} key={i}>
@@ -593,7 +615,11 @@ const ManageBill = () => {
                         value={dataFields[field.id]}
                         onChange={(e) => handleFieldChange(e)}
                         sx={{ width: "100%" }}
-                        disabled={disabledPermananty || disabledUpdateFields}
+                        disabled={
+                          disabledPermananty ||
+                          disabledFromUserBills ||
+                          disabledUpdateFields
+                        }
                         multiline={field.id === "currentremark" ? true : false}
                         rows={4}
                       />

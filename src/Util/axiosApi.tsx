@@ -18,7 +18,6 @@ async function axiosApi(
 
   try {
     const response = await axios(config)
-    console.log("aaaa:", response)
 
     if (String(response.status).charAt(0) === "2") {
       return response.data
