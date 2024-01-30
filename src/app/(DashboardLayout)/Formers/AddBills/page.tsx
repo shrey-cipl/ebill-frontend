@@ -83,6 +83,8 @@ const FormerAddBill = () => {
       ...prevState,
       [name]: type === "file" ? files[0] : value,
     }))
+
+    if (type === "file") setPreviewUrl(URL.createObjectURL(files[0]))
   }
 
   return (
@@ -168,7 +170,7 @@ const FormerAddBill = () => {
               }}
             >
               <h2>Preview:</h2>
-              {selectedFile.type.startsWith("image/") ? (
+              {formerFieldState.billFilePath.type.startsWith("image/") ? (
                 // Display image preview
                 <img
                   src={previewUrl}
