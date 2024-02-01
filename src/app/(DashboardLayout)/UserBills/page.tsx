@@ -140,6 +140,10 @@ const UserBills = () => {
     },
     { field: "billNumber", headerName: "Bill Number" },
     { field: "name", headerName: "Name" },
+    { field: "claimedAmount", headerName: "claimed Amount" },
+    { field: "billPeriodFrom", headerName: "bill Period From" },
+    { field: "billPeriodTo", headerName: "bill Period To" },
+    { field: "billType", headerName: "bill Type" },
     { field: "designation", headerName: "Designation" },
     { field: "phone", headerName: "Phone" },
     {

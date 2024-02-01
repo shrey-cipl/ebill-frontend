@@ -14,6 +14,7 @@ import DashboardNew from "../../components/shared/DashboardNew"
 import { useAuth } from "@/context/JWTContext/AuthContext.provider"
 import axiosApi from "@/Util/axiosApi"
 import { useRouter } from "next/navigation"
+import UploadFileIcon from "@mui/icons-material/UploadFile"
 import { enqueueSnackbar } from "notistack"
 
 import { FORMER_ADD_BILL_FIELDS } from "../../../../config/constants"
@@ -84,6 +85,12 @@ const FormerAddBill = () => {
     if (type === "file") setPreviewUrl(URL.createObjectURL(files[0]))
   }
 
+  const fileInputRef: any = useRef(null)
+
+  const handleClick = () => {
+    fileInputRef.current.click() // Click the hidden file input when the icon is clicked
+  }
+
   return (
     <PageContainer title="Add Bills" description="Manage Former data here">
       <DashboardNew title="Add Bills" titleVariant="h5">
@@ -98,19 +105,22 @@ const FormerAddBill = () => {
             >
               {FORMER_ADD_BILL_FIELDS.map((field, i) => {
                 return (
-                  <FormControl key={i}>
-                    <Typography
-                      fontWeight={600}
-                      component="label"
-                      sx={{
-                        display: "block",
-                        fontSize: "13px",
-                        lineHeight: "12px",
-                      }}
-                      mb={1}
-                    >
-                      {field.fieldName}
-                    </Typography>
+                  <FormControl key={i} sx={{}}>
+                    {field.type !== "file" && (
+                      <Typography
+                        fontWeight={600}
+                        component="label"
+                        sx={{
+                          display: "block",
+                          fontSize: "13px",
+                          lineHeight: "12px",
+                        }}
+                        mb={1}
+                      >
+                        {field.fieldName}
+                      </Typography>
+                    )}
+
                     {field.type === "select" ? (
                       <Select
                         name={field.id}
@@ -126,13 +136,71 @@ const FormerAddBill = () => {
                         ))}
                       </Select>
                     ) : field.type === "file" ? (
-                      <TextField
-                        name={field.id}
-                        type={field.type}
-                        size="small"
+                      <Box
+                        sx={{
+                          display: "flex",
+                          justifyContent: "center",
+                          alignItems: "center",
+                          width: "200%",
+                          gap: "20px",
+                          color: "#5d87ff",
+                        }}
+                        onClick={handleClick}
                         onChange={(e) => handleFieldChange(e)}
-                        sx={{ width: "100%" }}
-                      />
+                      >
+                        <Box
+                          sx={{
+                            mt: 4,
+                            display: "flex",
+                            alignItems: "center",
+                            border: "2px solid #5d87ff ",
+                            width: "180px",
+                            justifyContent: "center",
+                            alignContent: "center",
+                            textAlign: "center",
+                            borderRadius: "10px",
+                            px: 2,
+                            py: 1,
+                          }}
+                        >
+                          <Typography
+                            fontWeight={600}
+                            component="label"
+                            sx={{
+                              display: "block",
+                              fontSize: "13px",
+                              lineHeight: "12px",
+                            }}
+                            mb={1}
+                          >
+                            {field.fieldName}
+                          </Typography>
+                          <label
+                            htmlFor="file-input"
+                            style={{ cursor: "pointer" }}
+                          >
+                            <UploadFileIcon
+                              sx={{
+                                fontSize: "50px",
+                              }}
+                            />
+                          </label>
+
+                          {/* Hidden File Input */}
+                          <input
+                            ref={fileInputRef}
+                            name={field.id}
+                            type={field.type}
+                            style={{
+                              position: "absolute",
+                              opacity: 0,
+                              width: 0,
+                              height: 0,
+                              overflow: "hidden",
+                            }}
+                          />
+                        </Box>
+                      </Box>
                     ) : (
                       <TextField
                         name={field.id}
@@ -151,7 +219,7 @@ const FormerAddBill = () => {
               style={{
                 display: "flex",
                 justifyContent: "center",
-                marginTop: "40px",
+                marginTop: "15px",
               }}
             >
               <Button type="submit" size="small" variant="contained">
