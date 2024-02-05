@@ -564,7 +564,7 @@ const ManageBill = () => {
                       <Select
                         name={field.id}
                         size="small"
-                        value={dataFields[field.id]}
+                        value={billSequence[0] || dataFields[field.id]}
                         onChange={(e) => handleFieldChange(e)}
                         sx={{ width: "100%" }}
                         disabled={
