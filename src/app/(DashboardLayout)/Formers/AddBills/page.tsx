@@ -157,6 +157,10 @@ const FormerAddBill = () => {
                         type={field.type}
                         size="small"
                         onChange={(e) => handleFieldChange(e)}
+                        error={
+                          !validations[field.id].valid &&
+                          validations[field.id].errMsg
+                        }
                         sx={{ width: "100%" }}
                         required={field.required}
                       />
@@ -167,6 +171,10 @@ const FormerAddBill = () => {
                         size="small"
                         value={formerFieldState[field.id]}
                         onChange={(e) => handleFieldChange(e)}
+                        error={
+                          !validations[field.id].valid &&
+                          validations[field.id].errMsg
+                        }
                         sx={{ width: "100%" }}
                         required={field.required}
                       />
@@ -175,9 +183,9 @@ const FormerAddBill = () => {
                     {/* Validation Message */}
                     {!validations[field.id].valid &&
                     validations[field.id].errMsg ? (
-                      <p style={{ color: "red", margin: "0px" }}>
+                      <span style={{ color: "red", fontSize: "13px" }}>
                         {validations[field.id].errMsg}
-                      </p>
+                      </span>
                     ) : null}
                   </FormControl>
                 )
