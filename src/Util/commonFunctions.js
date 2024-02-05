@@ -104,6 +104,9 @@ const validateOnSubmit = (dataToValidate, validationState) => {
         validationStateCopy[key].errMsg =
           "End date should not come before Start date"
       }
+
+      dateRange.start = ""
+      dateRange.end = ""
     }
   }
 
