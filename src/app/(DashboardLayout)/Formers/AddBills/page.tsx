@@ -1,5 +1,5 @@
 "use client"
-import React, { useState, useRef } from "react"
+import React, { useState, useRef, useEffect } from "react"
 import {
   Button,
   Typography,
@@ -36,7 +36,6 @@ for (let arrEl of FIELDS_FORMERS_ADD_BILL) {
 const FormerAddBill = () => {
   const [formerFieldState, setFormerFieldState] = useState(initialFieldState)
   const [validations, setValidations] = useState(initialValidationState)
-
   const [previewUrl, setPreviewUrl] = useState<string | null>(null)
 
   const authCtx: any = useAuth()
@@ -95,6 +94,16 @@ const FormerAddBill = () => {
     }
   }
 
+  useEffect(() => {
+    console.log(formerFieldState)
+    const { allValidationsPass, updatedValidationState } = validateOnSubmit(
+      formerFieldState,
+      validations
+    )
+
+    setValidations(updatedValidationState)
+  }, [formerFieldState])
+
   const handleFieldChange = (e: any) => {
     const { name, value, type, files } = e.target
 
@@ -131,10 +140,7 @@ const FormerAddBill = () => {
                       }}
                       mb={1}
                     >
-                      {field.fieldName}{" "}
-                      {field.required && (
-                        <span style={{ color: "red" }}>*</span>
-                      )}
+                      {field.fieldName}
                     </Typography>
                     {field.type === "select" ? (
                       <Select
@@ -143,7 +149,7 @@ const FormerAddBill = () => {
                         value={formerFieldState[field.id]}
                         onChange={(e) => handleFieldChange(e)}
                         sx={{ width: "100%" }}
-                        required={field.required}
+                        required
                       >
                         {field.selectOptions?.map((option, i) => (
                           <MenuItem value={option} key={i}>
@@ -158,7 +164,7 @@ const FormerAddBill = () => {
                         size="small"
                         onChange={(e) => handleFieldChange(e)}
                         sx={{ width: "100%" }}
-                        required={field.required}
+                        required
                       />
                     ) : (
                       <TextField
@@ -166,18 +172,23 @@ const FormerAddBill = () => {
                         type={field.type}
                         size="small"
                         value={formerFieldState[field.id]}
+                        error={
+                          !validations[field.id].valid &&
+                          validations[field.id].errMsg
+                        }
+                        // id="outlined-error"
                         onChange={(e) => handleFieldChange(e)}
-                        sx={{ width: "100%" }}
-                        required={field.required}
+                        sx={{ width: "100%", border: "red" }}
+                        required
                       />
                     )}
 
                     {/* Validation Message */}
                     {!validations[field.id].valid &&
                     validations[field.id].errMsg ? (
-                      <p style={{ color: "red", margin: "0px" }}>
+                      <span style={{ color: "red", fontSize: "13px" }}>
                         {validations[field.id].errMsg}
-                      </p>
+                      </span>
                     ) : null}
                   </FormControl>
                 )
