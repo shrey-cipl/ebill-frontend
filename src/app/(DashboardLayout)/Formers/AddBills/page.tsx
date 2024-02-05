@@ -131,7 +131,10 @@ const FormerAddBill = () => {
                       }}
                       mb={1}
                     >
-                      {field.fieldName}
+                      {field.fieldName}{" "}
+                      {field.required && (
+                        <span style={{ color: "red" }}>*</span>
+                      )}
                     </Typography>
                     {field.type === "select" ? (
                       <Select
@@ -172,7 +175,7 @@ const FormerAddBill = () => {
                     {/* Validation Message */}
                     {!validations[field.id].valid &&
                     validations[field.id].errMsg ? (
-                      <p style={{ color: "red" }}>
+                      <p style={{ color: "red", margin: "0px" }}>
                         {validations[field.id].errMsg}
                       </p>
                     ) : null}

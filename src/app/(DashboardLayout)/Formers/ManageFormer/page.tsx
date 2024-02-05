@@ -283,7 +283,10 @@ const ManageFormer = () => {
                       }}
                       mb={1}
                     >
-                      {former.fieldName}
+                      {former.fieldName}{" "}
+                      {former.required && (
+                        <span style={{ color: "red" }}>*</span>
+                      )}
                     </Typography>
                     {former.type === "select" ? (
                       <Select

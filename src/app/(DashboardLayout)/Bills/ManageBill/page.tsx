@@ -557,7 +557,10 @@ const ManageBill = () => {
                       }}
                       mb={1}
                     >
-                      {field.fieldName}
+                      {field.fieldName}{" "}
+                      {field.required && (
+                        <span style={{ color: "red" }}>*</span>
+                      )}
                     </Typography>
 
                     {field.id == "lastForwardedTo" ? (
@@ -638,7 +641,10 @@ const ManageBill = () => {
                       }}
                       mb={1}
                     >
-                      {field.fieldName}
+                      {field.fieldName}{" "}
+                      {field.required && (
+                        <span style={{ color: "red" }}>*</span>
+                      )}
                     </Typography>
                     <TextField
                       name={field.id}

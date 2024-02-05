@@ -169,7 +169,8 @@ const ManageUser = () => {
                     }}
                     mb={1}
                   >
-                    {user.fieldName}
+                    {user.fieldName}{" "}
+                    {user.required && <span style={{ color: "red" }}>*</span>}
                   </Typography>
                   <TextField
                     name={user.id}
