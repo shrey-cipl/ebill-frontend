@@ -20,106 +20,8 @@ import { useAuth } from "@/context/JWTContext/AuthContext.provider"
 import axiosApi from "@/Util/axiosApi"
 
 import { enqueueSnackbar } from "notistack"
-import { IconButton, OutlinedInput, InputAdornment } from "@mui/material"
-import { Visibility, VisibilityOff } from "@mui/icons-material"
 
-const FORMER_FIELDS = [
-  {
-    id: "name",
-    fieldName: "Name",
-    type: "text",
-    validation: {
-      required: true,
-    },
-  },
-  {
-    id: "status",
-    fieldName: "Status",
-    type: "select",
-    selectOptions: ["Present", "Ex"],
-    validation: {
-      required: true,
-    },
-  },
-  {
-    id: "designation",
-    fieldName: "Designation",
-    type: "select",
-    selectOptions: ["Chairman", "Member"],
-    validation: {
-      required: true,
-    },
-  },
-  {
-    id: "phone",
-    fieldName: "Phone",
-    type: "number",
-    validation: {
-      required: true,
-      pattern: /^\d{10}$/, // Example pattern for 10-digit phone number
-    },
-  },
-  {
-    id: "email",
-    fieldName: "E-mail",
-    type: "text",
-    validation: {
-      required: true,
-      pattern: /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, // Email pattern
-    },
-  },
-  {
-    id: "password",
-    fieldName: "Password",
-    type: "password",
-    validation: {
-      required: true,
-    },
-  },
-  {
-    id: "isActive",
-    fieldName: "Active",
-    type: "select",
-    selectOptions: ["Active", "Inactive"],
-    validation: {
-      required: true,
-    },
-  },
-  {
-    id: "bankAccountNumber",
-    fieldName: "Bank A/C",
-    type: "text",
-    validation: {
-      required: true,
-    },
-  },
-  {
-    id: "ifscCode",
-    fieldName: "IFSC Code",
-    type: "text",
-    validation: {
-      required: true,
-    },
-  },
-  {
-    id: "bankName",
-    fieldName: "Bank Name",
-    type: "text",
-    validation: {
-      required: true,
-    },
-  },
-  {
-    id: "branchName",
-    fieldName: "Branch Name",
-    type: "text",
-    validation: {
-      required: true,
-    },
-  },
-]
-
-const FORMER_MODES = { add: "add_former", update: "update_former" }
+import { FORMER_MODES, FORMER_FIELDS } from "@/config/constants"
 
 const FormControl = styled("div")(() => ({
   marginTop: "10px",
@@ -163,7 +65,7 @@ let cachedFormerFields: any
 
 const ManageFormer = () => {
   const [formerFields, setFormerFields] = useState(initialFieldState)
-  const [showPassword, setShowPassword] = useState(false)
+
   const router = useRouter()
   const searchParams = useSearchParams()
 
@@ -171,13 +73,6 @@ const ManageFormer = () => {
   const paramMode = searchParams.get("mode")
 
   const authCtx: any = useAuth()
-
-  const handleClickShowPassword = () => setShowPassword(!showPassword)
-  const handleMouseDownPassword = (
-    event: React.MouseEvent<HTMLButtonElement>
-  ) => {
-    event.preventDefault()
-  }
 
   useEffect(() => {
     if (paramFormerId) {
@@ -424,58 +319,19 @@ const ManageFormer = () => {
                         </Button>
                       </div>
                     ) : (
-                      <>
-                        {former.id === "password" ? (
-                          <Box
-                            sx={{
-                              display: "flex",
-                              alignItems: "center",
-                            }}
-                          >
-                            <TextField
-                              name={former.id}
-                              size="small"
-                              type={
-                                former.type && showPassword
-                                  ? "text"
-                                  : "password"
-                              }
-                              // type={}
-                              value={formerFields[former.id]}
-                              onChange={handleFieldChange}
-                              sx={{ width: "100%" }}
-                            />
-                            <InputAdornment position="end">
-                              <IconButton
-                                aria-label="toggle password visibility"
-                                onClick={handleClickShowPassword}
-                                onMouseDown={handleMouseDownPassword}
-                              >
-                                {!showPassword ? (
-                                  <VisibilityOff />
-                                ) : (
-                                  <Visibility />
-                                )}
-                              </IconButton>
-                            </InputAdornment>
-                          </Box>
-                        ) : (
-                          <TextField
-                            name={former.id}
-                            size="small"
-                            type={former.type}
-                            value={formerFields[former.id]}
-                            onChange={handleFieldChange}
-                            sx={{ width: "100%" }}
-                            disabled={
-                              former.id === "bankName" ||
-                              former.id === "branchName"
-                                ? true
-                                : false
-                            }
-                          />
-                        )}
-                      </>
+                      <TextField
+                        name={former.id}
+                        size="small"
+                        type={former.type}
+                        value={formerFields[former.id]}
+                        onChange={handleFieldChange}
+                        sx={{ width: "100%" }}
+                        disabled={
+                          former.id === "bankName" || former.id === "branchName"
+                            ? true
+                            : false
+                        }
+                      />
                     )}
                   </FormControl>
                 )

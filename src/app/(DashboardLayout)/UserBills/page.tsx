@@ -65,20 +65,16 @@ const UserBills = () => {
       const res = await axiosApi(config.url, config.method, config.headers)
 
       for (let item of res.data) {
-        if (item.former != null) {
-          item.id = item._id
-          item.name = item.former.name
-          item.designation = item.former.designation
-          item.phone = item.former.phone
-        }
+        item.id = item._id
+        item.name = item?.former?.name
+        item.designation = item?.former?.designation
+        item.phone = item?.former?.phone
       }
 
-      console.log(res.data, "kkkkkkkkkkkkkkkkkkkkkkkkkkk")
       setBillList(res.data)
       // if (String(res.status).charAt(0) === "2") {
       // }
     } catch (err: any) {
-      console.log("kkkkkkkkkkkkkkkkkkkkkkkkkkk")
       console.log(err.message)
     }
   }
@@ -124,7 +120,7 @@ const UserBills = () => {
   // collect bills and updates list
   useEffect(() => {
     handleFetchBills()
-  }, [])
+  }, [authCtx?.user?.token])
 
   const handleViewBill = async (data: any) => {
     // const filteredBill = billList.find((bill: any) => bill._id === id)
@@ -144,6 +140,10 @@ const UserBills = () => {
     },
     { field: "billNumber", headerName: "Bill Number" },
     { field: "name", headerName: "Name" },
+    { field: "claimedAmount", headerName: "claimed Amount" },
+    { field: "billPeriodFrom", headerName: "bill Period From" },
+    { field: "billPeriodTo", headerName: "bill Period To" },
+    { field: "billType", headerName: "bill Type" },
     { field: "designation", headerName: "Designation" },
     { field: "phone", headerName: "Phone" },
     {
@@ -208,7 +208,7 @@ const UserBills = () => {
       },
     },
   ]
-  console.log(billList, "billList")
+
   return (
     <PageContainer title="User Bills" description="List of all the bills">
       <DashboardNew title="User Bills" titleVariant="h5">

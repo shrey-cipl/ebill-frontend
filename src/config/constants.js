@@ -135,32 +135,112 @@ const MANAGEBILL_UPDATE_FIELDS = [
   },
 ]
 
+const FORMER_MODES = { add: "add_former", update: "update_former" }
+
+const FORMER_FIELDS = [
+  {
+    id: "name",
+    fieldName: "Name",
+    type: "text",
+  },
+  {
+    id: "status",
+    fieldName: "Status",
+    type: "select",
+    selectOptions: ["Present", "Ex"],
+  },
+  {
+    id: "designation",
+    fieldName: "Designation",
+    type: "select",
+    selectOptions: ["Chairman", "Member"],
+  },
+  {
+    id: "phone",
+    fieldName: "Phone",
+    type: "number",
+  },
+  {
+    id: "email",
+    fieldName: "E-mail",
+    type: "text",
+  },
+  {
+    id: "password",
+    fieldName: "Password",
+    type: "password",
+  },
+  {
+    id: "isActive",
+    fieldName: "Active",
+    type: "select",
+    selectOptions: ["Active", "Inactive"],
+  },
+  {
+    id: "bankAccountNumber",
+    fieldName: "Bank A/C",
+    type: "text",
+  },
+  {
+    id: "ifscCode",
+    fieldName: "IFSC Code",
+    type: "text",
+  },
+  {
+    id: "bankName",
+    fieldName: "Bank Name",
+    type: "text",
+  },
+  {
+    id: "branchName",
+    fieldName: "Branch Name",
+    type: "text",
+  },
+]
+
+const VALIDATION_TYPE = {
+  alphaNumeric: "alpha_numeric",
+  amount: "amount",
+  dateRangeEnd: "date_end",
+  dateRangeStart: "date_start",
+  email: "email",
+  file: "file",
+  ifsc: "ifsc",
+  mobile: "mobile",
+  none: "none",
+}
+
 const FORMER_ADD_BILL_FIELDS = [
   {
     id: "billType",
     fieldName: "Bill Type",
     type: "select",
     selectOptions: BILL_TYPE,
+    validationType: VALIDATION_TYPE.none,
   },
   {
     id: "claimedAmount",
     fieldName: "Amount",
     type: "number",
+    validationType: VALIDATION_TYPE.amount,
   },
   {
     id: "billPeriodFrom",
     fieldName: "Bill Period From",
     type: "date",
+    validationType: VALIDATION_TYPE.dateRangeStart,
   },
   {
     id: "billPeriodTo",
     fieldName: "Bill Period To",
     type: "date",
+    validationType: VALIDATION_TYPE.dateRangeEnd,
   },
   {
     id: "billFilePath",
     fieldName: "Upload File",
     type: "file",
+    validationType: VALIDATION_TYPE.file,
   },
 ]
 
@@ -170,5 +250,8 @@ export {
   ROLES,
   MANAGEBILL_DATA_FIELDS,
   MANAGEBILL_UPDATE_FIELDS,
+  FORMER_MODES,
+  FORMER_FIELDS,
   FORMER_ADD_BILL_FIELDS,
+  VALIDATION_TYPE,
 }

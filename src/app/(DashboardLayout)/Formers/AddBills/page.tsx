@@ -14,19 +14,29 @@ import DashboardNew from "../../components/shared/DashboardNew"
 import { useAuth } from "@/context/JWTContext/AuthContext.provider"
 import axiosApi from "@/Util/axiosApi"
 import { useRouter } from "next/navigation"
-import UploadFileIcon from "@mui/icons-material/UploadFile"
 import { enqueueSnackbar } from "notistack"
 
 import { FORMER_ADD_BILL_FIELDS } from "../../../../config/constants"
+import { validateOnSubmit } from "../../../../Util/commonFunctions"
 
 const initialFieldState: any = {}
+const initialValidationState: any = {}
 // Creates an initial state object (uses 'id')
 for (let arrEl of FORMER_ADD_BILL_FIELDS) {
   if (!initialFieldState[arrEl.id]) initialFieldState[arrEl.id] = ""
+
+  // Setup collective validation state
+  initialValidationState[arrEl.id] = {
+    validationType: arrEl.validationType,
+    valid: false,
+    errMsg: "",
+  }
 }
 
 const FormerAddBill = () => {
   const [formerFieldState, setFormerFieldState] = useState(initialFieldState)
+  const [validations, setValidations] = useState(initialValidationState)
+
   const [previewUrl, setPreviewUrl] = useState<string | null>(null)
 
   const authCtx: any = useAuth()
@@ -34,6 +44,17 @@ const FormerAddBill = () => {
 
   const handleSubmit = async (e: any) => {
     e.preventDefault()
+
+    const { allValidationsPass, updatedValidationState } = validateOnSubmit(
+      formerFieldState,
+      validations
+    )
+
+    setValidations(updatedValidationState)
+
+    if (!allValidationsPass) {
+      return
+    }
 
     const formDataToSend = new FormData()
 
@@ -85,12 +106,6 @@ const FormerAddBill = () => {
     if (type === "file") setPreviewUrl(URL.createObjectURL(files[0]))
   }
 
-  const fileInputRef: any = useRef(null)
-
-  const handleClick = () => {
-    fileInputRef.current.click() // Click the hidden file input when the icon is clicked
-  }
-
   return (
     <PageContainer title="Add Bills" description="Manage Former data here">
       <DashboardNew title="Add Bills" titleVariant="h5">
@@ -105,22 +120,19 @@ const FormerAddBill = () => {
             >
               {FORMER_ADD_BILL_FIELDS.map((field, i) => {
                 return (
-                  <FormControl key={i} sx={{}}>
-                    {field.type !== "file" && (
-                      <Typography
-                        fontWeight={600}
-                        component="label"
-                        sx={{
-                          display: "block",
-                          fontSize: "13px",
-                          lineHeight: "12px",
-                        }}
-                        mb={1}
-                      >
-                        {field.fieldName}
-                      </Typography>
-                    )}
-
+                  <FormControl key={i}>
+                    <Typography
+                      fontWeight={600}
+                      component="label"
+                      sx={{
+                        display: "block",
+                        fontSize: "13px",
+                        lineHeight: "12px",
+                      }}
+                      mb={1}
+                    >
+                      {field.fieldName}
+                    </Typography>
                     {field.type === "select" ? (
                       <Select
                         name={field.id}
@@ -128,6 +140,7 @@ const FormerAddBill = () => {
                         value={formerFieldState[field.id]}
                         onChange={(e) => handleFieldChange(e)}
                         sx={{ width: "100%" }}
+                        required
                       >
                         {field.selectOptions?.map((option, i) => (
                           <MenuItem value={option} key={i}>
@@ -136,71 +149,14 @@ const FormerAddBill = () => {
                         ))}
                       </Select>
                     ) : field.type === "file" ? (
-                      <Box
-                        sx={{
-                          display: "flex",
-                          justifyContent: "center",
-                          alignItems: "center",
-                          width: "200%",
-                          gap: "20px",
-                          color: "#5d87ff",
-                        }}
-                        onClick={handleClick}
+                      <TextField
+                        name={field.id}
+                        type={field.type}
+                        size="small"
                         onChange={(e) => handleFieldChange(e)}
-                      >
-                        <Box
-                          sx={{
-                            mt: 4,
-                            display: "flex",
-                            alignItems: "center",
-                            border: "2px solid #5d87ff ",
-                            width: "180px",
-                            justifyContent: "center",
-                            alignContent: "center",
-                            textAlign: "center",
-                            borderRadius: "10px",
-                            px: 2,
-                            py: 1,
-                          }}
-                        >
-                          <Typography
-                            fontWeight={600}
-                            component="label"
-                            sx={{
-                              display: "block",
-                              fontSize: "13px",
-                              lineHeight: "12px",
-                            }}
-                            mb={1}
-                          >
-                            {field.fieldName}
-                          </Typography>
-                          <label
-                            htmlFor="file-input"
-                            style={{ cursor: "pointer" }}
-                          >
-                            <UploadFileIcon
-                              sx={{
-                                fontSize: "50px",
-                              }}
-                            />
-                          </label>
-
-                          {/* Hidden File Input */}
-                          <input
-                            ref={fileInputRef}
-                            name={field.id}
-                            type={field.type}
-                            style={{
-                              position: "absolute",
-                              opacity: 0,
-                              width: 0,
-                              height: 0,
-                              overflow: "hidden",
-                            }}
-                          />
-                        </Box>
-                      </Box>
+                        sx={{ width: "100%" }}
+                        required
+                      />
                     ) : (
                       <TextField
                         name={field.id}
@@ -209,8 +165,17 @@ const FormerAddBill = () => {
                         value={formerFieldState[field.id]}
                         onChange={(e) => handleFieldChange(e)}
                         sx={{ width: "100%" }}
+                        required
                       />
                     )}
+
+                    {/* Validation Message */}
+                    {!validations[field.id].valid &&
+                    validations[field.id].errMsg ? (
+                      <p style={{ color: "red" }}>
+                        {validations[field.id].errMsg}
+                      </p>
+                    ) : null}
                   </FormControl>
                 )
               })}
@@ -219,7 +184,7 @@ const FormerAddBill = () => {
               style={{
                 display: "flex",
                 justifyContent: "center",
-                marginTop: "15px",
+                marginTop: "40px",
               }}
             >
               <Button type="submit" size="small" variant="contained">
