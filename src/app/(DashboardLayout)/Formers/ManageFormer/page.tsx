@@ -21,7 +21,8 @@ import axiosApi from "@/Util/axiosApi"
 
 import { enqueueSnackbar } from "notistack"
 
-import { FORMER_MODES, FORMER_FIELDS } from "@/config/constants"
+import { FORMER_MODES } from "@/config/constants"
+import { FIELDS_MANAGE_FORMERS } from "@/config/formFields"
 
 const FormControl = styled("div")(() => ({
   marginTop: "10px",
@@ -36,7 +37,7 @@ const ButtonWrapper = styled("div")(() => ({
 
 const initialFieldState: any = {}
 // Creates an initial state object (uses 'id')
-for (let arrEl of FORMER_FIELDS) {
+for (let arrEl of FIELDS_MANAGE_FORMERS) {
   if (!initialFieldState[arrEl.id]) initialFieldState[arrEl.id] = ""
 }
 
@@ -266,7 +267,7 @@ const ManageFormer = () => {
               }}
               onSubmit={handleFormSubmit}
             >
-              {FORMER_FIELDS.map((former, i) =>
+              {FIELDS_MANAGE_FORMERS.map((former, i) =>
                 // Disables 'Active' field in 'add' mode
                 paramMode === FORMER_MODES.add &&
                 former.id === "isActive" ? null : paramMode ===

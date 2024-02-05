@@ -22,12 +22,12 @@ import { useAuth } from "@/context/JWTContext/AuthContext.provider"
 import axiosApi from "@/Util/axiosApi"
 import DynamicTable from "../../components/dynamicTable/DynamicTable"
 
+import { BILL_MODES, BILL_TYPE } from "@/config/constants"
+
 import {
-  MANAGEBILL_DATA_FIELDS,
-  MANAGEBILL_UPDATE_FIELDS,
-  BILL_MODES,
-  BILL_TYPE,
-} from "../../../../config/constants"
+  FIELDS_MANAGE_BILL,
+  FIELDS_MANAGE_BILL_UPDATE,
+} from "@/config/formFields"
 
 const FormControl = styled("div")(() => ({
   marginTop: "10px",
@@ -42,13 +42,13 @@ const ButtonWrapper = styled("div")(() => ({
 
 const initialFieldState: any = {}
 // Creates an initial state object (uses 'id')
-for (let arrEl of MANAGEBILL_DATA_FIELDS) {
+for (let arrEl of FIELDS_MANAGE_BILL) {
   if (!initialFieldState[arrEl.id]) initialFieldState[arrEl.id] = ""
 }
 
 const initialUpdateModeFields: any = {}
 // Creates an initial state object (uses 'id')
-for (let arrEl of MANAGEBILL_UPDATE_FIELDS) {
+for (let arrEl of FIELDS_MANAGE_BILL_UPDATE) {
   if (!initialUpdateModeFields[arrEl.id]) initialUpdateModeFields[arrEl.id] = ""
 }
 
@@ -510,7 +510,7 @@ const ManageBill = () => {
                 gap: "10px",
               }}
             >
-              {MANAGEBILL_DATA_FIELDS.map((field, i) => {
+              {FIELDS_MANAGE_BILL.map((field, i) => {
                 // Permanantly disabled fields
                 const permanantDisable = ["name", "phone", "email"]
                 const disabledPermananty = permanantDisable.includes(field.id)
@@ -626,7 +626,7 @@ const ManageBill = () => {
               })}
 
               {paramMode === BILL_MODES.update &&
-                MANAGEBILL_UPDATE_FIELDS.map((field, i) => (
+                FIELDS_MANAGE_BILL_UPDATE.map((field, i) => (
                   <FormControl key={i}>
                     <Typography
                       fontWeight={600}

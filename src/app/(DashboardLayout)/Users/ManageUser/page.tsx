@@ -17,28 +17,7 @@ import { useAuth } from "@/context/JWTContext/AuthContext.provider"
 import axiosApi from "@/Util/axiosApi"
 import { enqueueSnackbar } from "notistack"
 
-const USER_FIELDS = [
-  {
-    id: "role",
-    fieldName: "Role",
-    type: "text",
-  },
-  {
-    id: "name",
-    fieldName: "User Name",
-    type: "text",
-  },
-  {
-    id: "email",
-    fieldName: "E-Mail",
-    type: "text",
-  },
-  {
-    id: "phone",
-    fieldName: "Phone",
-    type: "number",
-  },
-]
+import { FIELDS_USERS } from "@/config/formFields"
 
 const FormControl = styled("div")(() => ({
   marginTop: "10px",
@@ -53,7 +32,7 @@ const ButtonWrapper = styled("div")(() => ({
 
 const initialFieldState: any = {}
 // Creates an initial state object (uses 'id')
-for (let arrEl of USER_FIELDS) {
+for (let arrEl of FIELDS_USERS) {
   if (!initialFieldState[arrEl.id]) initialFieldState[arrEl.id] = ""
 }
 
@@ -177,7 +156,7 @@ const ManageUser = () => {
             }}
             onSubmit={handleFormSubmit}
           >
-            {USER_FIELDS.map((user, i) => {
+            {FIELDS_USERS.map((user, i) => {
               return (
                 <FormControl key={i}>
                   <Typography

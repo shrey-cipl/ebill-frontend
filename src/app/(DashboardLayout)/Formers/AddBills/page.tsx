@@ -16,13 +16,13 @@ import axiosApi from "@/Util/axiosApi"
 import { useRouter } from "next/navigation"
 import { enqueueSnackbar } from "notistack"
 
-import { FORMER_ADD_BILL_FIELDS } from "../../../../config/constants"
-import { validateOnSubmit } from "../../../../Util/commonFunctions"
+import { FIELDS_FORMERS_ADD_BILL } from "@/config/formFields"
+import { validateOnSubmit } from "@/Util/commonFunctions"
 
 const initialFieldState: any = {}
 const initialValidationState: any = {}
 // Creates an initial state object (uses 'id')
-for (let arrEl of FORMER_ADD_BILL_FIELDS) {
+for (let arrEl of FIELDS_FORMERS_ADD_BILL) {
   if (!initialFieldState[arrEl.id]) initialFieldState[arrEl.id] = ""
 
   // Setup collective validation state
@@ -118,7 +118,7 @@ const FormerAddBill = () => {
                 gap: "10px",
               }}
             >
-              {FORMER_ADD_BILL_FIELDS.map((field, i) => {
+              {FIELDS_FORMERS_ADD_BILL.map((field, i) => {
                 return (
                   <FormControl key={i}>
                     <Typography
