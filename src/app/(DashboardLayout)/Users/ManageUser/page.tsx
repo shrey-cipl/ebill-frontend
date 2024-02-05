@@ -179,6 +179,7 @@ const ManageUser = () => {
                     value={userFieldData[user.id]}
                     onChange={handleFieldChange}
                     disabled={user.id === "role" ? true : false}
+                    required={user.required}
                   />
                 </FormControl>
               )

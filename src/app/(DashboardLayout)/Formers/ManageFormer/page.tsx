@@ -292,6 +292,7 @@ const ManageFormer = () => {
                         value={formerFields[former.id]}
                         onChange={handleFieldChange}
                         sx={{ width: "100%" }}
+                        required={former.required}
                       >
                         {former.selectOptions?.map((option, i) => (
                           <MenuItem key={i} value={option}>
@@ -308,6 +309,7 @@ const ManageFormer = () => {
                           value={formerFields[former.id]}
                           onChange={handleFieldChange}
                           sx={{ width: "100%" }}
+                          required={former.required}
                         />
                         <Button
                           type="button"
@@ -332,6 +334,7 @@ const ManageFormer = () => {
                             ? true
                             : false
                         }
+                        required={former.required}
                       />
                     )}
                   </FormControl>

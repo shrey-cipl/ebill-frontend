@@ -140,7 +140,7 @@ const FormerAddBill = () => {
                         value={formerFieldState[field.id]}
                         onChange={(e) => handleFieldChange(e)}
                         sx={{ width: "100%" }}
-                        required
+                        required={field.required}
                       >
                         {field.selectOptions?.map((option, i) => (
                           <MenuItem value={option} key={i}>
@@ -155,7 +155,7 @@ const FormerAddBill = () => {
                         size="small"
                         onChange={(e) => handleFieldChange(e)}
                         sx={{ width: "100%" }}
-                        required
+                        required={field.required}
                       />
                     ) : (
                       <TextField
@@ -165,7 +165,7 @@ const FormerAddBill = () => {
                         value={formerFieldState[field.id]}
                         onChange={(e) => handleFieldChange(e)}
                         sx={{ width: "100%" }}
-                        required
+                        required={field.required}
                       />
                     )}
 
