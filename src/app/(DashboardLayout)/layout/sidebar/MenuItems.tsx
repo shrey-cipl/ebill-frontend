@@ -59,6 +59,13 @@ const Menuitems: any = {
     },
     {
       id: uniqueId(),
+      title: "System Logs",
+      icon: StarBorderPurple500Icon,
+      href: "/SystemLogs",
+      present: "yes",
+    },
+    {
+      id: uniqueId(),
       title: "General Report",
       icon: EventNoteIcon,
       href: "/GeneralReport",
@@ -272,7 +279,6 @@ const Menuitems: any = {
       href: "/Formers",
       present: "yes",
     },
-
     {
       id: uniqueId(),
       title: "Users",
