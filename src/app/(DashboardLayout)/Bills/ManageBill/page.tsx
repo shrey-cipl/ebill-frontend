@@ -23,6 +23,7 @@ import axiosApi from "@/Util/axiosApi"
 import DynamicTable from "../../components/dynamicTable/DynamicTable"
 
 import { BILL_MODES, BILL_TYPE } from "@/config/constants"
+import { validateOnSubmit } from "@/Util/commonFunctions"
 
 import {
   FIELDS_MANAGE_BILL,
@@ -41,15 +42,31 @@ const ButtonWrapper = styled("div")(() => ({
 }))
 
 const initialFieldState: any = {}
+const initialValidationState: any = {}
 // Creates an initial state object (uses 'id')
 for (let arrEl of FIELDS_MANAGE_BILL) {
   if (!initialFieldState[arrEl.id]) initialFieldState[arrEl.id] = ""
+
+  // Setup collective validation state
+  initialValidationState[arrEl.id] = {
+    validationType: arrEl.validationType,
+    valid: false,
+    errMsg: "",
+  }
 }
 
 const initialUpdateModeFields: any = {}
+const initialUpdateModeValidationState: any = {}
 // Creates an initial state object (uses 'id')
 for (let arrEl of FIELDS_MANAGE_BILL_UPDATE) {
   if (!initialUpdateModeFields[arrEl.id]) initialUpdateModeFields[arrEl.id] = ""
+
+  // Setup collective validation state
+  initialUpdateModeValidationState[arrEl.id] = {
+    validationType: arrEl.validationType,
+    valid: false,
+    errMsg: "",
+  }
 }
 
 const getBillData = async (id: any, token: any) => {
@@ -106,6 +123,12 @@ const ManageBill = () => {
 
   const [updateModeFields, setUpdateModeFields] = useState(
     initialUpdateModeFields
+  )
+
+  // Validation States
+  const [validations, setValidations] = useState(initialValidationState)
+  const [validationsUpdateMode, setValidationsUpdateMode] = useState(
+    initialValidationState
   )
 
   const router = useRouter()
@@ -259,6 +282,32 @@ const ManageBill = () => {
   // Posts form data
   const handleFormSubmit = async (e: any) => {
     e.preventDefault()
+
+    // For only add_mode fields
+    const { allValidationsPass, updatedValidationState } = validateOnSubmit(
+      dataFields,
+      validations
+    )
+
+    setValidations(updatedValidationState)
+
+    if (!allValidationsPass) {
+      return
+    }
+
+    // For only update_mode fields
+    if (paramMode === BILL_MODES.update) {
+      const { allValidationsPass, updatedValidationState } = validateOnSubmit(
+        updateModeFields,
+        validationsUpdateMode
+      )
+
+      setValidationsUpdateMode(updatedValidationState)
+
+      if (!allValidationsPass) {
+        return
+      }
+    }
 
     try {
       let res
@@ -624,6 +673,20 @@ const ManageBill = () => {
                         rows={4}
                       />
                     )}
+
+                    {/* Validation Message */}
+                    {!validations[field.id].valid &&
+                    validations[field.id].errMsg ? (
+                      <p
+                        style={{
+                          color: "red",
+                          fontSize: "14px",
+                          margin: "0px",
+                        }}
+                      >
+                        {validations[field.id].errMsg}
+                      </p>
+                    ) : null}
                   </FormControl>
                 )
               })}
@@ -655,6 +718,20 @@ const ManageBill = () => {
                       size="small"
                       // disabled={disabledUpdateFields}
                     />
+
+                    {/* Validation Message */}
+                    {!validations[field.id].valid &&
+                    validations[field.id].errMsg ? (
+                      <p
+                        style={{
+                          color: "red",
+                          fontSize: "14px",
+                          margin: "0px",
+                        }}
+                      >
+                        {validations[field.id].errMsg}
+                      </p>
+                    ) : null}
                   </FormControl>
                 ))}
               <br />
