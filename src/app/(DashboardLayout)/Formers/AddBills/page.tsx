@@ -144,6 +144,10 @@ const FormerAddBill = () => {
                         onChange={(e) => handleFieldChange(e)}
                         sx={{ width: "100%" }}
                         required={field.required}
+                        error={
+                          !validations[field.id].valid &&
+                          validations[field.id].errMsg
+                        }
                       >
                         {field.selectOptions?.map((option, i) => (
                           <MenuItem value={option} key={i}>
@@ -183,9 +187,15 @@ const FormerAddBill = () => {
                     {/* Validation Message */}
                     {!validations[field.id].valid &&
                     validations[field.id].errMsg ? (
-                      <span style={{ color: "red", fontSize: "13px" }}>
+                      <p
+                        style={{
+                          color: "red",
+                          fontSize: "14px",
+                          margin: "0px",
+                        }}
+                      >
                         {validations[field.id].errMsg}
-                      </span>
+                      </p>
                     ) : null}
                   </FormControl>
                 )

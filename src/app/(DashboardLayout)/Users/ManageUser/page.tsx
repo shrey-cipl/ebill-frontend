@@ -17,6 +17,8 @@ import { useAuth } from "@/context/JWTContext/AuthContext.provider"
 import axiosApi from "@/Util/axiosApi"
 import { enqueueSnackbar } from "notistack"
 
+import { validateOnSubmit } from "@/Util/commonFunctions"
+
 import { FIELDS_USERS } from "@/config/formFields"
 
 const FormControl = styled("div")(() => ({
@@ -31,9 +33,17 @@ const ButtonWrapper = styled("div")(() => ({
 }))
 
 const initialFieldState: any = {}
+const initialValidationState: any = {}
 // Creates an initial state object (uses 'id')
 for (let arrEl of FIELDS_USERS) {
   if (!initialFieldState[arrEl.id]) initialFieldState[arrEl.id] = ""
+
+  // Setup collective validation state
+  initialValidationState[arrEl.id] = {
+    validationType: arrEl.validationType,
+    valid: false,
+    errMsg: "",
+  }
 }
 
 // Stores a cached data for User fields
@@ -60,6 +70,8 @@ const getUserData = async (id: any, token: any) => {
 
 const ManageUser = () => {
   const [userFieldData, setUserFieldData] = useState(initialFieldState)
+  const [validations, setValidations] = useState(initialValidationState)
+
   const router = useRouter()
   const searchParams = useSearchParams()
 
@@ -95,6 +107,17 @@ const ManageUser = () => {
 
   const handleFormSubmit = async (e: any) => {
     e.preventDefault()
+
+    const { allValidationsPass, updatedValidationState } = validateOnSubmit(
+      userFieldData,
+      validations
+    )
+
+    setValidations(updatedValidationState)
+
+    if (!allValidationsPass) {
+      return
+    }
 
     // Updated data to be sent
     const extractedData = {
@@ -182,6 +205,20 @@ const ManageUser = () => {
                     disabled={user.id === "role" ? true : false}
                     required={user.required}
                   />
+
+                  {/* Validation Message */}
+                  {!validations[user.id].valid &&
+                  validations[user.id].errMsg ? (
+                    <p
+                      style={{
+                        color: "red",
+                        fontSize: "14px",
+                        margin: "0px",
+                      }}
+                    >
+                      {validations[user.id].errMsg}
+                    </p>
+                  ) : null}
                 </FormControl>
               )
             })}

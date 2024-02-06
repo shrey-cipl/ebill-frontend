@@ -24,6 +24,8 @@ import { enqueueSnackbar } from "notistack"
 import { FORMER_MODES } from "@/config/constants"
 import { FIELDS_MANAGE_FORMERS } from "@/config/formFields"
 
+import { validateOnSubmit } from "@/Util/commonFunctions"
+
 const FormControl = styled("div")(() => ({
   marginTop: "10px",
 }))
@@ -36,9 +38,17 @@ const ButtonWrapper = styled("div")(() => ({
 }))
 
 const initialFieldState: any = {}
+const initialValidationState: any = {}
 // Creates an initial state object (uses 'id')
 for (let arrEl of FIELDS_MANAGE_FORMERS) {
   if (!initialFieldState[arrEl.id]) initialFieldState[arrEl.id] = ""
+
+  // Setup collective validation state
+  initialValidationState[arrEl.id] = {
+    validationType: arrEl.validationType,
+    valid: false,
+    errMsg: "",
+  }
 }
 
 const getFormerData = async (id: any, token: any) => {
@@ -66,6 +76,7 @@ let cachedFormerFields: any
 
 const ManageFormer = () => {
   const [formerFields, setFormerFields] = useState(initialFieldState)
+  const [validations, setValidations] = useState(initialValidationState)
 
   const router = useRouter()
   const searchParams = useSearchParams()
@@ -131,6 +142,17 @@ const ManageFormer = () => {
 
   const handleFormSubmit = async (e: any) => {
     e.preventDefault()
+
+    const { allValidationsPass, updatedValidationState } = validateOnSubmit(
+      formerFields,
+      validations
+    )
+
+    setValidations(updatedValidationState)
+
+    if (!allValidationsPass) {
+      return
+    }
 
     try {
       let res
@@ -340,6 +362,20 @@ const ManageFormer = () => {
                         required={former.required}
                       />
                     )}
+
+                    {/* Validation Message */}
+                    {!validations[former.id].valid &&
+                    validations[former.id].errMsg ? (
+                      <p
+                        style={{
+                          color: "red",
+                          fontSize: "14px",
+                          margin: "0px",
+                        }}
+                      >
+                        {validations[former.id].errMsg}
+                      </p>
+                    ) : null}
                   </FormControl>
                 )
               )}
