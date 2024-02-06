@@ -9,6 +9,8 @@ import {
   TextField,
   FormControl,
 } from "@mui/material"
+import WarningIcon from "@mui/icons-material/Warning"
+
 import PageContainer from "../../components/container/PageContainer"
 import DashboardNew from "../../components/shared/DashboardNew"
 import { useAuth } from "@/context/JWTContext/AuthContext.provider"
@@ -186,9 +188,27 @@ const FormerAddBill = () => {
                     {/* Validation Message */}
                     {!validations[field.id].valid &&
                     validations[field.id].errMsg ? (
-                      <span style={{ color: "red", fontSize: "13px" }}>
-                        {validations[field.id].errMsg}
-                      </span>
+                      <Box
+                        sx={{
+                          display: "flex",
+                          alignContent: "center",
+                          alignItems: "center",
+                          color: "red",
+                          gap: 0.5,
+                          ml: 1,
+                        }}
+                      >
+                        <Box>
+                          <WarningIcon
+                            sx={{
+                              fontSize: "13px",
+                            }}
+                          />
+                        </Box>
+                        <Box style={{ color: "red", fontSize: "13px" }}>
+                          {validations[field.id].errMsg}
+                        </Box>
+                      </Box>
                     ) : null}
                   </FormControl>
                 )

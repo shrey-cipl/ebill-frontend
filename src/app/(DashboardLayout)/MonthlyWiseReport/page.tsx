@@ -24,6 +24,13 @@ import TableHead from "@mui/material/TableHead"
 import TableRow from "@mui/material/TableRow"
 import { useAuth } from "@/context/JWTContext/AuthContext.provider"
 import CustomGrid from "../components/CustomGrid"
+import {
+  InputMonthly,
+  InputFormerName,
+  InputBillType,
+  InputYearly,
+} from "../components/InputComponents/InputComponents"
+import FilterTable from "../components/filterTable/FilterTable"
 
 const DashboardNew = dynamic(() => import("../components/shared/DashboardNew"))
 const PageContainer = dynamic(
@@ -49,21 +56,6 @@ const StyledSelect = styled(Select)(({ theme }) => ({
   display: "block",
   // textAlign: 'center', // Ce
 }))
-
-const months = [
-  "January",
-  "February",
-  "March",
-  "April",
-  "May",
-  "June",
-  "July",
-  "August",
-  "September",
-  "October",
-  "November",
-  "December",
-]
 
 const MonthlyWiseReport = () => {
   const auth: any = useAuth()
@@ -145,28 +137,6 @@ const MonthlyWiseReport = () => {
     getReports()
   }, [auth.user.token])
 
-  const columns: GridColDef[] = [
-    {
-      field: "s.no", // confirm this
-      headerName: "S.No",
-      valueGetter: (params:any) => params.api.getAllRowIds().indexOf(params.id) + 1,
-      width: 100,
-    },
-    { field: "diaryNumber", headerName: "Diary No." },
-    { field: "name", headerName: "Name" },
-    { field: "billType", headerName: "Bill Type" },
-    { field: "totalAdmissibleAmount", headerName: "Admissible Amount" },
-    {
-      field: "sanctionedAmount",
-      headerName: "Sanctioned Amount"
-    },
-    {
-      field: "currentStatus",
-      headerName: "Status"
-    },
-
-  ]
-
   return (
     <>
       <DashboardNew title="Monthly Report" titleVariant="h5">
@@ -191,72 +161,13 @@ const MonthlyWiseReport = () => {
                 mb: 2,
               }}
             >
-              <FormControl></FormControl>
-              <Typography
-                variant="subtitle1"
-                fontWeight={600}
-                component="label"
-                htmlFor="name"
-                mb="5px"
-              >
-                Name
-              </Typography>
-              <FormControl>
-                <InputLabel size="small" id="demo-simple-select-label">
-                  {" "}
-                  Name{" "}
-                </InputLabel>
-                <StyledSelect
-                  labelId="demo-simple-select-label"
-                  id="demo-simple-select"
-                  value={formData.name}
-                  name="name"
-                  label="Name"
-                  onChange={handleChange}
-                  size="small"
-                  inputProps={{ "aria-label": "Without label" }}
-                >
-                  <MenuItem disabled>
-                    <em>Name</em>
-                  </MenuItem>
-                  <MenuItem value="All">
-                    <em>All</em>
-                  </MenuItem>
-                  {allReports.map((el: any, i: any) => {
-                    return (
-                      <MenuItem value={el.former.name} key={i}>
-                        {el.former.name}
-                      </MenuItem>
-                    )
-                  })}
-                </StyledSelect>
-              </FormControl>
+              <InputFormerName
+                formData={formData}
+                allReports={allReports}
+                handleChange={handleChange}
+              />
 
-              <Typography
-                variant="subtitle1"
-                fontWeight={700}
-                component="label"
-                htmlFor="location"
-                mb="5px"
-                mt="15px"
-              >
-                Month
-              </Typography>
-              <FormControl size="small">
-                <InputLabel>Month</InputLabel>
-                <Select
-                  name="month"
-                  value={formData.month}
-                  onChange={handleChange}
-                  label="Month"
-                >
-                  {months.map((month, index) => (
-                    <MenuItem key={index} value={index + 1}>
-                      {month}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
+              <InputMonthly formData={formData} handleChange={handleChange} />
             </Stack>
             <Stack
               sx={{
@@ -266,77 +177,12 @@ const MonthlyWiseReport = () => {
                 },
               }}
             >
-              <Typography
-                variant="subtitle1"
-                fontWeight={600}
-                component="label"
-                htmlFor="status"
-                mb="5px"
-              >
-                Bill Type
-              </Typography>
-              <FormControl>
-                <InputLabel size="small" id="demo-simple-select-label">
-                  Bill Type
-                </InputLabel>
-                <StyledSelect
-                  type="text"
-                  label="Bill Type"
-                  value={formData.billtype}
-                  name="billtype"
-                  onChange={handleChange}
-                  size="small"
-                >
-                  <MenuItem disabled value="ctfc">
-                    <em>Bill Type</em>
-                  </MenuItem>
+              <InputBillType formData={formData} handleChange={handleChange} />
 
-                  <MenuItem value="Domestic Help">Domestic Help</MenuItem>
-                  <MenuItem value="Medical Reimbursement">
-                    Medical Reimbursement
-                  </MenuItem>
-                  <MenuItem value="F&Reimbursement for Defraying the Services of Orderly">
-                    F&Reimbursement for Defraying the Services of Orderly
-                  </MenuItem>
-                  <MenuItem value="Resident Telephone/Mobile charges Reimbursement">
-                    Resident Telephone/Mobile charges Reimbursement
-                  </MenuItem>
-                </StyledSelect>
-              </FormControl>
-              <Typography
-                variant="subtitle1"
-                fontWeight={600}
-                component="label"
-                htmlFor="designation"
-                mb="5px"
-                mt="15px"
-              >
-                Year
-              </Typography>
-              <FormControl size="small">
-                <InputLabel>Year</InputLabel>
-                <Select
-                  name="year"
-                  value={formData.year}
-                  onChange={handleChange}
-                  label="Year"
-                >
-                  <Box
-                    sx={{
-                      height: "320px",
-                    }}
-                  >
-                  {years.reverse().map((year) => (
-                    <MenuItem key={year} value={year}>
-                      {year}
-                    </MenuItem>
-                  ))}
-                 </Box>
-                </Select>
-              </FormControl>
+              <InputYearly formData={formData} handleChange={handleChange} />
             </Stack>
           </Box>
-           <Box
+          <Box
             sx={{
               display: "flex",
               gap: "10px",
@@ -392,92 +238,12 @@ const MonthlyWiseReport = () => {
               </Typography>
             </Button>
           </Box>
-
-
-
         </>
-
-
-
       </DashboardNew>
 
       <br />
 
-      {get && allReportsByfilter.length != 0 && (
-        // <DashboardNew>
-        //   <PageContainer title="Bills" description="List of all the bills">
-        //     <Box sx={{ overflow: "auto", width: { xs: "600px", sm: "100%" } }}>
-        //       <TableContainer>
-        //         <Table
-        //           sx={{
-        //             // display: "block",
-        //             overflowX: "auto",
-        //             // maxWidth: 500,
-        //             minWidth: "500px",
-        //             // "& .MuiTableCell-root": { border: "1px solid #333" },
-        //           }}
-        //           size="medium"
-        //         >
-        //           {get && allReportsByfilter.length != 0 && (
-        //             <TableHead>
-        //               <TableRow sx={{ background: "#4C7AFF" }}>
-        //                 {TABLE_HEADERS.map((header, i) => (
-        //                   <TableCell
-        //                     key={i}
-        //                     sx={{
-        //                       color: "white",
-        //                       padding: "15px 10px",
-        //                     }}
-        //                   >
-        //                     {header}
-        //                   </TableCell>
-        //                 ))}
-        //               </TableRow>
-        //             </TableHead>
-        //           )}
-
-        //           <TableBody>
-        //             {allReportsByfilter.map((bills: any, i: any) => {
-        //               const rowColor = (i + 1) % 2 === 0 ? "#eee" : "#fff"
-
-        //               return (
-        //                 <TableRow key={bills._id} sx={{ background: rowColor }}>
-        //                   <TabelCellStyled>{bills.diaryNumber}</TabelCellStyled>
-        //                   <TabelCellStyled>
-        //                     {bills.former.name}
-        //                   </TabelCellStyled>
-        //                   <TabelCellStyled>{bills.billType}</TabelCellStyled>
-        //                   <TabelCellStyled>
-        //                     {bills.totalClaimedAmount}
-        //                   </TabelCellStyled>
-        //                   <TabelCellStyled>
-        //                     {bills.totalAdmissibleAmount}
-        //                   </TabelCellStyled>
-
-        //                   <TabelCellStyled>
-        //                     {bills.currentStatus}
-        //                   </TabelCellStyled>
-        //                 </TableRow>
-        //               )
-        //             })}
-        //           </TableBody>
-        //         </Table>
-        //       </TableContainer>
-        //     </Box>
-        //   </PageContainer>
-        // </DashboardNew>
-        <CustomGrid    rows={allReportsByfilter}
-            columns={columns}/>
-      )}
-      {get && allReportsByfilter.length == 0 && (
-        <Typography
-          sx={{
-            color: "red",
-          }}
-        >
-          No report found !!
-        </Typography>
-      )}
+      <FilterTable allReportsByfilter={allReportsByfilter} get={get} />
     </>
   )
 }
