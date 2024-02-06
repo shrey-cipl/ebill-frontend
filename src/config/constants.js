@@ -45,4 +45,19 @@ const VALIDATION_TYPE = {
   none: "none",
 }
 
-export { BILL_MODES, FORMER_MODES, BILL_TYPE, ROLES, VALIDATION_TYPE }
+const months = [
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
+]
+
+export { BILL_MODES, FORMER_MODES, BILL_TYPE, ROLES, VALIDATION_TYPE, months }

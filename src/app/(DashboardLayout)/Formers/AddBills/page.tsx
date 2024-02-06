@@ -1,5 +1,5 @@
 "use client"
-import React, { useState, useRef } from "react"
+import React, { useState, useRef, useEffect } from "react"
 import {
   Button,
   Typography,
@@ -9,6 +9,8 @@ import {
   TextField,
   FormControl,
 } from "@mui/material"
+import WarningIcon from "@mui/icons-material/Warning"
+
 import PageContainer from "../../components/container/PageContainer"
 import DashboardNew from "../../components/shared/DashboardNew"
 import { useAuth } from "@/context/JWTContext/AuthContext.provider"
@@ -36,7 +38,6 @@ for (let arrEl of FIELDS_FORMERS_ADD_BILL) {
 const FormerAddBill = () => {
   const [formerFieldState, setFormerFieldState] = useState(initialFieldState)
   const [validations, setValidations] = useState(initialValidationState)
-
   const [previewUrl, setPreviewUrl] = useState<string | null>(null)
 
   const authCtx: any = useAuth()
@@ -95,6 +96,16 @@ const FormerAddBill = () => {
     }
   }
 
+  useEffect(() => {
+    console.log(formerFieldState)
+    const { allValidationsPass, updatedValidationState } = validateOnSubmit(
+      formerFieldState,
+      validations
+    )
+
+    setValidations(updatedValidationState)
+  }, [formerFieldState])
+
   const handleFieldChange = (e: any) => {
     const { name, value, type, files } = e.target
 
@@ -131,10 +142,7 @@ const FormerAddBill = () => {
                       }}
                       mb={1}
                     >
-                      {field.fieldName}{" "}
-                      {field.required && (
-                        <span style={{ color: "red" }}>*</span>
-                      )}
+                      {field.fieldName}
                     </Typography>
                     {field.type === "select" ? (
                       <Select
@@ -143,7 +151,7 @@ const FormerAddBill = () => {
                         value={formerFieldState[field.id]}
                         onChange={(e) => handleFieldChange(e)}
                         sx={{ width: "100%" }}
-                        required={field.required}
+                        required
                       >
                         {field.selectOptions?.map((option, i) => (
                           <MenuItem value={option} key={i}>
@@ -162,7 +170,7 @@ const FormerAddBill = () => {
                           validations[field.id].errMsg
                         }
                         sx={{ width: "100%" }}
-                        required={field.required}
+                        required
                       />
                     ) : (
                       <TextField
@@ -170,11 +178,12 @@ const FormerAddBill = () => {
                         type={field.type}
                         size="small"
                         value={formerFieldState[field.id]}
-                        onChange={(e) => handleFieldChange(e)}
                         error={
                           !validations[field.id].valid &&
                           validations[field.id].errMsg
                         }
+                        // id="outlined-error"
+                        onChange={(e) => handleFieldChange(e)}
                         sx={{ width: "100%" }}
                         required={field.required}
                       />
@@ -183,9 +192,27 @@ const FormerAddBill = () => {
                     {/* Validation Message */}
                     {!validations[field.id].valid &&
                     validations[field.id].errMsg ? (
-                      <span style={{ color: "red", fontSize: "13px" }}>
-                        {validations[field.id].errMsg}
-                      </span>
+                      <Box
+                        sx={{
+                          display: "flex",
+                          alignContent: "center",
+                          alignItems: "center",
+                          color: "red",
+                          gap: 0.5,
+                          ml: 1,
+                        }}
+                      >
+                        <Box>
+                          <WarningIcon
+                            sx={{
+                              fontSize: "13px",
+                            }}
+                          />
+                        </Box>
+                        <Box style={{ color: "red", fontSize: "13px" }}>
+                          {validations[field.id].errMsg}
+                        </Box>
+                      </Box>
                     ) : null}
                   </FormControl>
                 )

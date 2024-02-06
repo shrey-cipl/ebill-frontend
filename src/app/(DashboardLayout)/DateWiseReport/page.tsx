@@ -24,6 +24,11 @@ import TableHead from "@mui/material/TableHead"
 import TableRow from "@mui/material/TableRow"
 import { useAuth } from "@/context/JWTContext/AuthContext.provider"
 import CustomGrid from "../components/CustomGrid"
+import FilterTable from "../components/filterTable/FilterTable"
+import {
+  InputBillType,
+  InputFormerName,
+} from "../components/InputComponents/InputComponents"
 
 const DashboardNew = dynamic(() => import("../components/shared/DashboardNew"))
 const PageContainer = dynamic(
@@ -122,28 +127,6 @@ const DateWiseReport = () => {
     getReports()
   }, [auth.user.token])
 
-  const columns: GridColDef[] = [
-    {
-      field: "s.no", // confirm this
-      headerName: "S.No",
-      valueGetter: (params: any) =>
-        params.api.getAllRowIds().indexOf(params.id) + 1,
-      width: 100,
-    },
-    { field: "diaryNumber", headerName: "Diary No." },
-    { field: "name", headerName: "Name" },
-    { field: "billType", headerName: "Bill Type" },
-    { field: "totalAdmissibleAmount", headerName: "Admissible Amount" },
-    {
-      field: "sanctionedAmount",
-      headerName: "Sanctioned Amount",
-    },
-    {
-      field: "currentStatus",
-      headerName: "Status",
-    },
-  ]
-
   return (
     <>
       <DashboardNew title=" Date Wise Report" titleVariant="h5">
@@ -168,46 +151,11 @@ const DateWiseReport = () => {
                 mb: 2,
               }}
             >
-              <FormControl></FormControl>
-              <Typography
-                variant="subtitle1"
-                fontWeight={600}
-                component="label"
-                htmlFor="name"
-                mb="5px"
-              >
-                Name
-              </Typography>
-              <FormControl>
-                <InputLabel size="small" id="demo-simple-select-label">
-                  {" "}
-                  Name{" "}
-                </InputLabel>
-                <StyledSelect
-                  labelId="demo-simple-select-label"
-                  id="demo-simple-select"
-                  value={formData.name}
-                  name="name"
-                  label="Name"
-                  onChange={handleChange}
-                  size="small"
-                  inputProps={{ "aria-label": "Without label" }}
-                >
-                  <MenuItem disabled>
-                    <em>Name</em>
-                  </MenuItem>
-                  <MenuItem value="All">
-                    <em>All</em>
-                  </MenuItem>
-                  {allReports.map((el: any, i: any) => {
-                    return (
-                      <MenuItem value={el.former.name} key={i}>
-                        {el.former.name}
-                      </MenuItem>
-                    )
-                  })}
-                </StyledSelect>
-              </FormControl>
+              <InputFormerName
+                formData={formData}
+                allReports={allReports}
+                handleChange={handleChange}
+              />
               <Typography
                 variant="subtitle1"
                 fontWeight={700}
@@ -237,42 +185,7 @@ const DateWiseReport = () => {
                 },
               }}
             >
-              <Typography
-                variant="subtitle1"
-                fontWeight={600}
-                component="label"
-                htmlFor="status"
-                mb="5px"
-              >
-                Bill Type
-              </Typography>
-              <FormControl>
-                <InputLabel size="small" id="demo-simple-select-label">
-                  Bill Type
-                </InputLabel>
-                <StyledSelect
-                  type="text"
-                  label="Bill Type"
-                  value={formData.billtype}
-                  name="billtype"
-                  size="small"
-                  onChange={handleChange}
-                >
-                  <MenuItem disabled value="ctfc">
-                    <em>Bill Type</em>
-                  </MenuItem>
-                  <MenuItem value="Domestic Help">Domestic Help</MenuItem>
-                  <MenuItem value="Medical Reimbursement">
-                    Medical Reimbursement
-                  </MenuItem>
-                  <MenuItem value="F&Reimbursement for Defraying the Services of Orderly">
-                    F&Reimbursement for Defraying the Services of Orderly
-                  </MenuItem>
-                  <MenuItem value="Resident Telephone/Mobile charges Reimbursement">
-                    Resident Telephone/Mobile charges Reimbursement
-                  </MenuItem>
-                </StyledSelect>
-              </FormControl>
+              <InputBillType formData={formData} handleChange={handleChange} />
 
               <Typography
                 variant="subtitle1"
@@ -362,80 +275,7 @@ const DateWiseReport = () => {
 
       <br />
 
-      {get && allReportsByfilter.length != 0 && (
-        // <DashboardNew>
-        //   <PageContainer title="Bills" description="List of all the bills">
-        //     <Box sx={{ overflow: "auto", width: { xs: "600px", sm: "100%" } }}>
-        //       <TableContainer>
-        //         <Table
-        //           sx={{
-        //             // display: "block",
-        //             overflowX: "auto",
-        //             // maxWidth: 500,
-        //             minWidth: "500px",
-        //             // "& .MuiTableCell-root": { border: "1px solid #333" },
-        //           }}
-        //           size="medium"
-        //         >
-        //           {get && allReportsByfilter.length != 0 && (
-        //             <TableHead>
-        //               <TableRow sx={{ background: "#4C7AFF" }}>
-        //                 {TABLE_HEADERS.map((header, i) => (
-        //                   <TableCell
-        //                     key={i}
-        //                     sx={{
-        //                       color: "white",
-        //                       padding: "15px 10px",
-        //                     }}
-        //                   >
-        //                     {header}
-        //                   </TableCell>
-        //                 ))}
-        //               </TableRow>
-        //             </TableHead>
-        //           )}
-
-        //           <TableBody>
-        //             {allReportsByfilter.map((bills: any, i: any) => {
-        //               const rowColor = (i + 1) % 2 === 0 ? "#eee" : "#fff"
-
-        //               return (
-        //                 <TableRow key={bills._id} sx={{ background: rowColor }}>
-        //                   <TabelCellStyled>{bills.diaryNumber}</TabelCellStyled>
-        //                   <TabelCellStyled>
-        //                     {bills.former.name}
-        //                   </TabelCellStyled>
-        //                   <TabelCellStyled>{bills.billType}</TabelCellStyled>
-        //                   <TabelCellStyled>
-        //                     {bills.totalClaimedAmount}
-        //                   </TabelCellStyled>
-        //                   <TabelCellStyled>
-        //                     {bills.totalAdmissibleAmount}
-        //                   </TabelCellStyled>
-
-        //                   <TabelCellStyled>
-        //                     {bills.currentStatus}
-        //                   </TabelCellStyled>
-        //                 </TableRow>
-        //               )
-        //             })}
-        //           </TableBody>
-        //         </Table>
-        //       </TableContainer>
-        //     </Box>
-        //   </PageContainer>
-        // </DashboardNew>
-        <CustomGrid rows={allReportsByfilter} columns={columns} />
-      )}
-      {get && allReportsByfilter.length == 0 && (
-        <Typography
-          sx={{
-            color: "red",
-          }}
-        >
-          No report found !!
-        </Typography>
-      )}
+      <FilterTable allReportsByfilter={allReportsByfilter} get={get} />
     </>
   )
 }
