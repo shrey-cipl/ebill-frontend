@@ -126,6 +126,7 @@ const FIELDS_MANAGE_BILL_UPDATE = [
     required: true,
     validationType: VALIDATION_TYPE.amount,
   },
+
   {
     id: "PFMS",
     fieldName: "PFMS",
@@ -203,12 +204,20 @@ const FIELDS_MANAGE_FORMERS = [
     validationType: VALIDATION_TYPE.none,
   },
   {
+    id: "confrimbankAccountNumber",
+    fieldName: "Confrim Bank A/C",
+    type: "text",
+    required: true,
+    validationType: VALIDATION_TYPE.none,
+  },
+  {
     id: "ifscCode",
     fieldName: "IFSC Code",
     type: "text",
     required: true,
     validationType: VALIDATION_TYPE.none,
   },
+
   {
     id: "bankName",
     fieldName: "Bank Name",
@@ -216,6 +225,7 @@ const FIELDS_MANAGE_FORMERS = [
     required: true,
     validationType: VALIDATION_TYPE.none,
   },
+
   {
     id: "branchName",
     fieldName: "Branch Name",

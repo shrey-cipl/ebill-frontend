@@ -675,8 +675,8 @@ const ManageBill = () => {
                     )}
 
                     {/* Validation Message */}
-                    {!validations[field.id].valid &&
-                    validations[field.id].errMsg ? (
+                    {!validations[field.id]?.valid &&
+                    validations[field.id]?.errMsg ? (
                       <p
                         style={{
                           color: "red",
@@ -720,8 +720,8 @@ const ManageBill = () => {
                     />
 
                     {/* Validation Message */}
-                    {!validations[field.id].valid &&
-                    validations[field.id].errMsg ? (
+                    {!validations[field.id]?.valid &&
+                    validations[field.id]?.errMsg ? (
                       <p
                         style={{
                           color: "red",
