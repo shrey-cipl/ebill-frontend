@@ -34,6 +34,14 @@ const SystemLogs = () => {
           //  }
           for (let i = 0; i < res.length; i++) {
             res[i].id = i + 1
+
+            if (res[i].path.includes("/login")) {
+              res[i].email = res[i]?.user?.loginDetails?.email
+              res[i].status = res[i]?.user?.success
+            } else {
+              res[i].email = res[i]?.user?.email
+              res[i].status = "null"
+            }
           }
 
           setAllLogs(res)
@@ -54,7 +62,14 @@ const SystemLogs = () => {
     },
     { field: "ip", headerName: "I.P." },
     { field: "method", headerName: "Method" },
-    { field: "path", headerName: "Path" },
+    {
+      field: "path",
+      headerName: "Path",
+      valueFormatter: (params) => {
+        const arrSplit = params.value.split("/")
+        return arrSplit[arrSplit.length - 1]
+      },
+    },
     {
       field: "date",
       headerName: "Date",
@@ -69,6 +84,20 @@ const SystemLogs = () => {
         return dayjs(params.value).format("h:mm a")
       },
     },
+    {
+      field: "email",
+      headerName: "E-mail",
+      // valueFormatter: (params) => {
+      //   return dayjs(params.value).format("h:mm a")
+      // },
+    },
+    {
+      field: "status",
+      headerName: "Login Status",
+      // valueFormatter: (params) => {
+      //   return dayjs(params.value).format("h:mm a")
+      // },
+    },
   ]
 
   const filterButtons = ["user", "former", "claim", "bill"]
@@ -76,6 +105,8 @@ const SystemLogs = () => {
   const filteredList = allLogs.filter((log: any) =>
     log.path.includes(`/${filterBy}/`)
   )
+
+  console.log("aaa:", allLogs)
 
   return (
     <PageContainer title="System Logs" description="View all system logs">
@@ -116,10 +147,8 @@ const SystemLogs = () => {
               },
             }}
             getCellClassName={(params: any) => {
-              if (params.field === "currentStatus") {
-                return params.row.currentStatus === "Open"
-                  ? "text-green"
-                  : "text-red"
+              if (params.field === "status") {
+                return params.row.status === true ? "text-green" : "text-red"
               }
 
               return ""
