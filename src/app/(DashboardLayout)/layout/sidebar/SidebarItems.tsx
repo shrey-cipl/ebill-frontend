@@ -14,7 +14,7 @@ const SidebarItems = ({ toggleMobileSidebar }: any) => {
   const role: any = auth?.user?.data?.role?.name
   // const [state ,setstate] =useState(auth?.user?.role?.name);
   const [allData, setItems] = useState(
-    role ? Menuitems["Joint Secretary Admin"] : Menuitems["former"]
+    role ? Menuitems[role] : Menuitems["former"]
   )
 
   return (

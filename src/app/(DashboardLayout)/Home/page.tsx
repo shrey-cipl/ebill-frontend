@@ -31,50 +31,50 @@ const Dashboard = () => {
   const [fileStatus, setFileStatus] = useState<any>([])
   const auth: any = useAuth()
 
-  useEffect(() => {
-    getReportsbyfilter()
-    async function getReportsbyfilter() {
-      try {
-        // Define an array of URLs
-        const urls = [
-          `/api/claim/getAll`,
-          `/api/claim/getall?pendingBranch=pending`,
-          `/api/claim/getall?currentStatus=Closed`,
-          `/api/claim/getall?billType=bank`,
-        ]
+  // useEffect(() => {
+  //   getReportsbyfilter()
+  //   async function getReportsbyfilter() {
+  //     try {
+  //       // Define an array of URLs
+  //       const urls = [
+  //         `/api/claim/getAll`,
+  //         `/api/claim/getall?pendingBranch=pending`,
+  //         `/api/claim/getall?currentStatus=Closed`,
+  //         `/api/claim/getall?billType=bank`,
+  //       ]
 
-        // Make all requests concurrently
-        const responses = await Promise.all(
-          urls.map(async (url) => {
-            const method = "GET"
-            const headers = {
-              "Content-Type": "application/json",
-              authorization: `Bearer ${auth.user.token}`,
-            }
-            try {
-              const res = await axiosApi(url, method, headers)
-              // Process the response data
-              if (res.success !== true || !res) {
-                console.log("Bad Request")
-              } else {
-                console.log("200")
-                // Do something with the response data if needed
-              }
-              return res?.data?.length
-            } catch (error) {
-              console.error("Error fetching ", error)
-              // return 0 // Or handle error in any way you prefer
-            }
-          })
-        )
+  //       // Make all requests concurrently
+  //       const responses = await Promise.all(
+  //         urls.map(async (url) => {
+  //           const method = "GET"
+  //           const headers = {
+  //             "Content-Type": "application/json",
+  //             authorization: `Bearer ${auth.user.token}`,
+  //           }
+  //           try {
+  //             const res = await axiosApi(url, method, headers)
+  //             // Process the response data
+  //             if (res.success !== true || !res) {
+  //               console.log("Bad Request")
+  //             } else {
+  //               console.log("200")
+  //               // Do something with the response data if needed
+  //             }
+  //             return res?.data?.length
+  //           } catch (error) {
+  //             console.error("Error fetching ", error)
+  //             // return 0 // Or handle error in any way you prefer
+  //           }
+  //         })
+  //       )
 
-        // Update state after all requests are completed
-        setFileStatus((prev: any) => [...prev, ...responses])
-      } catch (error) {
-        console.error("Error fetching ", error)
-      }
-    }
-  }, [auth])
+  //       // Update state after all requests are completed
+  //       setFileStatus((prev: any) => [...prev, ...responses])
+  //     } catch (error) {
+  //       console.error("Error fetching ", error)
+  //     }
+  //   }
+  // }, [auth])
   console.log(fileStatus)
   return (
     <PageContainer
@@ -82,51 +82,11 @@ const Dashboard = () => {
       description="You can navigate the website from here"
     >
       <DashboardNew title=" Dashboard" titleVariant="h5">
-        {/* <Grid
-          container
-          spacing={3}
-          sx={{
-            display: "grid",
-            gridTemplateColumns: "1fr 1fr 1fr 1fr",
-            gridTemplateRows: "80px auto",
-            gap: "20px",
-          }}
-        >
-          <Grid>
-            <OverviewTotalProfit
-              sx={{ height: "100%" }}
-              value="21"
-              text="Total file(s)"
-              Icon={PostAddIcon}
-            />
-          </Grid>
-          <Grid>
-            <OverviewTotalProfit
-              sx={{ height: "100%" }}
-              value="19"
-              text="Pending file(s)"
-            />
-          </Grid>
-          <Grid>
-            <OverviewTotalProfit
-              sx={{ height: "100%" }}
-              value="45"
-              text="Closed file(s)"
-            />
-          </Grid>
-          <Grid>
-            <OverviewTotalProfit
-              sx={{ height: "100%" }}
-              value="10"
-              text="Fwd. To bank"
-            />
-          </Grid>
-        </Grid> */}
         <Grid>
           <Box
             sx={{
               display: "grid",
-              gridTemplateColumns: "repeat(4, 1fr)",
+              gridTemplateColumns: "repeat(3, 1fr)",
               gap: "20px",
               bgcolor: "background.paper",
               borderRadius: 1,
@@ -134,29 +94,43 @@ const Dashboard = () => {
             }}
           >
             <DashboardBox
-              filecount={fileStatus[fileStatus.length - 4]}
+              filecount={15}
               filetype="Total file(s)"
               iconcolor="#fa5c80"
               backgroundcolor="#fff"
               Icon={PostAddIcon}
             />
             <DashboardBox
-              filecount={fileStatus[fileStatus.length - 3]}
+              filecount={5}
               filetype="Pending file(s)"
               iconcolor="#fe987f"
               backgroundcolor="#fff"
               Icon={PendingActionsIcon}
             />
             <DashboardBox
-              filecount={fileStatus[fileStatus.length - 2]}
+              filecount={4}
               filetype="Closed file(s)"
               iconcolor="#3cd755"
               backgroundcolor="#fff"
               Icon={SubtitlesOffIcon}
             />
             <DashboardBox
-              filecount={fileStatus[fileStatus.length - 1]}
+              filecount={1}
               filetype="Fwd.To Bank"
+              iconcolor="#bf83ff"
+              backgroundcolor="#fff"
+              Icon={AccountBalanceIcon}
+            />
+            <DashboardBox
+              filecount={6}
+              filetype="Total Bills"
+              iconcolor="#bf83ff"
+              backgroundcolor="#fff"
+              Icon={AccountBalanceIcon}
+            />
+            <DashboardBox
+              filecount={4}
+              filetype="Bills not Linked"
               iconcolor="#bf83ff"
               backgroundcolor="#fff"
               Icon={AccountBalanceIcon}
