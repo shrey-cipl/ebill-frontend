@@ -25,6 +25,8 @@ import { FORMER_MODES } from "@/config/constants"
 import { FIELDS_MANAGE_FORMERS } from "@/config/formFields"
 
 import { validateOnSubmit } from "@/Util/commonFunctions"
+import { Visibility, VisibilityOff } from "@mui/icons-material"
+import { IconButton, InputAdornment } from "@mui/material"
 
 const FormControl = styled("div")(() => ({
   marginTop: "10px",
@@ -77,6 +79,7 @@ let cachedFormerFields: any
 const ManageFormer = () => {
   const [formerFields, setFormerFields] = useState(initialFieldState)
   const [validations, setValidations] = useState(initialValidationState)
+  const [showPassword, setShowPassword] = useState(false)
 
   const router = useRouter()
   const searchParams = useSearchParams()
@@ -139,6 +142,8 @@ const ManageFormer = () => {
       })
     }
   }, [paramFormerId, authCtx.user.token])
+
+  const handleClickShowPassword = () => setShowPassword(!showPassword)
 
   const handleFormSubmit = async (e: any) => {
     e.preventDefault()
@@ -347,20 +352,68 @@ const ManageFormer = () => {
                         </Button>
                       </div>
                     ) : (
-                      <TextField
-                        name={former.id}
-                        size="small"
-                        type={former.type}
-                        value={formerFields[former.id]}
-                        onChange={handleFieldChange}
-                        sx={{ width: "100%" }}
-                        disabled={
-                          former.id === "bankName" || former.id === "branchName"
-                            ? true
-                            : false
-                        }
-                        required={former.required}
-                      />
+                      <Box
+                        sx={{
+                          display: "flex",
+                          alignItems: "center",
+                        }}
+                      >
+                        {former.type == "password" ? (
+                          <>
+                            <TextField
+                              name={former.id}
+                              size="small"
+                              type={
+                                former.type && showPassword
+                                  ? "text"
+                                  : "password"
+                              }
+                              value={formerFields[former.id]}
+                              onChange={handleFieldChange}
+                              sx={{ width: "100%" }}
+                              disabled={
+                                former.id === "bankName" ||
+                                former.id === "branchName"
+                                  ? true
+                                  : false
+                              }
+                              required={former.required}
+                              InputProps={{
+                                endAdornment: (
+                                  <InputAdornment position="end">
+                                    <IconButton
+                                      aria-label="toggle password visibility"
+                                      onClick={handleClickShowPassword}
+                                    >
+                                      {!showPassword ? (
+                                        <VisibilityOff />
+                                      ) : (
+                                        <Visibility />
+                                      )}
+                                    </IconButton>
+                                  </InputAdornment>
+                                ),
+                              }}
+                            />
+                          </>
+                        ) : (
+                          <TextField
+                            name={former.id}
+                            size="small"
+                            type={former.type}
+                            value={formerFields[former.id]}
+                            onChange={handleFieldChange}
+                            sx={{ width: "100%" }}
+                            disabled={
+                              former.id === "bankName" ||
+                              former.id === "branchName"
+                                ? true
+                                : false
+                            }
+                            required={former.required}
+                          />
+                        )}
+                      </Box>
                     )}
 
                     {/* Validation Message */}
