@@ -168,7 +168,6 @@ const ManageFormer = () => {
     setValidations(updatedValidationState)
 
     if (!allValidationsPass) {
-      console.log("rannn!")
       return
     }
 
