@@ -13,15 +13,69 @@ import { useAuth } from "@/context/JWTContext/AuthContext.provider"
 
 import { OverviewTotalProfit } from "../components/OverviewTotalProfit"
 import { OverviewSales } from "../components/dashboard/Overview"
+import axiosApi from "@/Util/axiosApi"
+import { useEffect, useState } from "react"
+
+const urls = [
+  `/api/claim/getAll`,
+  `/api/claim/getall?pendingBranch=pending`,
+  `/api/claim/getall?currentStatus=Closed`,
+  `/api/claim/getall?billType=bank`,
+]
 
 const DashboardBox = dynamic(
   () => import("../components/dashboard/DashboardBox")
 )
 
 const Dashboard = () => {
-  const useauth = useAuth()
-  console.log(useauth)
+  const [fileStatus, setFileStatus] = useState<any>([])
+  const auth: any = useAuth()
 
+  useEffect(() => {
+    getReportsbyfilter()
+    async function getReportsbyfilter() {
+      try {
+        // Define an array of URLs
+        const urls = [
+          `/api/claim/getAll`,
+          `/api/claim/getall?pendingBranch=pending`,
+          `/api/claim/getall?currentStatus=Closed`,
+          `/api/claim/getall?billType=bank`,
+        ]
+
+        // Make all requests concurrently
+        const responses = await Promise.all(
+          urls.map(async (url) => {
+            const method = "GET"
+            const headers = {
+              "Content-Type": "application/json",
+              authorization: `Bearer ${auth.user.token}`,
+            }
+            try {
+              const res = await axiosApi(url, method, headers)
+              // Process the response data
+              if (res.success !== true || !res) {
+                console.log("Bad Request")
+              } else {
+                console.log("200")
+                // Do something with the response data if needed
+              }
+              return res?.data?.length
+            } catch (error) {
+              console.error("Error fetching ", error)
+              // return 0 // Or handle error in any way you prefer
+            }
+          })
+        )
+
+        // Update state after all requests are completed
+        setFileStatus((prev: any) => [...prev, ...responses])
+      } catch (error) {
+        console.error("Error fetching ", error)
+      }
+    }
+  }, [auth])
+  console.log(fileStatus)
   return (
     <PageContainer
       title="Welcome to Dashboard"
@@ -80,28 +134,28 @@ const Dashboard = () => {
             }}
           >
             <DashboardBox
-              filecount={21}
+              filecount={fileStatus[fileStatus.length - 4]}
               filetype="Total file(s)"
               iconcolor="#fa5c80"
               backgroundcolor="#fff"
               Icon={PostAddIcon}
             />
             <DashboardBox
-              filecount={19}
+              filecount={fileStatus[fileStatus.length - 3]}
               filetype="Pending file(s)"
               iconcolor="#fe987f"
               backgroundcolor="#fff"
               Icon={PendingActionsIcon}
             />
             <DashboardBox
-              filecount={2}
+              filecount={fileStatus[fileStatus.length - 2]}
               filetype="Closed file(s)"
               iconcolor="#3cd755"
               backgroundcolor="#fff"
               Icon={SubtitlesOffIcon}
             />
             <DashboardBox
-              filecount={0}
+              filecount={fileStatus[fileStatus.length - 1]}
               filetype="Fwd.To Bank"
               iconcolor="#bf83ff"
               backgroundcolor="#fff"

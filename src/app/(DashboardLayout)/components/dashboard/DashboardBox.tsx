@@ -10,6 +10,7 @@ import PostAddIcon from "@mui/icons-material/PostAdd"
 import { Box, Typography } from "@mui/material"
 import styled from "@emotion/styled"
 // import DashboardNew from "./components/shared/DashboardNew"
+import CircularProgress from "@mui/material/CircularProgress"
 import { useEffect } from "react"
 import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet"
 import { BoxProps } from "@mui/material/Box"
@@ -109,7 +110,11 @@ function DashboardBox({
               fontWeight: "800",
             }}
           >
-            {filecount}
+            {filecount != undefined ? (
+              filecount
+            ) : (
+              <CircularProgress color="success" />
+            )}
           </Typography>
           <Typography
             sx={{
