@@ -41,6 +41,8 @@ const VALIDATION_TYPE = {
   email: "email",
   file: "file",
   ifsc: "ifsc",
+  matchOne: "match_one",
+  matchTwo: "match_two",
   mobile: "mobile",
   none: "none",
 }

@@ -199,16 +199,16 @@ const FIELDS_MANAGE_FORMERS = [
   {
     id: "bankAccountNumber",
     fieldName: "Bank A/C",
-    type: "text",
+    type: "number",
     required: true,
-    validationType: VALIDATION_TYPE.none,
+    validationType: VALIDATION_TYPE.matchOne,
   },
   {
-    id: "confrimbankAccountNumber",
-    fieldName: "Confrim Bank A/C",
-    type: "text",
+    id: "confirmBankAccountNumber",
+    fieldName: "Confirm Bank A/C",
+    type: "number",
     required: true,
-    validationType: VALIDATION_TYPE.none,
+    validationType: VALIDATION_TYPE.matchTwo,
   },
   {
     id: "ifscCode",

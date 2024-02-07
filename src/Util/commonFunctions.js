@@ -19,6 +19,14 @@ const validateOnSubmit = (dataToValidate, validationState) => {
     end: "",
   }
 
+  // For matching any 2 fields
+  let inputMatch = {
+    one: "",
+    fieldOneName: "",
+    two: "",
+    fieldTwoName: "",
+  }
+
   for (let key of fieldKeys) {
     // De-structures validation type for that key
     const { validationType } = validationState[key]
@@ -98,6 +106,18 @@ const validateOnSubmit = (dataToValidate, validationState) => {
       dateRange.end = new Date(dataToValidate[key]).getTime()
     }
 
+    // Input to match - 1
+    if (validationType === VALIDATION_TYPE.matchOne) {
+      inputMatch.one = dataToValidate[key]
+      inputMatch.fieldOneName = key
+    }
+
+    // Input to match - 2
+    if (validationType === VALIDATION_TYPE.matchTwo) {
+      inputMatch.two = dataToValidate[key]
+      inputMatch.fieldTwoName = key
+    }
+
     if (dateRange.start && dateRange.end) {
       if (dateRange.start > dateRange.end) {
         validationStateCopy[key].valid = false
@@ -107,6 +127,17 @@ const validateOnSubmit = (dataToValidate, validationState) => {
 
       dateRange.start = ""
       dateRange.end = ""
+    }
+
+    if (inputMatch.one && inputMatch.two) {
+      if (inputMatch.one !== inputMatch.two) {
+        validationStateCopy[key].valid = false
+        validationStateCopy[
+          key
+        ].errMsg = `${inputMatch.fieldOneName} and ${inputMatch.fieldTwoName} do no match`
+      }
+
+      inputMatch = {}
     }
   }
 
