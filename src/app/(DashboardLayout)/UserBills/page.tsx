@@ -66,9 +66,9 @@ const UserBills = () => {
 
       for (let item of res.data) {
         item.id = item._id
-        item.name = item?.former?.name
-        item.designation = item?.former?.designation
-        item.phone = item?.former?.phone
+        item.name = item?.former[0]?.name
+        item.designation = item?.former[0]?.designation
+        item.phone = item?.former[0]?.phone
       }
 
       setBillList(res.data)

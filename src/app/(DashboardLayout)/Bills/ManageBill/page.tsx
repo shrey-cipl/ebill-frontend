@@ -141,7 +141,11 @@ const ManageBill = () => {
 
   const authCtx: any = useAuth()
   const role: any = authCtx?.user?.data?.role?.name
-
+  console.log(
+    updateModeFields,
+    dataFields,
+    "kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk"
+  )
   // Populates form fields with bill data
   useEffect(() => {
     if (paramBillId) {
@@ -169,7 +173,10 @@ const ManageBill = () => {
             billProcessingStartDate,
             telephoneNumbers,
           } = billData.data
-
+          console.log(
+            billData,
+            "jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj"
+          )
           setlastForwardedTo(lastForwardedTo)
           setlastForwardedBy(lastForwardedBy)
 
@@ -178,9 +185,9 @@ const ManageBill = () => {
             claimReceivingDate: dayjs(claimReceivingDate).format("YYYY-MM-DD"),
             billType,
             billNumber: bill?.billNumber,
-            name: former?.name,
-            email: former?.email,
-            phone: former?.phone,
+            name: former[0]?.name ? former[0]?.name : former.name,
+            email: former[0]?.email ? former[0]?.email : former.email,
+            phone: former[0]?.phone ? former[0]?.phone : former.phone,
             fileNumber,
             claimPeriodFrom: dayjs(claimPeriodFrom).format("YYYY-MM-DD"),
             claimPeriodTo: dayjs(claimPeriodTo).format("YYYY-MM-DD"),
@@ -224,7 +231,7 @@ const ManageBill = () => {
   useEffect(() => {
     const getBills = async () => {
       const config = {
-        url: `/api/bill/getAll?isLinkedWithClaim=notlinked`,
+        url: `/api/bill/getAll`,
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -247,23 +254,27 @@ const ManageBill = () => {
 
   // Auto selects bill number and its corresponding data
   // when re-directed from 'UserBills page'
+
   useEffect(() => {
     if (paramUserpageId) {
       const selectedBill: any = BillList.find(
         (bill: any) => bill._id === paramUserpageId
       )
-
+      console.log(
+        selectedBill,
+        "ppppppppppppppppppppppppppppppppppppppppppppppppppppppppppp"
+      )
       if (selectedBill) {
         // used only in add-mode
         selectedBillId = selectedBill._id
-        selectedFormerId = selectedBill.former._id
+        selectedFormerId = selectedBill.former[0]._id
 
         setDataFields((prevState: any) => ({
           ...prevState,
           billNumber: selectedBill.billNumber,
-          name: selectedBill.former.name,
-          email: selectedBill.former.email,
-          phone: selectedBill.former.phone,
+          name: selectedBill.former[0].name,
+          email: selectedBill.former[0].email,
+          phone: selectedBill.former[0].phone,
           billType: selectedBill.billType,
           totalClaimedAmount: selectedBill.claimedAmount,
           claimPeriodFrom: dayjs(selectedBill.billPeriodFrom).format(
@@ -284,30 +295,30 @@ const ManageBill = () => {
     e.preventDefault()
 
     // For only add_mode fields
-    const { allValidationsPass, updatedValidationState } = validateOnSubmit(
-      dataFields,
-      validations
-    )
+    // const { allValidationsPass, updatedValidationState } = validateOnSubmit(
+    //   dataFields,
+    //   validations
+    // )
 
-    setValidations(updatedValidationState)
+    // setValidations(updatedValidationState)
 
-    if (!allValidationsPass) {
-      return
-    }
+    // if (!allValidationsPass) {
+    //   return
+    // }
 
     // For only update_mode fields
-    if (paramMode === BILL_MODES.update) {
-      const { allValidationsPass, updatedValidationState } = validateOnSubmit(
-        updateModeFields,
-        validationsUpdateMode
-      )
+    // if (paramMode === BILL_MODES.update) {
+    //   const { allValidationsPass, updatedValidationState } = validateOnSubmit(
+    //     updateModeFields,
+    //     validationsUpdateMode
+    //   )
 
-      setValidationsUpdateMode(updatedValidationState)
+    //   setValidationsUpdateMode(updatedValidationState)
 
-      if (!allValidationsPass) {
-        return
-      }
-    }
+    //   if (!allValidationsPass) {
+    //     return
+    //   }
+    // }
 
     try {
       let res
@@ -436,17 +447,18 @@ const ManageBill = () => {
 
       // used only in add-mode
       selectedBillId = selectedBill._id
-      selectedFormerId = selectedBill.former._id
+      selectedFormerId = selectedBill.former[0]._id
 
       setDataFields((prevState: any) => ({
         ...prevState,
         [name]: value,
-        name: selectedBill.former.name,
-        email: selectedBill.former.email,
-        phone: selectedBill.former.phone,
+        name: selectedBill.former[0].name,
+        email: selectedBill.former[0].email,
+        phone: selectedBill.former[0].phone,
         billFilePath: selectedBill.billFilePath,
         // former: empId,
       }))
+      console.log(selectedBill, "selectedBill")
     } else {
       // For other fields, directly set the value
       setDataFields((prevState: any) => ({
@@ -616,7 +628,7 @@ const ManageBill = () => {
                       <Select
                         name={field.id}
                         size="small"
-                        value={billSequence[0] || dataFields[field.id]}
+                        value={billSequence[0]}
                         onChange={(e) => handleFieldChange(e)}
                         sx={{ width: "100%" }}
                         disabled={

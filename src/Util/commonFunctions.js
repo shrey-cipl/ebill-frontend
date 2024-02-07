@@ -31,7 +31,6 @@ const validateOnSubmit = (dataToValidate, validationState) => {
     // De-structures validation type for that key
     const { validationType } = validationState[key]
 
-    //  Assumes valid data initially
     validationStateCopy[key].valid = true
     validationStateCopy[key].errMsg = ""
 

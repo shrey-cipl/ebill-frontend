@@ -729,7 +729,7 @@ const Menuitems: any = {
     //   present: "yes",
     // },
   ],
-  "Under Secretary O&M": [
+  "Under Secretary": [
     {
       navlabel: true,
       subheader: "Home",

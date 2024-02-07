@@ -96,15 +96,15 @@ const FormerAddBill = () => {
     }
   }
 
-  useEffect(() => {
-    console.log(formerFieldState)
-    const { allValidationsPass, updatedValidationState } = validateOnSubmit(
-      formerFieldState,
-      validations
-    )
+  // useEffect(() => {
+  //   console.log(formerFieldState)
+  //   const { allValidationsPass, updatedValidationState } = validateOnSubmit(
+  //     formerFieldState,
+  //     validations
+  //   )
 
-    setValidations(updatedValidationState)
-  }, [formerFieldState])
+  //   setValidations(updatedValidationState)
+  // }, [formerFieldState])
 
   const handleFieldChange = (e: any) => {
     const { name, value, type, files } = e.target
