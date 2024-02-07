@@ -117,6 +117,7 @@ const ManageFormer = () => {
             phone,
             email,
             bankAccountNumber: bankDetails.bankAccountNumber,
+            confirmBankAccountNumber: bankDetails.bankAccountNumber,
             bankName: bankDetails.bankName,
             branchName: bankDetails.branchName,
             ifscCode: bankDetails.ifscCode,
@@ -141,6 +142,7 @@ const ManageFormer = () => {
             phone,
             email,
             bankAccountNumber: bankDetails.bankAccountNumber,
+            confirmBankAccountNumber: bankDetails.bankAccountNumber,
             bankName: bankDetails.bankName,
             branchName: bankDetails.branchName,
             ifscCode: bankDetails.ifscCode,
@@ -166,6 +168,7 @@ const ManageFormer = () => {
     setValidations(updatedValidationState)
 
     if (!allValidationsPass) {
+      console.log("rannn!")
       return
     }
 

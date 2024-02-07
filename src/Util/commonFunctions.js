@@ -32,10 +32,8 @@ const validateOnSubmit = (dataToValidate, validationState) => {
     const { validationType } = validationState[key]
 
     //  Assumes valid data initially
-    if (dataToValidate[key]) {
-      validationStateCopy[key].valid = true
-      validationStateCopy[key].errMsg = ""
-    }
+    validationStateCopy[key].valid = true
+    validationStateCopy[key].errMsg = ""
 
     if (validationType === VALIDATION_TYPE.amount) {
       // Checks if number is greater than 0 (includes decimals)
