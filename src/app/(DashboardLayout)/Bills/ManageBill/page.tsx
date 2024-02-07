@@ -224,7 +224,7 @@ const ManageBill = () => {
   useEffect(() => {
     const getBills = async () => {
       const config = {
-        url: `/api/bill/getAll`,
+        url: `/api/bill/getAll?isLinkedWithClaim=notlinked`,
         method: "GET",
         headers: {
           "Content-Type": "application/json",
