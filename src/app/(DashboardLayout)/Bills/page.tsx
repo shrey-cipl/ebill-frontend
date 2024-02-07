@@ -12,12 +12,7 @@ import { enqueueSnackbar } from "notistack"
 
 import Link from "next/link"
 
-import {
-  DataGrid,
-  GridRowsProp,
-  GridColDef,
-  GridToolbar,
-} from "@mui/x-data-grid"
+import { GridColDef } from "@mui/x-data-grid"
 
 import PageContainer from "../components/container/PageContainer"
 import DashboardNew from "../components/shared/DashboardNew"

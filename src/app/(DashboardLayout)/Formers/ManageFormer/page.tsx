@@ -76,6 +76,8 @@ const getFormerData = async (id: any, token: any) => {
 // to reset to initial field state IF IN UPDATE MODE
 let cachedFormerFields: any
 
+let lastTouchedState: any
+
 const ManageFormer = () => {
   const [formerFields, setFormerFields] = useState(initialFieldState)
   const [validations, setValidations] = useState(initialValidationState)
@@ -118,10 +120,18 @@ const ManageFormer = () => {
             bankName: bankDetails.bankName,
             branchName: bankDetails.branchName,
             ifscCode: bankDetails.ifscCode,
+            // createdAt,
+            // updatedAt,
+            // lastUpdatedBy,
+          })
+
+          // Shows last updated status
+          lastTouchedState = {
+            name,
             createdAt,
             updatedAt,
             lastUpdatedBy,
-          })
+          }
 
           cachedFormerFields = {
             name,
@@ -134,9 +144,9 @@ const ManageFormer = () => {
             bankName: bankDetails.bankName,
             branchName: bankDetails.branchName,
             ifscCode: bankDetails.ifscCode,
-            createdAt,
-            updatedAt,
-            lastUpdatedBy,
+            // createdAt,
+            // updatedAt,
+            // lastUpdatedBy,
           }
         }
       })
@@ -275,13 +285,16 @@ const ManageFormer = () => {
           <Typography mt={1}>
             {paramMode === FORMER_MODES.update && (
               <>
-                <b>{formerFields.name}</b>, last Edited on{" "}
+                <b>{lastTouchedState?.name}</b>, last Edited on{" "}
                 <b>
-                  {new Date(formerFields.updatedAt).toLocaleString("en-US", {
-                    timeZone: "Asia/Kolkata",
-                  })}
+                  {new Date(lastTouchedState?.updatedAt).toLocaleString(
+                    "en-US",
+                    {
+                      timeZone: "Asia/Kolkata",
+                    }
+                  )}
                 </b>{" "}
-                by <b>{formerFields.lastUpdatedBy}</b>
+                by <b>{lastTouchedState?.lastUpdatedBy}</b>
               </>
             )}
           </Typography>
@@ -433,12 +446,7 @@ const ManageFormer = () => {
                 )
               )}
               <ButtonWrapper sx={{ gridColumn: "1/-1" }}>
-                <Button
-                  type="button"
-                  variant="contained"
-                  size="small"
-                  onClick={handleFormSubmit}
-                >
+                <Button type="submit" variant="contained" size="small">
                   Submit
                 </Button>
                 <Button

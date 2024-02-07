@@ -287,7 +287,6 @@ const FIELDS_FORMERS_ADD_BILL = [
     fieldName: "Bill Period From",
     type: "date",
     required: true,
-
     validationType: VALIDATION_TYPE.dateRangeStart,
   },
   {
@@ -295,7 +294,6 @@ const FIELDS_FORMERS_ADD_BILL = [
     fieldName: "Bill Period To",
     type: "date",
     required: true,
-
     validationType: VALIDATION_TYPE.dateRangeEnd,
   },
   {
@@ -303,7 +301,6 @@ const FIELDS_FORMERS_ADD_BILL = [
     fieldName: "Upload File",
     type: "file",
     required: true,
-
     validationType: VALIDATION_TYPE.file,
   },
 ]
