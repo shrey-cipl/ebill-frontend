@@ -91,8 +91,12 @@ const InputBillType = ({ formData, handleChange }: any) => {
             <em>Bill Type</em>
           </MenuItem>
 
-          {BILL_TYPE.map((ele) => {
-            return <MenuItem value={ele}>{ele}</MenuItem>
+          {BILL_TYPE.map((ele, i) => {
+            return (
+              <MenuItem key={i} value={ele}>
+                {ele}
+              </MenuItem>
+            )
           })}
         </StyledSelect>
       </FormControl>
