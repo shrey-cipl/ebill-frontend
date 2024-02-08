@@ -49,6 +49,7 @@ const ListOfAllBills = () => {
       if (res && res.data) {
         for (let item of res.data) {
           item.id = item._id
+          item.billNumber = item.bill.billNumber
         }
 
         setBillList(res.data)
@@ -72,6 +73,7 @@ const ListOfAllBills = () => {
     { field: "name", headerName: "Name" },
     { field: "diaryNumber", headerName: "Diary No." },
     { field: "billType", headerName: "Bill Type" },
+    { field: "billNumber", headerName: "Bill no." },
     {
       field: "claimReceivingDate",
       headerName: "Receiving Date",
@@ -93,7 +95,7 @@ const ListOfAllBills = () => {
       field: "updatedAt",
       headerName: "Updated On",
       valueFormatter: (params) => {
-        return dayjs(params.value).format("YYYY-MM-DD")
+        return dayjs(params.value).format("YYYY-MM-DD h:mm a")
       },
     },
     { field: "lastForwardedTo", headerName: "Forward To" },
