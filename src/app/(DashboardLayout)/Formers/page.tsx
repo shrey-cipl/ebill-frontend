@@ -63,20 +63,20 @@ const Formers = () => {
   const columns: GridColDef[] = [
     {
       field: "s.no", // confirm this
-      headerName: "S.No",
+      headerName: "S.NO",
       valueGetter: (params) => params.api.getAllRowIds().indexOf(params.id) + 1,
     },
-    { field: "name", headerName: "Name" },
-    { field: "status", headerName: "Status" },
-    { field: "designation", headerName: "Designation" },
-    { field: "email", headerName: "E-mail" },
+    { field: "name", headerName: "NAME" },
+    { field: "status", headerName: "STATUS" },
+    { field: "designation", headerName: "DESIGNATION" },
+    { field: "email", headerName: "EMAIL" },
     {
       field: "bankAccountNumber",
-      headerName: "Bank A/C",
+      headerName: "BANK A/C",
     },
     {
       field: "createdAt",
-      headerName: "Created At",
+      headerName: "CREATED AT",
 
       valueFormatter: (params) => {
         return dayjs(params.value).format("DD-MM-YYYY h:mm A")
@@ -84,16 +84,16 @@ const Formers = () => {
     },
     {
       field: "updatedAt",
-      headerName: "Updated On",
+      headerName: "UPDATED ON",
 
       valueFormatter: (params) => {
         return dayjs(params.value).format("DD-MM-YYYY h:mm A")
       },
     },
-    { field: "isActive", headerName: "Active" },
+    { field: "isActive", headerName: "ACTIVE" },
     {
       field: "random_2",
-      headerName: "Action",
+      headerName: "ACTION",
       renderCell: (params) => {
         return (
           <Link

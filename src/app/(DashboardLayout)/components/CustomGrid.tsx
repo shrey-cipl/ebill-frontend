@@ -18,6 +18,7 @@ const CustomGrid = ({ rows, columns, sx, getCellClassName }: any) => {
       rows={rows}
       columns={columns}
       density="compact"
+      // getRowHeight={() => "auto"}
       sx={{
         ...sx,
         ".bg-light": {

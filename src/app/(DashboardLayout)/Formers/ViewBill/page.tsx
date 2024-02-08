@@ -125,29 +125,29 @@ const Bills = () => {
   const columns: GridColDef[] = [
     {
       field: "s.no", // confirm this
-      headerName: "S.No",
+      headerName: "S.NO",
       valueGetter: (params) => params.api.getAllRowIds().indexOf(params.id) + 1,
     },
-    { field: "claimedAmount", headerName: "claimed Amount" },
-    { field: "billType", headerName: "bill Type" },
+    { field: "claimedAmount", headerName: "CLAIMED AMOUNT" },
+    { field: "billType", headerName: "BILL TYPE" },
 
     {
       field: "billPeriodFrom",
-      headerName: "bill Period From",
+      headerName: "BILL FROM",
       valueFormatter: (params) => {
         return dayjs(params.value).format("DD-MM-YYYY")
       },
     },
     {
       field: "billPeriodTo",
-      headerName: "bill Period To",
+      headerName: "BILL TO",
       valueFormatter: (params) => {
         return dayjs(params.value).format("DD-MM-YYYY")
       },
     },
     {
       field: "createdAt",
-      headerName: "Created At",
+      headerName: "CREATED AT",
 
       valueFormatter: (params) => {
         return dayjs(params.value).format("DD-MM-YYYY h:mm A")
@@ -155,7 +155,7 @@ const Bills = () => {
     },
     {
       field: "updatedAt",
-      headerName: "Updated On",
+      headerName: "UPDATED ON",
 
       valueFormatter: (params) => {
         return dayjs(params.value).format("DD-MM-YYYY h:mm A")
@@ -163,7 +163,7 @@ const Bills = () => {
     },
     {
       field: "id",
-      headerName: "Action",
+      headerName: "ACTION",
       renderCell: (params) => {
         return (
           <button
@@ -184,7 +184,7 @@ const Bills = () => {
     },
     {
       field: "Download",
-      headerName: "Download",
+      headerName: "DOWNLOAD",
       renderCell: (params) => {
         const downloadLink = params.row.billFilePath
 
@@ -215,8 +215,7 @@ const Bills = () => {
       },
     },
   ]
-  console.log(billList)
-  console.log(claim)
+
   return (
     <PageContainer title="View Bills" description="List of all the bills">
       <DashboardNew title="View Bills" titleVariant="h5">

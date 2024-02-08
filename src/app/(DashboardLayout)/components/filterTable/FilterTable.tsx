@@ -10,22 +10,22 @@ interface FilterTableProps {
 const columns: GridColDef[] = [
   {
     field: "s.no", // confirm this
-    headerName: "S.No",
+    headerName: "S.NO",
     valueGetter: (params: any) =>
       params.api.getAllRowIds().indexOf(params.id) + 1,
     width: 100,
   },
-  { field: "diaryNumber", headerName: "Diary No." },
-  { field: "name", headerName: "Name" },
-  { field: "billType", headerName: "Bill Type" },
-  { field: "totalAdmissibleAmount", headerName: "Admissible Amount" },
+  { field: "diaryNumber", headerName: "DIARY NO." },
+  { field: "name", headerName: "NAME" },
+  { field: "billType", headerName: "BILL TYPE" },
+  { field: "totalAdmissibleAmount", headerName: "ADMISSIBLE AMOUNT" },
   {
     field: "sanctionedAmount",
-    headerName: "Sanctioned Amount",
+    headerName: "SANCTIONED AMOUNT",
   },
   {
     field: "currentStatus",
-    headerName: "Status",
+    headerName: "STATUS",
   },
 ]
 

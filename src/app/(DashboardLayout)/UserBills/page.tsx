@@ -134,21 +134,21 @@ const UserBills = () => {
   const columns: GridColDef[] = [
     {
       field: "s.no", // confirm this
-      headerName: "S.No",
+      headerName: "S.NO",
       valueGetter: (params) => params.api.getAllRowIds().indexOf(params.id) + 1,
       width: 100,
     },
-    { field: "billNumber", headerName: "Bill Number" },
-    { field: "name", headerName: "Name" },
-    { field: "claimedAmount", headerName: "claimed Amount" },
-    { field: "billPeriodFrom", headerName: "bill Period From" },
-    { field: "billPeriodTo", headerName: "bill Period To" },
-    { field: "billType", headerName: "bill Type" },
-    { field: "designation", headerName: "Designation" },
-    { field: "phone", headerName: "Phone" },
+    { field: "billNumber", headerName: "BILL NUMBER" },
+    { field: "name", headerName: "NAME" },
+    { field: "claimedAmount", headerName: "CLAIMED AMOUNT" },
+    { field: "billPeriodFrom", headerName: "BILL FROM" },
+    { field: "billPeriodTo", headerName: "BILL TO" },
+    { field: "billType", headerName: "BILL TYPE" },
+    { field: "designation", headerName: "DESIGNATION" },
+    { field: "phone", headerName: "PHONE" },
     {
       field: "createdAt",
-      headerName: "Created At",
+      headerName: "CREATED AT",
 
       valueFormatter: (params) => {
         return dayjs(params.value).format("DD-MM-YYYY h:mm A")
@@ -156,7 +156,7 @@ const UserBills = () => {
     },
     {
       field: "updatedAt",
-      headerName: "Updated On",
+      headerName: "UPDATED ON",
 
       valueFormatter: (params) => {
         return dayjs(params.value).format("DD-MM-YYYY h:mm A")
@@ -164,7 +164,7 @@ const UserBills = () => {
     },
     {
       field: "id",
-      headerName: "Action",
+      headerName: "ACTION",
       renderCell: (params) => {
         return (
           <button
@@ -185,7 +185,7 @@ const UserBills = () => {
     },
     {
       field: "Download",
-      headerName: "Download",
+      headerName: "DOWNLOAD",
       renderCell: (params) => {
         const downloadLink = params.row.billFilePath
 
