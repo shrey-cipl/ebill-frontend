@@ -13,6 +13,7 @@ import MenuItem from "@mui/material/MenuItem"
 import Box from "@mui/material/Box"
 import Button from "@mui/material/Button"
 import { styled } from "@mui/system"
+import Tooltip from "@mui/material/Tooltip"
 
 import PageContainer from "../../components/container/PageContainer"
 import DashboardNew from "../../components/shared/DashboardNew"
@@ -330,60 +331,102 @@ const ManageFormer = () => {
                         <span style={{ color: "red" }}>*</span>
                       )}
                     </Typography>
-                    {former.type === "select" ? (
-                      <Select
-                        name={former.id}
-                        size="small"
-                        value={formerFields[former.id]}
-                        onChange={handleFieldChange}
-                        sx={{ width: "100%" }}
-                        required={former.required}
-                      >
-                        {former.selectOptions?.map((option, i) => (
-                          <MenuItem key={i} value={option}>
-                            {option}
-                          </MenuItem>
-                        ))}
-                      </Select>
-                    ) : former.id === "ifscCode" ? (
-                      <div style={{ display: "flex", gap: "5px" }}>
-                        <TextField
+                    <Tooltip
+                      title={
+                        former.type === "date"
+                          ? "Select a date"
+                          : former.placeholder
+                      }
+                      placement="top-start"
+                    >
+                      {former.type === "select" ? (
+                        <Select
                           name={former.id}
                           size="small"
-                          type={former.type}
-                          placeholder={former.placeholder}
                           value={formerFields[former.id]}
                           onChange={handleFieldChange}
                           sx={{ width: "100%" }}
                           required={former.required}
-                        />
-                        <Button
-                          type="button"
-                          variant="contained"
-                          size="small"
-                          sx={{ background: "#9C27B0" }}
-                          onClick={handleFetchBankDetails}
                         >
-                          fetch
-                        </Button>
-                      </div>
-                    ) : (
-                      <Box
-                        sx={{
-                          display: "flex",
-                          alignItems: "center",
-                        }}
-                      >
-                        {former.type == "password" ? (
-                          <>
+                          {former.selectOptions?.map((option, i) => (
+                            <MenuItem key={i} value={option}>
+                              {option}
+                            </MenuItem>
+                          ))}
+                        </Select>
+                      ) : former.id === "ifscCode" ? (
+                        <div style={{ display: "flex", gap: "5px" }}>
+                          <TextField
+                            name={former.id}
+                            size="small"
+                            type={former.type}
+                            placeholder={former.placeholder}
+                            value={formerFields[former.id]}
+                            onChange={handleFieldChange}
+                            sx={{ width: "100%" }}
+                            required={former.required}
+                          />
+                          <Button
+                            type="button"
+                            variant="contained"
+                            size="small"
+                            sx={{ background: "#9C27B0" }}
+                            onClick={handleFetchBankDetails}
+                          >
+                            fetch
+                          </Button>
+                        </div>
+                      ) : (
+                        <Box
+                          sx={{
+                            display: "flex",
+                            alignItems: "center",
+                          }}
+                        >
+                          {former.type == "password" ? (
+                            <>
+                              <TextField
+                                name={former.id}
+                                size="small"
+                                type={
+                                  former.type && showPassword
+                                    ? "text"
+                                    : "password"
+                                }
+                                placeholder={former.placeholder}
+                                value={formerFields[former.id]}
+                                onChange={handleFieldChange}
+                                sx={{ width: "100%" }}
+                                disabled={
+                                  former.id === "bankName" ||
+                                  former.id === "branchName"
+                                    ? true
+                                    : false
+                                }
+                                required={former.required}
+                                InputProps={{
+                                  endAdornment: (
+                                    <InputAdornment position="end">
+                                      <IconButton
+                                        aria-label="toggle password visibility"
+                                        onClick={handleClickShowPassword}
+                                      >
+                                        {!showPassword ? (
+                                          <VisibilityOff />
+                                        ) : (
+                                          <Visibility />
+                                        )}
+                                      </IconButton>
+                                    </InputAdornment>
+                                  ),
+                                }}
+                              />
+                            </>
+                          ) : (
                             <TextField
                               name={former.id}
                               size="small"
-                              type={
-                                former.type && showPassword
-                                  ? "text"
-                                  : "password"
-                              }
+                              type={former.type}
                               placeholder={former.placeholder}
                               value={formerFields[former.id]}
                               onChange={handleFieldChange}
@@ -395,44 +438,11 @@ const ManageFormer = () => {
                                   : false
                               }
                               required={former.required}
-                              InputProps={{
-                                endAdornment: (
-                                  <InputAdornment position="end">
-                                    <IconButton
-                                      aria-label="toggle password visibility"
-                                      onClick={handleClickShowPassword}
-                                    >
-                                      {!showPassword ? (
-                                        <VisibilityOff />
-                                      ) : (
-                                        <Visibility />
-                                      )}
-                                    </IconButton>
-                                  </InputAdornment>
-                                ),
-                              }}
                             />
-                          </>
-                        ) : (
-                          <TextField
-                            name={former.id}
-                            size="small"
-                            type={former.type}
-                            placeholder={former.placeholder}
-                            value={formerFields[former.id]}
-                            onChange={handleFieldChange}
-                            sx={{ width: "100%" }}
-                            disabled={
-                              former.id === "bankName" ||
-                              former.id === "branchName"
-                                ? true
-                                : false
-                            }
-                            required={former.required}
-                          />
-                        )}
-                      </Box>
-                    )}
+                          )}
+                        </Box>
+                      )}
+                    </Tooltip>
 
                     {/* Validation Message */}
                     {!validations[former.id].valid &&
