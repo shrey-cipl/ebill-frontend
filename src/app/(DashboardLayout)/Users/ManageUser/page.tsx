@@ -198,6 +198,7 @@ const ManageUser = () => {
                   <TextField
                     name={user.id}
                     type={user.type}
+                    placeholder={user.placeholder}
                     sx={{ width: "100%" }}
                     size="small"
                     value={userFieldData[user.id]}

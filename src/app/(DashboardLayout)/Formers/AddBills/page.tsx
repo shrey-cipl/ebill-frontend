@@ -167,6 +167,7 @@ const FormerAddBill = () => {
                       <TextField
                         name={field.id}
                         type={field.type}
+                        placeholder={field.placeholder}
                         size="small"
                         onChange={(e) => handleFieldChange(e)}
                         error={
@@ -180,6 +181,7 @@ const FormerAddBill = () => {
                       <TextField
                         name={field.id}
                         type={field.type}
+                        placeholder={field.placeholder}
                         size="small"
                         value={formerFieldState[field.id]}
                         error={

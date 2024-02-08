@@ -351,6 +351,7 @@ const ManageFormer = () => {
                           name={former.id}
                           size="small"
                           type={former.type}
+                          placeholder={former.placeholder}
                           value={formerFields[former.id]}
                           onChange={handleFieldChange}
                           sx={{ width: "100%" }}
@@ -383,6 +384,7 @@ const ManageFormer = () => {
                                   ? "text"
                                   : "password"
                               }
+                              placeholder={former.placeholder}
                               value={formerFields[former.id]}
                               onChange={handleFieldChange}
                               sx={{ width: "100%" }}
@@ -416,6 +418,7 @@ const ManageFormer = () => {
                             name={former.id}
                             size="small"
                             type={former.type}
+                            placeholder={former.placeholder}
                             value={formerFields[former.id]}
                             onChange={handleFieldChange}
                             sx={{ width: "100%" }}

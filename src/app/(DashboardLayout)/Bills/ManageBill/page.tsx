@@ -673,6 +673,7 @@ const ManageBill = () => {
                         name={field.id}
                         type={field.type}
                         size="small"
+                        placeholder={field?.placeholder}
                         value={dataFields[field.id]}
                         onChange={(e) => handleFieldChange(e)}
                         sx={{ width: "100%" }}
