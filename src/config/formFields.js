@@ -324,7 +324,7 @@ const FIELDS_FORMERS_ADD_BILL = [
   },
   {
     id: "billFilePath",
-    fieldName: "Upload File",
+    fieldName: "Upload File (Allowed: PDF, JPEG, JPG, PNG)",
     type: "file",
     required: true,
     validationType: VALIDATION_TYPE.file,
