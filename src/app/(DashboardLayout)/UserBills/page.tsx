@@ -138,7 +138,7 @@ const UserBills = () => {
       valueGetter: (params) => params.api.getAllRowIds().indexOf(params.id) + 1,
       width: 100,
     },
-    { field: "billNumber", headerName: "BILL NUMBER" },
+    { field: "billNumber", headerName: "BILL NO." },
     { field: "name", headerName: "NAME" },
     { field: "claimedAmount", headerName: "CLAIMED AMOUNT" },
     { field: "billPeriodFrom", headerName: "BILL FROM" },
