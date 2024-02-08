@@ -151,7 +151,15 @@ const UserBills = () => {
       headerName: "Created At",
 
       valueFormatter: (params) => {
-        return dayjs(params.value).format("YYYY-MM-DD")
+        return dayjs(params.value).format("DD-MM-YYYY h:mm A")
+      },
+    },
+    {
+      field: "updatedAt",
+      headerName: "Updated On",
+
+      valueFormatter: (params) => {
+        return dayjs(params.value).format("DD-MM-YYYY h:mm A")
       },
     },
     {

@@ -66,7 +66,7 @@ const ListOfAllBills = () => {
 
   const columns: GridColDef[] = [
     {
-      field: "ranodm_1", // confirm this
+      field: "s.no", // confirm this
       headerName: "S.No",
       valueGetter: (params) => params.api.getAllRowIds().indexOf(params.id) + 1,
     },
@@ -92,10 +92,19 @@ const ListOfAllBills = () => {
       },
     },
     {
+      field: "createdAt",
+      headerName: "Created At",
+
+      valueFormatter: (params) => {
+        return dayjs(params.value).format("DD-MM-YYYY h:mm A")
+      },
+    },
+    {
       field: "updatedAt",
       headerName: "Updated On",
+
       valueFormatter: (params) => {
-        return dayjs(params.value).format("YYYY-MM-DD h:mm a")
+        return dayjs(params.value).format("DD-MM-YYYY h:mm A")
       },
     },
     { field: "lastForwardedTo", headerName: "Forward To" },

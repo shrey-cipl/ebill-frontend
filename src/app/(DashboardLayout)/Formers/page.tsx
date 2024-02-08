@@ -6,6 +6,7 @@ import Button from "@mui/material/Button"
 
 import { useRouter } from "next/navigation"
 import Link from "next/link"
+import dayjs from "dayjs"
 
 import PageContainer from "../components/container/PageContainer"
 import DashboardNew from "../components/shared/DashboardNew"
@@ -72,6 +73,22 @@ const Formers = () => {
     {
       field: "bankAccountNumber",
       headerName: "Bank A/C",
+    },
+    {
+      field: "createdAt",
+      headerName: "Created At",
+
+      valueFormatter: (params) => {
+        return dayjs(params.value).format("DD-MM-YYYY h:mm A")
+      },
+    },
+    {
+      field: "updatedAt",
+      headerName: "Updated On",
+
+      valueFormatter: (params) => {
+        return dayjs(params.value).format("DD-MM-YYYY h:mm A")
+      },
     },
     { field: "isActive", headerName: "Active" },
     {

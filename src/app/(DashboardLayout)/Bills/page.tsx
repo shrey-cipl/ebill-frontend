@@ -103,11 +103,19 @@ const Bills = () => {
     { field: "currentStatus", headerName: "Status" },
     { field: "lastForwardedTo", headerName: "Forward To" },
     {
-      field: "updatedAt",
-      headerName: "Last Updated",
+      field: "createdAt",
+      headerName: "Created At",
 
       valueFormatter: (params) => {
-        return dayjs(params.value).format("YYYY-MM-DD h:mm A")
+        return dayjs(params.value).format("DD-MM-YYYY h:mm A")
+      },
+    },
+    {
+      field: "updatedAt",
+      headerName: "Updated On",
+
+      valueFormatter: (params) => {
+        return dayjs(params.value).format("DD-MM-YYYY h:mm A")
       },
     },
     {
@@ -231,19 +239,19 @@ const Bills = () => {
               <BoxWrapper>
                 <Typography fontWeight={600}>Claim Receiving Date:</Typography>
                 <Typography>
-                  {dayjs(selectedBill.claimReceivingDate).format("YYYY-MM-DD")}
+                  {dayjs(selectedBill.claimReceivingDate).format("DD-MM-YYYY")}
                 </Typography>
               </BoxWrapper>
               <BoxWrapper>
                 <Typography fontWeight={600}>Claim Period From:</Typography>
                 <Typography>
-                  {dayjs(selectedBill.claimPeriodFrom).format("YYYY-MM-DD")}
+                  {dayjs(selectedBill.claimPeriodFrom).format("DD-MM-YYYY")}
                 </Typography>
               </BoxWrapper>
               <BoxWrapper>
                 <Typography fontWeight={600}>Claim Period To:</Typography>
                 <Typography>
-                  {dayjs(selectedBill.claimPeriodTo).format("YYYY-MM-DD")}
+                  {dayjs(selectedBill.claimPeriodTo).format("DD-MM-YYYY")}
                 </Typography>
               </BoxWrapper>
               <BoxWrapper>

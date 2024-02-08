@@ -3,7 +3,7 @@ import { DataGrid, GridToolbar } from "@mui/x-data-grid"
 const CustomGrid = ({ rows, columns, sx, getCellClassName }: any) => {
   for (let i = 0; i < columns.length; i++) {
     if (columns[i].field === "s.no") {
-      columns[i] = { ...columns[i], width: 75 }
+      columns[i] = { ...columns[i], width: 50 }
     } else {
       columns[i] = { ...columns[i], flex: 1 }
     }
