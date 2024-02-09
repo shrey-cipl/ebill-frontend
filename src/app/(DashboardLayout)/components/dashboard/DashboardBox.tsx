@@ -15,6 +15,9 @@ import { useEffect } from "react"
 import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet"
 import { BoxProps } from "@mui/material/Box"
 
+import LinearProgress, {
+  linearProgressClasses,
+} from "@mui/material/LinearProgress"
 type Props = {
   filecount?: number
   filetype?: string | any
@@ -53,13 +56,17 @@ function DashboardBox({
       />
     )
   }
+
   return (
     <>
       <Item
         sx={{
-          // display: "flex",
+          display: "flex",
           py: 3,
           // width: "208px",
+          height: "80px",
+          alignItems: "center",
+          // border: "2px solid black",
           backgroundColor: backgroundcolor,
           boxShadow: "rgba(0, 0, 0, 0.1) 0px 4px 12px",
         }}
@@ -97,15 +104,15 @@ function DashboardBox({
           sx={{
             width: "100%",
             textAlign: "center",
-
+            alignItems: "center",
             mt: 1.5,
-            // border:"1px solid black"
+            // border: "1px solid black",
           }}
         >
           <Typography
             sx={{
               fontSize: "32px",
-              p: 2,
+              // p: 2,
               pb: 1.5,
               fontWeight: "800",
             }}

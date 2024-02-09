@@ -89,8 +89,11 @@ const Dashboard = () => {
               gridTemplateColumns: "repeat(3, 1fr)",
               gap: "20px",
               bgcolor: "background.paper",
-              borderRadius: 1,
+              borderRadius: 4,
               marginTop: "20px",
+              backgroundColor: "rgb(93, 135, 255)",
+              p: 2,
+              mx: 2,
             }}
           >
             <DashboardBox
