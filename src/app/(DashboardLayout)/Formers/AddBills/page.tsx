@@ -17,6 +17,7 @@ import { useAuth } from "@/context/JWTContext/AuthContext.provider"
 import axiosApi from "@/Util/axiosApi"
 import { useRouter } from "next/navigation"
 import { enqueueSnackbar } from "notistack"
+import Tooltip from "@mui/material/Tooltip"
 
 import { FIELDS_FORMERS_ADD_BILL } from "@/config/formFields"
 import { validateOnSubmit } from "@/Util/commonFunctions"
@@ -144,54 +145,65 @@ const FormerAddBill = () => {
                     >
                       {field.fieldName}
                     </Typography>
-                    {field.type === "select" ? (
-                      <Select
-                        name={field.id}
-                        size="small"
-                        value={formerFieldState[field.id]}
-                        onChange={(e) => handleFieldChange(e)}
-                        sx={{ width: "100%" }}
-                        required
-                        error={
-                          !validations[field.id].valid &&
-                          validations[field.id].errMsg
-                        }
-                      >
-                        {field.selectOptions?.map((option, i) => (
-                          <MenuItem value={option} key={i}>
-                            {option}
-                          </MenuItem>
-                        ))}
-                      </Select>
-                    ) : field.type === "file" ? (
-                      <TextField
-                        name={field.id}
-                        type={field.type}
-                        size="small"
-                        onChange={(e) => handleFieldChange(e)}
-                        error={
-                          !validations[field.id].valid &&
-                          validations[field.id].errMsg
-                        }
-                        sx={{ width: "100%" }}
-                        required
-                      />
-                    ) : (
-                      <TextField
-                        name={field.id}
-                        type={field.type}
-                        size="small"
-                        value={formerFieldState[field.id]}
-                        error={
-                          !validations[field.id].valid &&
-                          validations[field.id].errMsg
-                        }
-                        // id="outlined-error"
-                        onChange={(e) => handleFieldChange(e)}
-                        sx={{ width: "100%" }}
-                        required={field.required}
-                      />
-                    )}
+                    <Tooltip
+                      title={
+                        field.type === "date"
+                          ? "Select a date"
+                          : field.placeholder
+                      }
+                      placement="top-start"
+                    >
+                      {field.type === "select" ? (
+                        <Select
+                          name={field.id}
+                          size="small"
+                          value={formerFieldState[field.id]}
+                          onChange={(e) => handleFieldChange(e)}
+                          sx={{ width: "100%" }}
+                          required
+                          error={
+                            !validations[field.id].valid &&
+                            validations[field.id].errMsg
+                          }
+                        >
+                          {field.selectOptions?.map((option, i) => (
+                            <MenuItem value={option} key={i}>
+                              {option}
+                            </MenuItem>
+                          ))}
+                        </Select>
+                      ) : field.type === "file" ? (
+                        <TextField
+                          name={field.id}
+                          type={field.type}
+                          placeholder={field.placeholder}
+                          size="small"
+                          onChange={(e) => handleFieldChange(e)}
+                          error={
+                            !validations[field.id].valid &&
+                            validations[field.id].errMsg
+                          }
+                          sx={{ width: "100%" }}
+                          required
+                        />
+                      ) : (
+                        <TextField
+                          name={field.id}
+                          type={field.type}
+                          placeholder={field.placeholder}
+                          size="small"
+                          value={formerFieldState[field.id]}
+                          error={
+                            !validations[field.id].valid &&
+                            validations[field.id].errMsg
+                          }
+                          // id="outlined-error"
+                          onChange={(e) => handleFieldChange(e)}
+                          sx={{ width: "100%" }}
+                          required={field.required}
+                        />
+                      )}
+                    </Tooltip>
 
                     {/* Validation Message */}
                     {!validations[field.id].valid &&

@@ -1,32 +1,32 @@
-"use client";
-import { useEffect, useState } from "react";
+"use client"
+import { useEffect, useState } from "react"
 
-import { useSearchParams } from "next/navigation";
-import dayjs from "dayjs";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
-import Button from "@mui/material/Button";
-import Typography from "@mui/material/Typography";
-import Box from "@mui/material/Box";
-import TextField from "@mui/material/TextField";
-import { styled } from "@mui/system";
-import { useRouter } from "next/navigation";
-import Link from "next/link";
+import { useSearchParams } from "next/navigation"
+import dayjs from "dayjs"
+import Table from "@mui/material/Table"
+import TableBody from "@mui/material/TableBody"
+import TableCell from "@mui/material/TableCell"
+import TableHead from "@mui/material/TableHead"
+import TableRow from "@mui/material/TableRow"
+import Button from "@mui/material/Button"
+import Typography from "@mui/material/Typography"
+import Box from "@mui/material/Box"
+import TextField from "@mui/material/TextField"
+import { styled } from "@mui/system"
+import { useRouter } from "next/navigation"
+import Link from "next/link"
 
-import axiosApi from "@/Util/axiosApi";
-import { useAuth } from "@/context/JWTContext/AuthContext.provider";
-import TableContainer from "@mui/material/TableContainer/TableContainer";
-import DashboardNew from "../../components/shared/DashboardNew";
-import { get } from "lodash";
+import axiosApi from "@/Util/axiosApi"
+import { useAuth } from "@/context/JWTContext/AuthContext.provider"
+import TableContainer from "@mui/material/TableContainer/TableContainer"
+import DashboardNew from "../../components/shared/DashboardNew"
+import { get } from "lodash"
 
 const TabelCellStyled = styled(TableCell)(() => ({
   fontSize: "12px",
   padding: "5px",
   // wordBreak: "break-all",
-}));
+}))
 //   useEffect(() => {
 //     if (paramBillId) {
 //       getBillData(paramBillId, authCtx.user.token).then((billData: any) => {
@@ -88,34 +88,34 @@ const TabelCellStyled = styled(TableCell)(() => ({
 //   }, [paramBillId, authCtx.user.token])
 
 const Page = () => {
-  const authCtx: any = useAuth();
+  const authCtx: any = useAuth()
 
-  const searchParams = useSearchParams();
-  const paramBillId = searchParams.get("bill_id");
-  const TABLE_HEADERS = ["S.No", "Date", "From", "To", "Status", "Remarks"];
-  const [allReportsByfilter, setAllReportsByfilter]: any = useState([]);
+  const searchParams = useSearchParams()
+  const paramBillId = searchParams.get("bill_id")
+  const TABLE_HEADERS = ["S.No", "Date", "From", "To", "Status", "Remarks"]
+  const [allReportsByfilter, setAllReportsByfilter]: any = useState([])
   async function getBillMovement() {
     try {
-      const url = `/api/claim/get/${paramBillId}`;
-      const method = "GET";
+      const url = `/api/claim/get/${paramBillId}`
+      const method = "GET"
       const headers = {
         "Content-Type": "application/json",
         authorization: `Bearer ${authCtx.user.token}`,
-      };
-      const res = await axiosApi(url, method, headers);
-      setAllReportsByfilter([...res.data.movement]);
+      }
+      const res = await axiosApi(url, method, headers)
+      setAllReportsByfilter([...res.data.movement])
       if (res.success != true || !res) {
-        console.log("Bad Request");
+        console.log("Bad Request")
       } else {
-        console.log("200");
+        console.log("200")
       }
     } catch (error) {
-      console.error("Error fetching ", error);
+      console.error("Error fetching ", error)
     }
   }
   useEffect(() => {
-    getBillMovement();
-  }, [authCtx.user.token]);
+    getBillMovement()
+  }, [authCtx.user.token])
   //   const getBillData = async (id: any, token: any) => {
   //     const config = {
   //       url: `/api/claim/get/${paramBillId}`,
@@ -136,7 +136,7 @@ const Page = () => {
 
   return (
     <div>
-        <h3> Channel Log </h3>
+      <h3> Channel Log </h3>
       {allReportsByfilter.length !== 0 ? (
         <DashboardNew>
           <Box sx={{ overflow: "auto", width: { xs: "600px", sm: "100%" } }}>
@@ -168,20 +168,20 @@ const Page = () => {
                 </TableHead>
                 <TableBody>
                   {allReportsByfilter.map((bills: any, i: any) => {
-                    const rowColor = (i + 1) % 2 === 0 ? "#eee" : "#fff";
+                    const rowColor = (i + 1) % 2 === 0 ? "#eee" : "#fff"
 
                     return (
                       <TableRow key={bills._id} sx={{ background: rowColor }}>
                         <TabelCellStyled>{i + 1}</TabelCellStyled>
                         <TabelCellStyled>
-                          {bills.forwardedAt.substring(0, 10)}
+                          {dayjs(bills.forwardedAt).format("DD-MM-YYYY")}
                         </TabelCellStyled>
                         <TabelCellStyled>{bills.forwardedBy}</TabelCellStyled>
                         <TabelCellStyled>{bills.forwardedTo}</TabelCellStyled>
                         <TabelCellStyled>{bills.status}</TabelCellStyled>
                         <TabelCellStyled>{bills.remarks}</TabelCellStyled>
                       </TableRow>
-                    );
+                    )
                   })}
                 </TableBody>
               </Table>
@@ -190,7 +190,7 @@ const Page = () => {
         </DashboardNew>
       ) : null}
     </div>
-  );
-};
+  )
+}
 
-export default Page;
+export default Page

@@ -16,6 +16,7 @@ import DashboardNew from "../../components/shared/DashboardNew"
 import { useAuth } from "@/context/JWTContext/AuthContext.provider"
 import axiosApi from "@/Util/axiosApi"
 import { enqueueSnackbar } from "notistack"
+import Tooltip from "@mui/material/Tooltip"
 
 import { validateOnSubmit } from "@/Util/commonFunctions"
 
@@ -195,16 +196,24 @@ const ManageUser = () => {
                     {user.fieldName}{" "}
                     {user.required && <span style={{ color: "red" }}>*</span>}
                   </Typography>
-                  <TextField
-                    name={user.id}
-                    type={user.type}
-                    sx={{ width: "100%" }}
-                    size="small"
-                    value={userFieldData[user.id]}
-                    onChange={handleFieldChange}
-                    disabled={user.id === "role" ? true : false}
-                    required={user.required}
-                  />
+                  <Tooltip
+                    title={
+                      user.type === "date" ? "Select a date" : user.placeholder
+                    }
+                    placement="top-start"
+                  >
+                    <TextField
+                      name={user.id}
+                      type={user.type}
+                      placeholder={user.placeholder}
+                      sx={{ width: "100%" }}
+                      size="small"
+                      value={userFieldData[user.id]}
+                      onChange={handleFieldChange}
+                      disabled={user.id === "role" ? true : false}
+                      required={user.required}
+                    />
+                  </Tooltip>
 
                   {/* Validation Message */}
                   {!validations[user.id].valid &&

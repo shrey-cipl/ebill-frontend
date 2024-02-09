@@ -17,6 +17,7 @@ import { useAuth } from "@/context/JWTContext/AuthContext.provider"
 import PageContainer from "@/app/(DashboardLayout)/components/container/PageContainer"
 import DashboardNew from "@/app/(DashboardLayout)/components/shared/DashboardNew"
 import CustomModal from "@/app/(DashboardLayout)/components/CustomModal/CustomModal"
+import CustomGrid from "@/app/(DashboardLayout)/components/CustomGrid"
 
 import {
   CosmeticContext,
@@ -123,25 +124,46 @@ const Bills = () => {
 
   const columns: GridColDef[] = [
     {
-      field: "ranodm_1", // confirm this
-      headerName: "S.No",
+      field: "s.no", // confirm this
+      headerName: "S.NO",
       valueGetter: (params) => params.api.getAllRowIds().indexOf(params.id) + 1,
     },
-    { field: "claimedAmount", headerName: "claimed Amount" },
-    { field: "billPeriodFrom", headerName: "bill Period From" },
-    { field: "billPeriodTo", headerName: "bill Period To" },
-    { field: "billType", headerName: "bill Type" },
+    { field: "claimedAmount", headerName: "CLAIMED AMOUNT" },
+    { field: "billType", headerName: "BILL TYPE" },
+
+    {
+      field: "billPeriodFrom",
+      headerName: "BILL FROM",
+      valueFormatter: (params) => {
+        return dayjs(params.value).format("DD-MM-YYYY")
+      },
+    },
+    {
+      field: "billPeriodTo",
+      headerName: "BILL TO",
+      valueFormatter: (params) => {
+        return dayjs(params.value).format("DD-MM-YYYY")
+      },
+    },
     {
       field: "createdAt",
-      headerName: "Created At",
+      headerName: "CREATED AT",
 
       valueFormatter: (params) => {
-        return dayjs(params.value).format("YYYY-MM-DD")
+        return dayjs(params.value).format("DD-MM-YYYY h:mm A")
+      },
+    },
+    {
+      field: "updatedAt",
+      headerName: "UPDATED ON",
+
+      valueFormatter: (params) => {
+        return dayjs(params.value).format("DD-MM-YYYY h:mm A")
       },
     },
     {
       field: "id",
-      headerName: "Action",
+      headerName: "ACTION",
       renderCell: (params) => {
         return (
           <button
@@ -162,7 +184,7 @@ const Bills = () => {
     },
     {
       field: "Download",
-      headerName: "Download",
+      headerName: "DOWNLOAD",
       renderCell: (params) => {
         const downloadLink = params.row.billFilePath
 
@@ -193,57 +215,23 @@ const Bills = () => {
       },
     },
   ]
-  console.log(billList)
-  console.log(claim)
+
   return (
     <PageContainer title="View Bills" description="List of all the bills">
       <DashboardNew title="View Bills" titleVariant="h5">
         <>
-          {/* <div style={{ display: "flex", justifyContent: "flex-end" }}>
-            <Button
-              sx={{ background: "#9C27B0" }}
-              variant="contained"
-              size="small"
-              onClick={() =>
-                router.push(`/Bills/ManageBill?mode=${BILL_MODES.add}`)
-              }
-            >
-              Add New
-            </Button>
-          </div> */}
-          <DataGrid
+          <CustomGrid
             rows={billList}
             columns={columns}
-            density="compact"
             sx={{
-              ".bg-light": {
-                bgcolor: "#eee",
-                // "&:hover": {
-                //   bgcolor: "darkgrey",
-                // },
-              },
-              ".bg-dark": {
-                bgcolor: "#fff",
-              },
               ".text-green": {
                 color: "green",
               },
               ".text-red": {
                 color: "red",
               },
-              "& .MuiDataGrid-columnHeaders": {
-                backgroundColor: "#4C7AFF",
-                color: "#ffffff",
-                // fontWeight: "600",
-                // fontSize: "16px",
-              },
             }}
-            getRowClassName={(params) => {
-              return (params.indexRelativeToCurrentPage + 1) % 2 === 0
-                ? "bg-light"
-                : "bg-dark"
-            }}
-            getCellClassName={(params) => {
+            getCellClassName={(params: any) => {
               if (params.field === "currentStatus") {
                 return params.row.currentStatus === "Open"
                   ? "text-green"
@@ -252,11 +240,6 @@ const Bills = () => {
 
               return ""
             }}
-            slots={{ toolbar: GridToolbar }}
-            initialState={{
-              pagination: { paginationModel: { pageSize: 25 } },
-            }}
-            pageSizeOptions={[25, 50, 100]}
           />
 
           {selectedBill.nodata ? (

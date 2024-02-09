@@ -15,6 +15,7 @@ import Button from "@mui/material/Button"
 import Box from "@mui/material/Box"
 import { styled } from "@mui/system"
 import dayjs from "dayjs"
+import Tooltip from "@mui/material/Tooltip"
 
 import PageContainer from "../../components/container/PageContainer"
 import DashboardNew from "../../components/shared/DashboardNew"
@@ -623,68 +624,82 @@ const ManageBill = () => {
                         <span style={{ color: "red" }}>*</span>
                       )}
                     </Typography>
-
-                    {field.id == "lastForwardedTo" ? (
-                      <Select
-                        name={field.id}
-                        size="small"
-                        value={billSequence[0]}
-                        onChange={(e) => handleFieldChange(e)}
-                        sx={{ width: "100%" }}
-                        disabled={
-                          disabledPermananty ||
-                          disabledFromUserBills ||
-                          disabledUpdateFields
-                        }
-                      >
-                        {billSequence.map((bill: any, i: any) => (
-                          <MenuItem value={bill} key={i}>
-                            {bill}
-                          </MenuItem>
-                        ))}
-                      </Select>
-                    ) : field.type === "select" ? (
-                      <Select
-                        name={field.id}
-                        size="small"
-                        value={dataFields[field.id]}
-                        onChange={(e) => handleFieldChange(e)}
-                        sx={{ width: "100%" }}
-                        disabled={
-                          disabledPermananty ||
-                          disabledFromUserBills ||
-                          disabledUpdateFields
-                        }
-                      >
-                        {field.id === "billNumber"
-                          ? BillList.map((bill: any) => (
-                              <MenuItem value={bill.billNumber} key={bill._id}>
-                                {bill.billNumber}
-                              </MenuItem>
-                            ))
-                          : field.selectOptions?.map((option, i) => (
-                              <MenuItem value={option} key={i}>
-                                {option}
-                              </MenuItem>
-                            ))}
-                      </Select>
-                    ) : (
-                      <TextField
-                        name={field.id}
-                        type={field.type}
-                        size="small"
-                        value={dataFields[field.id]}
-                        onChange={(e) => handleFieldChange(e)}
-                        sx={{ width: "100%" }}
-                        disabled={
-                          disabledPermananty ||
-                          disabledFromUserBills ||
-                          disabledUpdateFields
-                        }
-                        multiline={field.id === "currentremark" ? true : false}
-                        rows={4}
-                      />
-                    )}
+                    <Tooltip
+                      title={
+                        field.type === "date"
+                          ? "Select a date"
+                          : field.placeholder
+                      }
+                      placement="top-start"
+                    >
+                      {field.id == "lastForwardedTo" ? (
+                        <Select
+                          name={field.id}
+                          size="small"
+                          value={billSequence[0]}
+                          onChange={(e) => handleFieldChange(e)}
+                          sx={{ width: "100%" }}
+                          disabled={
+                            disabledPermananty ||
+                            disabledFromUserBills ||
+                            disabledUpdateFields
+                          }
+                        >
+                          {billSequence.map((bill: any, i: any) => (
+                            <MenuItem value={bill} key={i}>
+                              {bill}
+                            </MenuItem>
+                          ))}
+                        </Select>
+                      ) : field.type === "select" ? (
+                        <Select
+                          name={field.id}
+                          size="small"
+                          value={dataFields[field.id]}
+                          onChange={(e) => handleFieldChange(e)}
+                          sx={{ width: "100%" }}
+                          disabled={
+                            disabledPermananty ||
+                            disabledFromUserBills ||
+                            disabledUpdateFields
+                          }
+                        >
+                          {field.id === "billNumber"
+                            ? BillList.map((bill: any) => (
+                                <MenuItem
+                                  value={bill.billNumber}
+                                  key={bill._id}
+                                >
+                                  {bill.billNumber}
+                                </MenuItem>
+                              ))
+                            : field.selectOptions?.map((option, i) => (
+                                <MenuItem value={option} key={i}>
+                                  {option}
+                                </MenuItem>
+                              ))}
+                        </Select>
+                      ) : (
+                        <TextField
+                          name={field.id}
+                          type={field.type}
+                          size="small"
+                          placeholder={field?.placeholder}
+                          value={dataFields[field.id]}
+                          onChange={(e) => handleFieldChange(e)}
+                          sx={{ width: "100%" }}
+                          disabled={
+                            disabledPermananty ||
+                            disabledFromUserBills ||
+                            disabledUpdateFields
+                          }
+                          multiline={
+                            field.id === "currentremark" ? true : false
+                          }
+                          rows={4}
+                        />
+                      )}
+                    </Tooltip>
 
                     {/* Validation Message */}
                     {!validations[field.id]?.valid &&
