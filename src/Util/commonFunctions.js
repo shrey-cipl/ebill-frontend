@@ -28,6 +28,7 @@ const validateOnSubmit = (dataToValidate, validationState) => {
   }
 
   for (let key of fieldKeys) {
+    console.log(key)
     // De-structures validation type for that key
     const { validationType } = validationState[key]
 
