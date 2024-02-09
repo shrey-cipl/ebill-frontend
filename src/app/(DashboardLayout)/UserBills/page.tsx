@@ -166,21 +166,39 @@ const UserBills = () => {
       field: "id",
       headerName: "ACTION",
       renderCell: (params) => {
-        return (
-          <button
-            style={{
-              background: "none",
-              border: "none",
-              color: "#4C7AFF",
-              fontSize: "13px",
-              padding: 0,
-              cursor: "pointer",
-            }}
-            onClick={() => handleFetchSingleBills(params.row._id)}
-          >
-            View
-          </button>
-        )
+        if (params.row.claim[0]) {
+          return (
+            <button
+              style={{
+                background: "none",
+                border: "none",
+                color: "#4C7AFF",
+                fontSize: "13px",
+                padding: 0,
+                cursor: "pointer",
+              }}
+              onClick={() => handleFetchSingleBills(params.row._id)}
+            >
+              View
+            </button>
+          )
+        } else if (!params.row.claim[0]) {
+          return (
+            <button
+              style={{
+                background: "none",
+                border: "none",
+                color: "#4C7AFF",
+                fontSize: "13px",
+                padding: 0,
+                cursor: "pointer",
+              }}
+              onClick={() => handleFetchSingleBills(params.row._id)}
+            >
+              Create
+            </button>
+          )
+        }
       },
     },
     {
