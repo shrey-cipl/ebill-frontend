@@ -5,13 +5,12 @@ import axios from "../../config/axios"
 import { isValidToken, setSession } from "../../Util/jwt"
 import AuthReducer from "./AuthContext.reducer"
 import { Alert } from "@mui/material"
-import { usePathname } from 'next/navigation'
+import { usePathname } from "next/navigation"
 
 const INITIALIZE = "INITIALIZE"
 const SIGN_IN = "SIGN_IN"
 const SIGN_OUT = "SIGN_OUT"
 const SIGN_IN_FOR = "SIGN_IN_FOR"
-
 
 const illegalStateFunction = (...args: any) => {
   throw new Error("You must wrap your components in <AuthProvider />")
@@ -44,7 +43,7 @@ export default function AuthProvider({ children }: AuthProviderProps) {
 
   const pathname = usePathname()
 
-    console.log("Current Path:", pathname);
+  console.log("Current Path:", pathname)
 
   useEffect(() => {
     const initialize = async () => {
@@ -52,22 +51,18 @@ export default function AuthProvider({ children }: AuthProviderProps) {
         // localStorage.getItem('login')
         if (localStorage.getItem("login")) {
           const info: any = JSON.parse(localStorage.getItem("login") || "")
-console.log("ds");
           const { token, data } = info
 
           dispatch({
             type: INITIALIZE,
             payload: {
               isInitialized: true,
-              user: {data ,token},
-
+              user: { data, token },
             },
           })
         } else {
           //http://localhost:3000/resetpassword
           // /resetpassword]
-
-
 
           dispatch({
             type: INITIALIZE,
@@ -77,8 +72,13 @@ console.log("ds");
             },
           })
           // console.log("logout");
-          {pathname=="/Forgot"||pathname=="/resetpassword"||pathname=="/FormersLogin"?null:router.push("/login")}
-
+          {
+            pathname == "/Forgot" ||
+            pathname == "/resetpassword" ||
+            pathname == "/FormersLogin"
+              ? null
+              : router.push("/login")
+          }
         }
       } catch (err) {
         dispatch({
@@ -94,79 +94,96 @@ console.log("ds");
     initialize()
   }, [])
 
-    const signIn = async (email: any, password: any) => {
-      try {
-        const response = await axios.post("/api/user/login", {
-          email,
-          password,
-        })
+  const signIn = async (email: any, password: any) => {
+    try {
+      const response = await axios.post("/api/user/login", {
+        email,
+        password,
+      })
 
-        const { token, data } = response.data
-        localStorage.setItem("login", JSON.stringify(response.data))
-        setSession(token)
-        dispatch({
-          type: SIGN_IN,
-          payload: {
-            user: {data ,token},
-            isAuthenticated: true,
-          },
-        })
+      const { token, data } = response.data
+      localStorage.setItem("login", JSON.stringify(response.data))
+      setSession(token)
+      dispatch({
+        type: SIGN_IN,
+        payload: {
+          user: { data, token },
+          isAuthenticated: true,
+        },
+      })
 
-        //  response;
-        return router.push("/")
-      } catch (err: any) {
+      //  response;
+      return router.push("/")
+    } catch (err: any) {
       //   console.log(err, "errrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr")
       // alert("Invalid email or invalid password please try again");
-        dispatch({
-          type: SIGN_IN,
-          payload: {
-            isAuthenticated: false,
-            validationErrors: err.error,
-          },
-        })
-        return  err;
-      }
+      dispatch({
+        type: SIGN_IN,
+        payload: {
+          isAuthenticated: false,
+          validationErrors: err.error,
+        },
+      })
+      return err
     }
-    const signInFor = async (email: any, password: any) => {
-      try {
-        const response = await axios.post("/api/former/login", {
-          email,
-          password,
-        })
+  }
+  const signInFor = async (email: any, password: any) => {
+    try {
+      const response = await axios.post("/api/former/login", {
+        email,
+        password,
+      })
 
-        const { token, data } = response.data
-        localStorage.setItem("login", JSON.stringify(response.data))
-        setSession(token)
-        dispatch({
-          type: SIGN_IN_FOR,
-          payload: {
-            user: {data ,token},
-            isAuthenticated: true,
-          },
-        })
+      const { token, data } = response.data
+      localStorage.setItem("login", JSON.stringify(response.data))
+      setSession(token)
+      dispatch({
+        type: SIGN_IN_FOR,
+        payload: {
+          user: { data, token },
+          isAuthenticated: true,
+        },
+      })
 
-        //  response;
-        return router.push("/")
-      } catch (err: any) {
+      //  response;
+      return router.push("/")
+    } catch (err: any) {
       //   console.log(err, "errrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr")
       // alert("Invalid email or invalid password please try again");
-        dispatch({
-          type: SIGN_IN,
-          payload: {
-            isAuthenticated: false,
-            validationErrors: err.error,
-          },
-        })
-        return  err;
-      }
+      dispatch({
+        type: SIGN_IN,
+        payload: {
+          isAuthenticated: false,
+          validationErrors: err.error,
+        },
+      })
+      return err
     }
+  }
   const signOut = async () => {
     setSession(null)
+    router.push("/login")
     dispatch({ type: SIGN_OUT })
 
     // localStorage.setItem("login", "logout")
-    localStorage.removeItem("login");
+    localStorage.removeItem("login")
   }
+
+  let logoutTimer: any
+
+  function startLogoutTimer() {
+    logoutTimer = setTimeout(signOut, 30 * 60 * 1000)
+  }
+
+  function resetLogoutTimer() {
+    clearTimeout(logoutTimer)
+    startLogoutTimer()
+  }
+
+  document.addEventListener("mousemove", resetLogoutTimer)
+  document.addEventListener("keypress", resetLogoutTimer)
+
+  startLogoutTimer()
   return (
     <AuthContext.Provider
       value={useMemo(
@@ -175,7 +192,7 @@ console.log("ds");
           method: "jwt",
           signIn,
           signOut,
-          signInFor
+          signInFor,
         }),
         [state]
       )}
