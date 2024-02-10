@@ -30,7 +30,7 @@ const ROLES = [
   "F&BO",
   "System Admin", // remove this for bill routing page
   "PAO",
-  "Forwarded To Bank",
+  "Closed after Approval",
 ]
 
 const VALIDATION_TYPE = {

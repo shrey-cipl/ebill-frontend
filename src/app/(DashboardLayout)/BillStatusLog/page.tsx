@@ -76,7 +76,7 @@ const DATA_FIELDS = [
       "Asst. Section Officer Admin IV",
       "Section Officer Admin I",
       "Section Officer Admin IV",
-      "Under Secretary",
+      "Under Secretary O&M",
       "Deputy Secretary Admin",
       "Joint Secretary Admin",
       "Asst. Section Officer General II",

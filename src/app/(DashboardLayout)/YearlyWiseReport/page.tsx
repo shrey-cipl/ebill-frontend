@@ -24,6 +24,7 @@ import TableRow from "@mui/material/TableRow"
 import { useAuth } from "@/context/JWTContext/AuthContext.provider"
 import CustomGrid from "../components/CustomGrid"
 import {
+  InputBillType,
   InputFormerName,
   InputYearly,
 } from "../components/InputComponents/InputComponents"
@@ -163,7 +164,7 @@ const YearlyWiseReport = () => {
                 },
               }}
             >
-              <InputYearly formData={formData} handleChange={handleChange} />
+              <InputBillType formData={formData} handleChange={handleChange} />
             </Stack>
           </Box>
           <Box

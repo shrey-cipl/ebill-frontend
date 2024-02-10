@@ -193,7 +193,19 @@ const UserBills = () => {
                 padding: 0,
                 cursor: "pointer",
               }}
-              onClick={() => handleFetchSingleBills(params.row._id)}
+              onClick={() => {
+                handleFetchSingleBills(params.row._id)
+                  .then(() => {
+                    router.push(
+                      `/Bills/ManageBill?id_from_userpage=${params.row._id}&mode=${BILL_MODES.add}`
+                    )
+                    console.log("Route pushed successfully")
+                  })
+                  .catch((error) => {
+                    // Handle error
+                    console.error("Error pushing route:", error)
+                  })
+              }}
             >
               Create
             </button>
