@@ -180,8 +180,24 @@ export default function AuthProvider({ children }: AuthProviderProps) {
     startLogoutTimer()
   }
 
-  document.addEventListener("mousemove", resetLogoutTimer)
-  document.addEventListener("keypress", resetLogoutTimer)
+  const events = [
+    "load",
+    "mousemove",
+    "mousedown",
+    "click",
+    "scroll",
+    "keypress",
+  ]
+
+  useEffect(() => {
+    Object.values(events).forEach((item) => {
+      window.addEventListener(item, () => {
+        resetLogoutTimer
+      })
+    })
+  }, [])
+
+  // document.addEventListener(events, resetLogoutTimer)
 
   startLogoutTimer()
   return (
