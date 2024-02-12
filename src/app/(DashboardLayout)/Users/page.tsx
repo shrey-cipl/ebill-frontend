@@ -8,7 +8,7 @@ import DashboardNew from "../components/shared/DashboardNew"
 import axiosApi from "@/Util/axiosApi"
 import { useAuth } from "@/context/JWTContext/AuthContext.provider"
 
-import { GridRowsProp, GridColDef } from "@mui/x-data-grid"
+import { GridColDef } from "@mui/x-data-grid"
 import CustomGrid from "../components/CustomGrid"
 
 const Users = () => {

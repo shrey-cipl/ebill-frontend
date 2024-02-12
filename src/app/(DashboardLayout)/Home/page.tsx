@@ -88,7 +88,7 @@ const Dashboard = () => {
             />
             <DashboardBox
               filecount={dashboardData.forwardToBankCount}
-              filetype="Fwd.To Bank Claim(s)"
+              filetype="Fwd.To Bank"
               iconcolor="#bf83ff"
               backgroundcolor="#fff"
               Icon={AccountBalanceIcon}
