@@ -28,13 +28,26 @@ const validateOnSubmit = (dataToValidate, validationState) => {
   }
 
   for (let key of fieldKeys) {
-    console.log(key)
     // De-structures validation type for that key
     const { validationType } = validationState[key]
 
     // Assumes valid data initially
     validationStateCopy[key].valid = true
     validationStateCopy[key].errMsg = ""
+
+    if (validationType === VALIDATION_TYPE.alphaNumeric) {
+      // Allows alpha-numeric, with (.), (-), (/) and characters upto 30
+      const validAlphanumeric = regExCheck(
+        dataToValidate[key],
+        /^[a-zA-Z0-9./-]{1,30}$/
+      )
+
+      if (!validAlphanumeric) {
+        validationStateCopy[key].valid = false
+        validationStateCopy[key].errMsg =
+          "Only alphanumeric with (.), (/), (-) is allowed"
+      }
+    }
 
     if (validationType === VALIDATION_TYPE.amount) {
       // Checks if number is greater than 0 (includes decimals)

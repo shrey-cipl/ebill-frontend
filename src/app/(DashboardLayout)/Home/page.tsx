@@ -30,7 +30,7 @@ const Dashboard = () => {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
-          authorization: `Bearer ${authCtx.user.token}`,
+          authorization: `Bearer ${authCtx?.user?.token}`,
         },
       }
 
@@ -43,7 +43,7 @@ const Dashboard = () => {
     }
 
     getData()
-  }, [authCtx.user.token])
+  }, [authCtx?.user?.token])
 
   return (
     <PageContainer

@@ -7,7 +7,7 @@ const FIELDS_MANAGE_BILL = [
     type: "number",
     placeholder: "Enter diary number here",
     required: true,
-    validationType: VALIDATION_TYPE.none,
+    validationType: VALIDATION_TYPE.alphaNumeric,
   },
   {
     id: "claimReceivingDate",
@@ -62,7 +62,7 @@ const FIELDS_MANAGE_BILL = [
     type: "number",
     placeholder: "Enter file number here",
     required: true,
-    validationType: VALIDATION_TYPE.none,
+    validationType: VALIDATION_TYPE.alphaNumeric,
   },
   {
     id: "claimPeriodFrom",
