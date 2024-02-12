@@ -94,14 +94,14 @@ const FIELDS_MANAGE_BILL = [
     required: true,
     validationType: VALIDATION_TYPE.amount,
   },
-  {
-    id: "maxAdmissibleAmount",
-    fieldName: "Max Amissible Amount",
-    type: "number",
-    placeholder: "Enter max admissible amount here",
-    required: true,
-    validationType: VALIDATION_TYPE.amount,
-  },
+  // {
+  //   id: "maxAdmissibleAmount",
+  //   fieldName: "Max Amissible Amount",
+  //   type: "number",
+  //   placeholder: "Enter max admissible amount here",
+  //   required: true,
+  //   validationType: VALIDATION_TYPE.amount,
+  // },
   {
     id: "currentStatus",
     fieldName: "Status",
