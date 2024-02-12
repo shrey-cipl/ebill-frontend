@@ -1,104 +1,10 @@
 "use client"
-// import React, { useEffect, useState } from "react"
-// import dynamic from "next/dynamic"
+
 import { redirect } from "next/navigation"
-// import {
-//   Box,
-//   Button,
-//   MenuItem,
-//   FormControl,
-//   Select,
-//   Stack,
-//   InputLabel,
-//   Typography,
-// } from "@mui/material"
-
-// import axiosApi from "@/Util/axiosApi"
-// import { styled } from "@mui/material/styles"
-// import Table from "@mui/material/Table"
-// import TableBody from "@mui/material/TableBody"
-// import TableCell from "@mui/material/TableCell"
-// import TableContainer from "@mui/material/TableContainer"
-// import TableHead from "@mui/material/TableHead"
-// import TableRow from "@mui/material/TableRow"
-// import { useAuth } from "@/context/JWTContext/AuthContext.provider"
-
-// const DashboardCard = dynamic(
-//   () => import("../components/shared/DashboardCard")
-// )
-// const PageContainer = dynamic(
-//   () => import("../components/container/PageContainer")
-// )
-// const DashboardNew = dynamic(() => import("../components/shared/DashboardNew"))
-
-// import { useRouter } from "next/navigation"
-// const TABLE_HEADERS = [
-//   "Diary No.",
-//   "Name",
-//   "Type",
-//   "Admissible Amount",
-//   "Sanctioned Amount",
-//   "Status",
-// ]
-
-// const TabelCellStyled = styled(TableCell)(() => ({
-//   fontSize: "12px",
-//   padding: "10px 10px",
-//   // wordBreak: "break-all",
-// }))
-
-// const StyledSelect = styled(Select)(({ theme }) => ({
-//   display: "block",
-// }))
-
-// const currentYear = new Date().getFullYear()
-// const startYear = currentYear - 30 // Adjust the range as needed
-// const years = Array.from({ length: 31 }, (_, index) => startYear + index)
 
 const Reports = () => {
   redirect("/not-found")
-  // const router = useRouter()
-  // const [get, setGet]: any = useState(false)
-  // const [allReports, setAllReports]: any = useState([])
-  // const [allReportsByfilter, setAllReportsByfilter]: any = useState([])
-  // const [formData, setFormData] = useState<any>({
-  //   name: "",
-  //   billtype: "",
-  //   billstatus: "",
-  //   year: "",
-  // })
 
-  // const auth: any = useAuth()
-  // async function getReports() {
-  //   try {
-  //     const url = "/api/claim/getall"
-  //     const method = "GET"
-  //     const headers = {
-  //       "Content-Type": "application/json",
-  //       authorization: `Bearer ${auth.user.token}`,
-  //     }
-  //     const res = await axiosApi(url, method, headers)
-
-  //     setAllReports([...res.data])
-
-  //     if (res.success != true || !res) {
-  //       console.log("Bad Request")
-  //     } else {
-  //       console.log("200")
-  //     }
-  //   } catch (error) {
-  //     console.error("Error fetching ", error)
-  //   }
-  // }
-
-  // const handleChange = (e: any) => {
-  //   const val = e.target.value
-  //   setFormData({ ...formData, [e.target.name]: val })
-  // }
-
-  // useEffect(() => {
-  //   getReports()
-  // }, [auth.user.token])
   return (
     <>
       {/* <DashboardCard title="Reports">

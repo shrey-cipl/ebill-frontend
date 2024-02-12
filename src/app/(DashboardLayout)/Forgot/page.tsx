@@ -1,5 +1,5 @@
-"use client";
-// import { useRouter } from "next/router";
+"use client"
+
 import {
   Alert,
   Box,
@@ -9,18 +9,16 @@ import {
   TextField,
   Tooltip,
   Typography,
-  formHelperTextClasses,
   styled,
-} from "@mui/material";
-import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
-import LockIcon from "@mui/icons-material/Lock";
-import CircularProgress from "@mui/material/CircularProgress";
-import axios from "axios";
-import { useState } from "react";
-import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
+} from "@mui/material"
+import LockIcon from "@mui/icons-material/Lock"
+import CircularProgress from "@mui/material/CircularProgress"
+import axios from "axios"
+import { useState } from "react"
+import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos"
 // import { Box1, GreenBox, Heading, Round } from "./ResetPassword";
-import Image from "next/image";
-import Link from "next/link";
+import Image from "next/image"
+import Link from "next/link"
 // import axios from "axios";
 
 const GreenBox = styled(Box)({
@@ -28,17 +26,17 @@ const GreenBox = styled(Box)({
   height: "54px",
   display: "flex",
   justifyContent: "center",
-});
+})
 
 const Round = styled(Box)({
   width: "100%",
   borderRadius: "50%",
   position: "relative",
-});
+})
 const Box1 = styled(Box)({
   width: "fit-content",
   margin: "10px auto",
-});
+})
 
 const Heading1 = styled(Typography)(({ theme }) => ({
   padding: theme.spacing(1),
@@ -49,7 +47,7 @@ const Heading1 = styled(Typography)(({ theme }) => ({
   fontWeight: 600,
 
   textAlign: "center",
-}));
+}))
 
 const Heading = styled(Typography)({
   width: "100%",
@@ -61,13 +59,7 @@ const Heading = styled(Typography)({
   color: "#eaf2f9",
   marginLeft: "auto",
   marginRight: "auto",
-});
-
-const ErrorTypography = styled(Typography)({
-  color: "#ff0000",
-  fontSize: "12px",
-  marginTop: "10px",
-});
+})
 
 const SBox = styled(Box)({
   display: "flex",
@@ -77,7 +69,7 @@ const SBox = styled(Box)({
   alignItems: "center",
   width: "90%",
   margin: "auto",
-});
+})
 
 const LoginButton = styled(Button)({
   width: "500px",
@@ -92,75 +84,64 @@ const LoginButton = styled(Button)({
   "&:hover": {
     backgroundColor: "#e15a11",
   },
-});
-
-const ResendOTP = styled(Typography)({
-  width: "150px",
-  height: "22px",
-  fontFamily: "Nunito",
-  fontStyle: "normal",
-  fontWeight: 700,
-  fontSize: "22px",
-  lineHeight: "22px",
-  textDecorationLine: "underline",
-  color: "#1e88e5",
-  cursor: "pointer",
-  marginLeft: "auto",
-});
+})
 
 const Forgot = (props: any) => {
   const styles = {
     paperContainer: {
       backgroundImage: `url(/Banner.png)`,
     },
-  };
+  }
 
-  const { respdata } = props;
-  const [id, setId] = useState<string>("");
-  const [empId, setEmpId] = useState<any>("");
-  const [error, setError] = useState<any>("");
-  const [loader, setLoader] = useState<boolean>(false);
-  const [open, setOpen] = useState(false);
-  const [timer, setTimer] = useState(60);
-  const [delay, setDelay] = useState(false);
-  const [resendshow, setResendshow] = useState(false);
+  const { respdata } = props
+  const [id, setId] = useState<string>("")
+  const [empId, setEmpId] = useState<any>("")
+  const [error, setError] = useState<any>("")
+  const [loader, setLoader] = useState<boolean>(false)
+  const [open, setOpen] = useState(false)
+  const [timer, setTimer] = useState(60)
+  const [delay, setDelay] = useState(false)
+  const [resendshow, setResendshow] = useState(false)
 
   //   const router = useRouter()
 
   const handleVerify = async () => {
-    setLoader(true);
+    setLoader(true)
 
     if (id == "") {
-      setError("Email Id is Required");
+      setError("Email Id is Required")
     }
 
     try {
-      let res: any = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/user/forgotPassword`, {
-        email: id,
-      });
-      setError(res.data.msg);
-      setOpen(true);
-      setDelay(true);
-      setResendshow(true);
+      let res: any = await axios.post(
+        `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/user/forgotPassword`,
+        {
+          email: id,
+        }
+      )
+      setError(res.data.msg)
+      setOpen(true)
+      setDelay(true)
+      setResendshow(true)
       setTimeout(() => {
-        setDelay(false);
-        setTimer(60);
-        setResendshow(false);
-        clearInterval(myInterval);
-      }, 1000 * 60);
+        setDelay(false)
+        setTimer(60)
+        setResendshow(false)
+        clearInterval(myInterval)
+      }, 1000 * 60)
       const myInterval = setInterval(() => {
-        setTimer((prev) => prev - 1);
-      }, 1000);
+        setTimer((prev) => prev - 1)
+      }, 1000)
       // setTimeout(()=>{
 
       //   router.push("/")
       // },30000)
     } catch (error: any) {
-      setError(error?.errorMsg);
-      setOpen(true);
+      setError(error?.errorMsg)
+      setOpen(true)
     }
-    setLoader(false);
-  };
+    setLoader(false)
+  }
 
   const handleClose = (
     event?: React.SyntheticEvent | Event,
@@ -170,8 +151,8 @@ const Forgot = (props: any) => {
     //   return;
     // }
 
-    setOpen(false);
-  };
+    setOpen(false)
+  }
 
   return (
     <Box
@@ -327,7 +308,7 @@ const Forgot = (props: any) => {
               variant="outlined"
               sx={{ background: "white" }}
               onChange={(e) => {
-                setId(e.target.value);
+                setId(e.target.value)
               }}
               size="small"
               inputProps={{
@@ -424,7 +405,7 @@ const Forgot = (props: any) => {
         </Box>
       </Box>
     </Box>
-  );
-};
+  )
+}
 
-export default Forgot;
+export default Forgot

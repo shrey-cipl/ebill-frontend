@@ -1,4 +1,3 @@
-import PropTypes from "prop-types"
 // import CurrencyDollarIcon from '@heroicons/react/24/solid/CurrencyDollarIcon';
 import PostAddIcon from "@mui/icons-material/PostAdd"
 

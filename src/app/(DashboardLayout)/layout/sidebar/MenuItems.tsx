@@ -1,49 +1,14 @@
-import {
-  IconAperture,
-  IconCopy,
-  IconLayoutDashboard,
-  IconLogin,
-  IconMoodHappy,
-  IconTypography,
-  IconUserPlus,
-} from "@tabler/icons-react"
-import PageviewIcon from "@mui/icons-material/Pageview"
+import { IconLayoutDashboard } from "@tabler/icons-react"
 import EditNoteIcon from "@mui/icons-material/EditNote"
 import { uniqueId } from "lodash"
-import SummarizeIcon from "@mui/icons-material/Summarize"
-import AddHomeWorkIcon from "@mui/icons-material/AddHomeWork"
-import PendingActionsIcon from "@mui/icons-material/PendingActions"
 import FormatListBulletedIcon from "@mui/icons-material/FormatListBulleted"
 import AssessmentIcon from "@mui/icons-material/Assessment"
-import RotateLeftIcon from "@mui/icons-material/RotateLeft"
-import EventNoteIcon from "@mui/icons-material/EventNote"
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth"
 import AccessTimeIcon from "@mui/icons-material/AccessTime"
 import EventIcon from "@mui/icons-material/Event"
 import StarBorderPurple500Icon from "@mui/icons-material/StarBorderPurple500"
 import GroupIcon from "@mui/icons-material/Group"
 
-const ROLES = [
-  "Asst. Section Officer Admin I",
-  "Asst. Section Officer Admin IV",
-  "Section Officer Admin I",
-  "Section Officer Admin IV",
-  "Under Secretary O&M",
-  "Deputy Secretary Admin",
-  "Joint Secretary Admin",
-  "Asst. Section Officer General II",
-  "Section Officer General II",
-  "Under Secretary General II",
-  "Deputy Secretary General",
-  "Joint Secretary General",
-  "Accounts I",
-  "Accounts II",
-  "Accounts IV",
-  "F&BO",
-  "System Admin", // remove this for bill routing page
-  "PAO",
-  "Forwarded To Bank",
-]
 const Menuitems: any = {
   "Joint Secretary Admin": [
     {

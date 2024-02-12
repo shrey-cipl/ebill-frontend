@@ -1,19 +1,13 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { useRouter } from "next/navigation"
-import { useSearchParams } from "next/navigation"
 
-import TextField from "@mui/material/TextField"
-import Typography from "@mui/material/Typography"
 import Select from "@mui/material/Select"
 import MenuItem from "@mui/material/MenuItem"
 import Box from "@mui/material/Box"
 import Button from "@mui/material/Button"
-import { styled } from "@mui/system"
 import CloseIcon from "@mui/icons-material/Close"
 import AddIcon from "@mui/icons-material/Add"
-import SouthIcon from "@mui/icons-material/South"
 import PageContainer from "../components/container/PageContainer"
 import DashboardNew from "../components/shared/DashboardNew"
 import { useAuth } from "@/context/JWTContext/AuthContext.provider"
@@ -22,7 +16,7 @@ import axiosApi from "@/Util/axiosApi"
 import { enqueueSnackbar } from "notistack"
 import { InputLabel } from "@mui/material"
 
-import { BILL_TYPE, ROLES } from "../../../../src/config/constants"
+import { BILL_TYPE, ROLES } from "@/config/constants"
 
 const BillRouting = () => {
   const [selectedBillType, setSelectedBillType] = useState("")

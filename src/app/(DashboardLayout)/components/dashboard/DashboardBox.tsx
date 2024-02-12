@@ -1,23 +1,10 @@
 import React from "react"
 
-import Link from "next/link"
-import { useRouter } from "next/navigation"
-
-import MessageIcon from "@mui/icons-material/Message"
-import SubtitlesOffIcon from "@mui/icons-material/SubtitlesOff"
-import InsertDriveFileIcon from "@mui/icons-material/InsertDriveFile"
-import PostAddIcon from "@mui/icons-material/PostAdd"
 import { Box, Typography } from "@mui/material"
-import styled from "@emotion/styled"
 // import DashboardNew from "./components/shared/DashboardNew"
 import CircularProgress from "@mui/material/CircularProgress"
-import { useEffect } from "react"
-import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet"
 import { BoxProps } from "@mui/material/Box"
 
-import LinearProgress, {
-  linearProgressClasses,
-} from "@mui/material/LinearProgress"
 type Props = {
   filecount?: number
   filetype?: string | any

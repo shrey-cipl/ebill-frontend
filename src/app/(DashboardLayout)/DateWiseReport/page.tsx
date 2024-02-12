@@ -6,24 +6,15 @@ import { DataGrid, GridColDef, GridToolbar } from "@mui/x-data-grid"
 import {
   Box,
   Button,
-  MenuItem,
-  FormControl,
   Select,
   Stack,
-  InputLabel,
   Typography,
   TextField,
 } from "@mui/material"
 import axiosApi from "@/Util/axiosApi"
 import { styled } from "@mui/material/styles"
-import Table from "@mui/material/Table"
-import TableBody from "@mui/material/TableBody"
 import TableCell from "@mui/material/TableCell"
-import TableContainer from "@mui/material/TableContainer"
-import TableHead from "@mui/material/TableHead"
-import TableRow from "@mui/material/TableRow"
 import { useAuth } from "@/context/JWTContext/AuthContext.provider"
-import CustomGrid from "../components/CustomGrid"
 import FilterTable from "../components/filterTable/FilterTable"
 import {
   InputBillType,
@@ -34,25 +25,6 @@ const DashboardNew = dynamic(() => import("../components/shared/DashboardNew"))
 const PageContainer = dynamic(
   () => import("../components/container/PageContainer")
 )
-
-const TABLE_HEADERS = [
-  "Diary No.",
-  "Name",
-  "Type",
-  "Admissible Amount",
-  "Sanctioned Amount",
-  "Status",
-]
-
-const TabelCellStyled = styled(TableCell)(() => ({
-  fontSize: "12px",
-  padding: "10px 10px",
-  wordBreak: "break-all",
-}))
-
-const StyledSelect = styled(Select)(({ theme }) => ({
-  display: "block",
-}))
 
 const DateWiseReport = () => {
   const auth: any = useAuth()

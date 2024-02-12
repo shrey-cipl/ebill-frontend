@@ -1,4 +1,5 @@
 "use client"
+import { useEffect, useState } from "react"
 
 import dynamic from "next/dynamic"
 import PageContainer from "../components/container/PageContainer"
@@ -11,17 +12,8 @@ import PendingActionsIcon from "@mui/icons-material/PendingActions"
 
 import { useAuth } from "@/context/JWTContext/AuthContext.provider"
 
-import { OverviewTotalProfit } from "../components/OverviewTotalProfit"
 import { OverviewSales } from "../components/dashboard/Overview"
 import axiosApi from "@/Util/axiosApi"
-import { useEffect, useState } from "react"
-
-const urls = [
-  `/api/claim/getAll`,
-  `/api/claim/getall?pendingBranch=pending`,
-  `/api/claim/getall?currentStatus=Closed`,
-  `/api/claim/getall?billType=bank`,
-]
 
 const DashboardBox = dynamic(
   () => import("../components/dashboard/DashboardBox")

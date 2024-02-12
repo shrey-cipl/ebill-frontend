@@ -6,7 +6,7 @@ import { useEffect, useState } from "react"
 
 import RefreshIcon from "@mui/icons-material/Refresh"
 
-import Snackbar, { SnackbarOrigin } from "@mui/material/Snackbar"
+import Snackbar from "@mui/material/Snackbar"
 import {
   Alert,
   Box,

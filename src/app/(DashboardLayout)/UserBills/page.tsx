@@ -2,14 +2,11 @@
 import { useEffect, useState, useContext } from "react"
 
 import dayjs from "dayjs"
-import Button from "@mui/material/Button"
 import Typography from "@mui/material/Typography"
 import { styled } from "@mui/system"
 import { useRouter } from "next/navigation"
 
-import Link from "next/link"
-
-import { DataGrid, GridColDef, GridToolbar } from "@mui/x-data-grid"
+import { GridColDef } from "@mui/x-data-grid"
 import DownloadIcon from "@mui/icons-material/Download"
 import GppBadIcon from "@mui/icons-material/GppBad"
 import axiosApi from "@/Util/axiosApi"
@@ -18,13 +15,10 @@ import PageContainer from "@/app/(DashboardLayout)/components/container/PageCont
 import DashboardNew from "@/app/(DashboardLayout)/components/shared/DashboardNew"
 import CustomModal from "@/app/(DashboardLayout)/components/CustomModal/CustomModal"
 
-import {
-  CosmeticContext,
-  useCosmetic,
-} from "@/context/CosmeticContext/UseCosmetic.Provider"
-import { Box, CircularProgress } from "@mui/material"
+import { CosmeticContext } from "@/context/CosmeticContext/UseCosmetic.Provider"
+
+import { BILL_MODES } from "@/config/constants"
 import CustomGrid from "../components/CustomGrid"
-const BILL_MODES = { add: "add_bill", update: "update_bill" }
 
 const BoxWrapper = styled("div")(() => ({
   display: "grid",
