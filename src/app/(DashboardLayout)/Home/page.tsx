@@ -28,54 +28,31 @@ const DashboardBox = dynamic(
 )
 
 const Dashboard = () => {
-  const [fileStatus, setFileStatus] = useState<any>([])
-  const auth: any = useAuth()
+  const [dashboardData, setDashboardData] = useState<any>([])
+  const authCtx: any = useAuth()
 
-  // useEffect(() => {
-  //   getReportsbyfilter()
-  //   async function getReportsbyfilter() {
-  //     try {
-  //       // Define an array of URLs
-  //       const urls = [
-  //         `/api/claim/getAll`,
-  //         `/api/claim/getall?pendingBranch=pending`,
-  //         `/api/claim/getall?currentStatus=Closed`,
-  //         `/api/claim/getall?billType=bank`,
-  //       ]
+  useEffect(() => {
+    const getData = async () => {
+      const config = {
+        url: `/api/user/getDashboardData`,
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          authorization: `Bearer ${authCtx.user.token}`,
+        },
+      }
 
-  //       // Make all requests concurrently
-  //       const responses = await Promise.all(
-  //         urls.map(async (url) => {
-  //           const method = "GET"
-  //           const headers = {
-  //             "Content-Type": "application/json",
-  //             authorization: `Bearer ${auth.user.token}`,
-  //           }
-  //           try {
-  //             const res = await axiosApi(url, method, headers)
-  //             // Process the response data
-  //             if (res.success !== true || !res) {
-  //               console.log("Bad Request")
-  //             } else {
-  //               console.log("200")
-  //               // Do something with the response data if needed
-  //             }
-  //             return res?.data?.length
-  //           } catch (error) {
-  //             console.error("Error fetching ", error)
-  //             // return 0 // Or handle error in any way you prefer
-  //           }
-  //         })
-  //       )
+      try {
+        const res = await axiosApi(config.url, config.method, config.headers)
+        setDashboardData(res.data)
+      } catch (err: any) {
+        console.log(err.message)
+      }
+    }
 
-  //       // Update state after all requests are completed
-  //       setFileStatus((prev: any) => [...prev, ...responses])
-  //     } catch (error) {
-  //       console.error("Error fetching ", error)
-  //     }
-  //   }
-  // }, [auth])
-  console.log(fileStatus)
+    getData()
+  }, [authCtx.user.token])
+
   return (
     <PageContainer
       title="Welcome to Dashboard"
@@ -97,43 +74,43 @@ const Dashboard = () => {
             }}
           >
             <DashboardBox
-              filecount={15}
+              filecount={dashboardData.claimCount}
               filetype="Total file(s)"
               iconcolor="#fa5c80"
               backgroundcolor="#fff"
               Icon={PostAddIcon}
             />
             <DashboardBox
-              filecount={5}
+              filecount={dashboardData.pendingClaimsCount}
               filetype="Pending file(s)"
               iconcolor="#fe987f"
               backgroundcolor="#fff"
               Icon={PendingActionsIcon}
             />
             <DashboardBox
-              filecount={4}
+              filecount={dashboardData.closedClaimsCount}
               filetype="Closed file(s)"
               iconcolor="#3cd755"
               backgroundcolor="#fff"
               Icon={SubtitlesOffIcon}
             />
             <DashboardBox
-              filecount={1}
+              filecount={dashboardData.forwardToBankCount}
               filetype="Fwd.To Bank"
               iconcolor="#bf83ff"
               backgroundcolor="#fff"
               Icon={AccountBalanceIcon}
             />
             <DashboardBox
-              filecount={6}
+              filecount={dashboardData.billCount}
               filetype="Total Bills"
               iconcolor="#bf83ff"
               backgroundcolor="#fff"
               Icon={AccountBalanceIcon}
             />
             <DashboardBox
-              filecount={4}
-              filetype="Bills not Linked"
+              filecount={dashboardData.unlinkedBillsCount}
+              filetype="Unlinked Bills"
               iconcolor="#bf83ff"
               backgroundcolor="#fff"
               Icon={AccountBalanceIcon}
