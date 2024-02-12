@@ -75,42 +75,42 @@ const Dashboard = () => {
           >
             <DashboardBox
               filecount={dashboardData.claimCount}
-              filetype="Total file(s)"
+              filetype="Total Claim(s)"
               iconcolor="#fa5c80"
               backgroundcolor="#fff"
               Icon={PostAddIcon}
             />
             <DashboardBox
               filecount={dashboardData.pendingClaimsCount}
-              filetype="Pending file(s)"
+              filetype="Pending Claim(s)"
               iconcolor="#fe987f"
               backgroundcolor="#fff"
               Icon={PendingActionsIcon}
             />
             <DashboardBox
               filecount={dashboardData.closedClaimsCount}
-              filetype="Closed file(s)"
+              filetype="Closed Claim(s)"
               iconcolor="#3cd755"
               backgroundcolor="#fff"
               Icon={SubtitlesOffIcon}
             />
             <DashboardBox
               filecount={dashboardData.forwardToBankCount}
-              filetype="Fwd.To Bank"
+              filetype="Fwd.To Bank Claim(s)"
               iconcolor="#bf83ff"
               backgroundcolor="#fff"
               Icon={AccountBalanceIcon}
             />
             <DashboardBox
               filecount={dashboardData.billCount}
-              filetype="Total Bills"
+              filetype="Total Bill(s)"
               iconcolor="#bf83ff"
               backgroundcolor="#fff"
               Icon={AccountBalanceIcon}
             />
             <DashboardBox
               filecount={dashboardData.unlinkedBillsCount}
-              filetype="Unlinked Bills"
+              filetype="Unlinked Bill(s)"
               iconcolor="#bf83ff"
               backgroundcolor="#fff"
               Icon={AccountBalanceIcon}
