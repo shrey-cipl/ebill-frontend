@@ -278,6 +278,12 @@ const ManageFormer = () => {
     }
   }
 
+  const handlePreventDefault = (e: any, id: any) => {
+    if (id === "confirmBankAccountNumber") {
+      e.preventDefault()
+    }
+  }
+
   const pageTitle =
     paramMode === FORMER_MODES.add ? "Add Former" : `Edit Former`
 
@@ -431,6 +437,10 @@ const ManageFormer = () => {
                               value={formerFields[former.id]}
                               onChange={handleFieldChange}
                               sx={{ width: "100%" }}
+                              onCopy={(e) => handlePreventDefault(e, former.id)}
+                              onPaste={(e) =>
+                                handlePreventDefault(e, former.id)
+                              }
                               disabled={
                                 former.id === "bankName" ||
                                 former.id === "branchName"
