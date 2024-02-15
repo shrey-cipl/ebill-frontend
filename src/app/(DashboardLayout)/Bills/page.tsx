@@ -19,6 +19,7 @@ import { useAuth } from "@/context/JWTContext/AuthContext.provider"
 import DownloadIcon from "@mui/icons-material/Download"
 import { BILL_MODES } from "@/config/constants"
 import CustomGrid from "../components/CustomGrid"
+import { exportDataToExcel, exportDataToPDF } from "@/Util/commonFunctions"
 
 const BoxWrapper = styled("div")(() => ({
   display: "grid",
@@ -190,6 +191,18 @@ const Bills = () => {
     },
   ]
 
+  const handleExportToPDF = () => {
+    const dataToExport = billList.map((billItem: any) => ({
+      "Diary No.": billItem.diaryNumber,
+      "File No.": billItem.fileNumber,
+      "Bill Name": billItem.name,
+      "Bill Type": billItem.billType,
+      "Claimed Amt.": billItem.totalClaimedAmount,
+    }))
+
+    exportDataToPDF(dataToExport, "Bills")
+  }
+
   return (
     <PageContainer title="Bills" description="List of all the bills">
       <DashboardNew title="Bills" titleVariant="h5">
@@ -205,6 +218,7 @@ const Bills = () => {
             >
               Add New
             </Button>
+            <button onClick={handleExportToPDF}>PDF</button>
           </div>
           <CustomGrid
             rows={billList}

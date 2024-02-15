@@ -27,6 +27,7 @@
     "dayjs": "^1.11.9",
     "eslint": "8.41.0",
     "eslint-config-next": "^14.0.4",
+    "file-saver": "^2.0.5",
     "jsonwebtoken": "^9.0.1",
     "jwt-decode": "^3.1.2",
     "lodash": "^4.17.21",
@@ -40,7 +41,10 @@
     "swr": "^2.2.4",
     "typescript": "5.0.4",
     "apexcharts": "3.44.2",
-    "react-apexcharts": "1.4.1"
+    "react-apexcharts": "1.4.1",
+    "xlsx": "^0.18.5",
+    "jspdf": "^2.5.1",
+    "jspdf-autotable": "^3.8.1"
   },
   "devDependencies": {
     "@types/jsonwebtoken": "^9.0.2",

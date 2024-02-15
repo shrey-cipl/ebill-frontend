@@ -1,3 +1,8 @@
+import { saveAs } from "file-saver"
+import * as XLSX from "xlsx"
+import jsPDF from "jspdf"
+import "jspdf-autotable"
+
 import { VALIDATION_TYPE } from "@/config/constants"
 
 // Checks if the data passes the regular expression
@@ -163,4 +168,84 @@ const validateOnSubmit = (dataToValidate, validationState) => {
   }
 }
 
-export { validateOnSubmit }
+const exportDataToExcel = (data, fileName) => {
+  const worksheet = XLSX.utils.json_to_sheet(data)
+  const workbook = XLSX.utils.book_new()
+  XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1")
+  const excelBuffer = XLSX.write(workbook, { bookType: "xlsx", type: "array" })
+  saveAs(
+    new Blob([excelBuffer], { type: "application/octet-stream" }),
+    fileName + ".xlsx"
+  )
+}
+
+const exportDataToPDF = (data, fileName) => {
+  const doc = new jsPDF()
+  // Define header function
+  const header = function (data) {
+    doc.setFontSize(18)
+    doc.setTextColor(40)
+    doc.setFontStyle("normal")
+    // Main title
+    doc.text("Main Header", data.settings.margin.left, 15)
+    // Subtitle
+    doc.setFontSize(14)
+    doc.text(fileName, data.settings.margin.left, 25)
+  }
+
+  // Define footer function
+  const footer = function (data) {
+    const pageCount = doc.internal.getNumberOfPages()
+    // Page number
+    doc.text(
+      "Page " + data.pageNumber + " of " + pageCount,
+      data.settings.margin.left,
+      doc.internal.pageSize.height - 10
+    )
+    // System IP and datetime
+    doc.text(
+      `   Date: ${getCurrentDateTime()}`,
+      10,
+      doc.internal.pageSize.height - 10
+    )
+  }
+
+  // Assign header and footer functions to autoTable options
+  const options = {
+    beforePageContent: header,
+    afterPageContent: footer,
+  }
+
+  // Convert data to PDF format
+  const tableData = data.map((obj) => Object.values(obj))
+  const headers = Object.keys(data[0])
+
+  // Add table to PDF using autoTable
+  doc.autoTable({
+    head: [headers],
+    body: tableData,
+    margin: { top: 60 }, // Adjust margin to make space for header
+    startY: 70, // Start table below the custom header
+    beforePageContent: function (data) {
+      const textWidth = doc.getTextWidth(fileName) // Get the width of the text
+      const textX = (doc.internal.pageSize.getWidth() - textWidth) / 2 // Calculate the X coordinate to center the text horizontally
+      const textY = 15 // Y coordinate for the header text
+      doc.setFontSize(18)
+      doc.setTextColor(40)
+      doc.setFont("helvetica", "normal") // Set font and style
+      doc.text(fileName, textX, textY) // Render header text
+    },
+    afterPageContent: footer, // Render footer
+  })
+
+  // Save PDF file
+  doc.save(fileName + ".pdf")
+}
+
+// Function to get current datetime
+function getCurrentDateTime() {
+  const now = new Date()
+  return now.toLocaleString()
+}
+
+export { exportDataToExcel, exportDataToPDF, validateOnSubmit }
