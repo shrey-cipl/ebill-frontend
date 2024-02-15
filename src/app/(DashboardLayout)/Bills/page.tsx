@@ -203,6 +203,18 @@ const Bills = () => {
     exportDataToPDF(dataToExport, "Bills")
   }
 
+  const handleExportToExcel = () => {
+    const dataToExport = billList.map((billItem: any) => ({
+      "Diary No.": billItem.diaryNumber,
+      "File No.": billItem.fileNumber,
+      "Bill Name": billItem.name,
+      "Bill Type": billItem.billType,
+      "Claimed Amt.": billItem.totalClaimedAmount,
+    }))
+
+    exportDataToExcel(dataToExport, "Bills")
+  }
+
   return (
     <PageContainer title="Bills" description="List of all the bills">
       <DashboardNew title="Bills" titleVariant="h5">
@@ -219,6 +231,7 @@ const Bills = () => {
               Add New
             </Button>
             <button onClick={handleExportToPDF}>PDF</button>
+            <button onClick={handleExportToExcel}>Excel</button>
           </div>
           <CustomGrid
             rows={billList}
