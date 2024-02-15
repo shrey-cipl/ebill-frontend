@@ -180,7 +180,9 @@ const exportDataToExcel = (data, fileName) => {
 }
 
 const exportDataToPDF = (data, fileName) => {
-  const doc = new jsPDF()
+  const doc = new jsPDF({
+    orientation: "landscape",
+  })
   // Define header function
   const header = function (data) {
     doc.setFontSize(18)
@@ -205,7 +207,7 @@ const exportDataToPDF = (data, fileName) => {
     // System IP and datetime
     doc.text(
       `   Date: ${getCurrentDateTime()}`,
-      10,
+      100,
       doc.internal.pageSize.height - 10
     )
   }
@@ -225,7 +227,7 @@ const exportDataToPDF = (data, fileName) => {
     head: [headers],
     body: tableData,
     margin: { top: 60 }, // Adjust margin to make space for header
-    startY: 70, // Start table below the custom header
+    startY: 20, // Start table below the custom header
     beforePageContent: function (data) {
       const textWidth = doc.getTextWidth(fileName) // Get the width of the text
       const textX = (doc.internal.pageSize.getWidth() - textWidth) / 2 // Calculate the X coordinate to center the text horizontally
