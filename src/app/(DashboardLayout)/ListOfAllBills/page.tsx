@@ -19,7 +19,7 @@ const ListOfAllBills = () => {
 
   const handleFetchBills = async () => {
     const config = {
-      url: `/api/claim/getall`,
+      url: `/api/claim/getall?claimAccesedByUser=${authCtx?.user?.data?.role?.name}`,
       method: "GET",
       headers: {
         "Content-Type": "application/json",

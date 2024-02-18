@@ -80,8 +80,8 @@ const Header = ({ toggleMobileSidebar }: ItemType) => {
                 sx={{ fontWeight: "900", fontSize: "20px", color: "black" }}
               >
                 {role
-                  ? "Bill Monitoring System Admin Portal"
-                  : "Bill Monitoring System exchairman and members Portal"}
+                  ? "Bill Monitoring System (Admin Portal)"
+                  : "Bill Monitoring System (Exchairman and members Portal)"}
               </Typography>
             </Box>
           </Box>
