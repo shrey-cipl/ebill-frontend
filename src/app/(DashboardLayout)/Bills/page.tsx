@@ -43,7 +43,7 @@ const Bills = () => {
 
   const handleFetchBills = async () => {
     const config = {
-      url: `/api/claim/getall/lastForwardedTo=${authCtx?.user?.data?.role?.name}`,
+      url: `/api/claim/getall?lastForwardedTo=${authCtx?.user?.data?.role?.name}`,
       method: "GET",
       headers: {
         "Content-Type": "application/json",

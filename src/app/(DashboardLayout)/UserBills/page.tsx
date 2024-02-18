@@ -266,43 +266,7 @@ const UserBills = () => {
               return ""
             }}
           />
-          {selectedBill.nodata ? (
-            <CustomModal
-              modalState={modalState}
-              setModalState={setModalState}
-              altBtnText="Create"
-              altBtnFn={() =>
-                router.push(
-                  `/Bills/ManageBill?id_from_userpage=${selectedBill.id}&mode=${BILL_MODES.add}`
-                )
-              }
-            >
-              <BoxWrapper
-                sx={{
-                  // justifyContent:"center",
-                  alignItems: "center",
-                  mt: 9,
-                  // border:"2px solid black"
-                }}
-              >
-                <GppBadIcon
-                  sx={{
-                    fontSize: 70,
-                    ml: 12,
-                    color: "#921a9e",
-                  }}
-                />
-                <Typography
-                  variant="h4"
-                  sx={{
-                    mr: 5,
-                  }}
-                >
-                  No Claim Found
-                </Typography>
-              </BoxWrapper>
-            </CustomModal>
-          ) : (
+          {selectedBill.nodata ? null : (
             <>
               <CustomModal
                 modalState={modalState}
