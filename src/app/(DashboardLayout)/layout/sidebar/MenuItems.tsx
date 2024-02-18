@@ -422,13 +422,13 @@ const Menuitems: any = {
       href: "/UserBills",
       present: "yes",
     },
-    // {
-    //   id: uniqueId(),
-    //   title: "Reset Bill Status",
-    //   icon: RotateLeftIcon,
-    //   href: "/ResetBillStatus",
-    //   present: "no",
-    // },
+    {
+      id: uniqueId(),
+      title: "Reset Bill Status",
+      icon: EditNoteIcon,
+      href: "/ResetOfAllBills",
+      present: "no",
+    },
     // {
     //   id: uniqueId(),
     //   title: "Reports",
