@@ -102,6 +102,7 @@ const ResetOfAllBills = () => {
           <Typography
             sx={{
               color: "blue",
+              cursor: "pointer",
             }}
             onClick={async () => {
               const config = {
