@@ -9,7 +9,7 @@ import {
   Typography,
 } from "@mui/material"
 import PropTypes from "prop-types"
-
+import { useAuth } from "../../../../context/JWTContext/AuthContext.provider"
 // components
 import Profile from "./Profile"
 
@@ -20,7 +20,7 @@ interface ItemType {
 const Header = ({ toggleMobileSidebar }: ItemType) => {
   // const lgUp = useMediaQuery((theme) => theme.breakpoints.up('lg'));
   // const lgDown = useMediaQuery((theme) => theme.breakpoints.down('lg'));
-
+  const auth: any = useAuth()
   const AppBarStyled = styled(AppBar)(({ theme }) => ({
     boxShadow: "none",
     background: theme.palette.background.paper,
@@ -35,6 +35,8 @@ const Header = ({ toggleMobileSidebar }: ItemType) => {
     color: theme.palette.text.secondary,
   }))
 
+  const role: any = auth?.user?.data?.role?.name
+  const mail: any = auth?.user?.data?.email
   return (
     <AppBarStyled position="sticky" color="default">
       <ToolbarStyled
@@ -77,7 +79,9 @@ const Header = ({ toggleMobileSidebar }: ItemType) => {
               <Typography
                 sx={{ fontWeight: "900", fontSize: "20px", color: "black" }}
               >
-                Bill Monitoring System
+                {role
+                  ? "Bill Monitoring System Admin Portal"
+                  : "Bill Monitoring System exchairman and members Portal"}
               </Typography>
             </Box>
           </Box>

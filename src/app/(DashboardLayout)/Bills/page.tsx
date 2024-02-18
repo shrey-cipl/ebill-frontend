@@ -216,8 +216,8 @@ const Bills = () => {
   }
 
   return (
-    <PageContainer title="Bills" description="List of all the bills">
-      <DashboardNew title="Bills" titleVariant="h5">
+    <PageContainer title="Claims" description="List of all the bills">
+      <DashboardNew title="Claims" titleVariant="h5">
         <>
           <div style={{ display: "flex", justifyContent: "flex-end" }}>
             <Button
