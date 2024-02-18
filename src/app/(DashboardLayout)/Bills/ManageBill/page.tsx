@@ -234,7 +234,7 @@ const ManageBill = () => {
   useEffect(() => {
     const getBills = async () => {
       const config = {
-        url: `/api/bill/getAll`,
+        url: `/api/bill/getAll/lastForwardedTo=${authCtx?.user?.data?.role?.name}`,
         method: "GET",
         headers: {
           "Content-Type": "application/json",
