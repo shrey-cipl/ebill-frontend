@@ -219,7 +219,9 @@ const Bills = () => {
     <PageContainer title="Claims" description="List of all the bills">
       <DashboardNew title="Claims" titleVariant="h5">
         <>
-          <div style={{ display: "flex", justifyContent: "flex-end" }}>
+          <div
+            style={{ display: "flex", justifyContent: "flex-end", gap: "5px" }}
+          >
             <Button
               sx={{ background: "#9C27B0" }}
               variant="contained"
@@ -230,8 +232,22 @@ const Bills = () => {
             >
               Add New
             </Button>
-            <button onClick={handleExportToPDF}>PDF</button>
-            <button onClick={handleExportToExcel}>Excel</button>
+            <Button
+              sx={{ background: "#9C27B0" }}
+              variant="contained"
+              size="small"
+              onClick={handleExportToPDF}
+            >
+              PDF
+            </Button>
+            <Button
+              sx={{ background: "#9C27B0" }}
+              variant="contained"
+              size="small"
+              onClick={handleExportToExcel}
+            >
+              Excel
+            </Button>
           </div>
           <CustomGrid
             rows={billList}
