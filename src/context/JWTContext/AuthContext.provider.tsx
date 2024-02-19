@@ -133,7 +133,13 @@ export default function AuthProvider({ children }: AuthProviderProps) {
         email,
         password,
       })
-
+      console.log(response.data.data.firstTimeLogin, "response")
+      if (response.data.data.firstTimeLogin) {
+        console.log()
+        router.push("/passwordReset")
+      } else {
+        router.push("/")
+      }
       const { token, data } = response.data
       localStorage.setItem("login", JSON.stringify(response.data))
       setSession(token)
@@ -146,7 +152,6 @@ export default function AuthProvider({ children }: AuthProviderProps) {
       })
 
       //  response;
-      return router.push("/")
     } catch (err: any) {
       //   console.log(err, "errrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr")
       // alert("Invalid email or invalid password please try again");
@@ -169,37 +174,37 @@ export default function AuthProvider({ children }: AuthProviderProps) {
     localStorage.removeItem("login")
   }
 
-  let logoutTimer: any
+  // let logoutTimer: any
 
-  function startLogoutTimer() {
-    logoutTimer = setTimeout(signOut, 30 * 60 * 1000)
-  }
+  // function startLogoutTimer() {
+  //   logoutTimer = setTimeout(signOut, 30 * 60 * 1000)
+  // }
 
-  function resetLogoutTimer() {
-    clearTimeout(logoutTimer)
-    startLogoutTimer()
-  }
+  // function resetLogoutTimer() {
+  //   clearTimeout(logoutTimer)
+  //   startLogoutTimer()
+  // }
 
-  const events = [
-    "load",
-    "mousemove",
-    "mousedown",
-    "click",
-    "scroll",
-    "keypress",
-  ]
+  // const events = [
+  //   "load",
+  //   "mousemove",
+  //   "mousedown",
+  //   "click",
+  //   "scroll",
+  //   "keypress",
+  // ]
 
-  useEffect(() => {
-    Object.values(events).forEach((item) => {
-      window.addEventListener(item, () => {
-        resetLogoutTimer
-      })
-    })
-  }, [])
+  // useEffect(() => {
+  //   Object.values(events).forEach((item) => {
+  //     window.addEventListener(item, () => {
+  //       resetLogoutTimer
+  //     })
+  //   })
+  // }, [])
 
   // document.addEventListener(events, resetLogoutTimer)
 
-  startLogoutTimer()
+  // startLogoutTimer()
   return (
     <AuthContext.Provider
       value={useMemo(
