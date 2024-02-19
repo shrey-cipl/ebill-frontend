@@ -104,7 +104,6 @@ let cachedTableData: any
 // Used to later store selectedBill id
 let selectedBillId: any
 let selectedFormerId: any
-let billFilePath: any
 const backendBaseUrl = process.env.NEXT_PUBLIC_BACKEND_BASE_URL
 
 const ManageBill = () => {
@@ -129,8 +128,8 @@ const ManageBill = () => {
 
   // Validation States
   const [validations, setValidations] = useState(initialValidationState)
-  const [validationsUpdateField, setValidationsUpdateField] = useState(
-    initialUpdateModeValidationState
+  const [validationsUpdateMode, setValidationsUpdateMode] = useState(
+    initialValidationState
   )
 
   const router = useRouter()
@@ -165,7 +164,7 @@ const ManageBill = () => {
             claimPeriodTo,
             totalClaimedAmount,
             totalAdmissibleAmount,
-            // maxAdmissibleAmount,
+            maxAdmissibleAmount,
             currentStatus,
             lastForwardedTo,
             lastForwardedBy,
@@ -195,10 +194,11 @@ const ManageBill = () => {
             claimPeriodTo: dayjs(claimPeriodTo).format("YYYY-MM-DD"),
             totalClaimedAmount,
             totalAdmissibleAmount,
-            // maxAdmissibleAmount,
+            maxAdmissibleAmount,
             currentStatus,
             lastForwardedTo,
             currentremark,
+            billFilePath: bill.billFilePath,
           })
 
           setUpdateModeFields({
@@ -208,8 +208,6 @@ const ManageBill = () => {
               "YYYY-MM-DD"
             ),
           })
-
-          billFilePath = bill.billFilePath
 
           cachedUpdateModeField = {
             sanctionedAmount,
@@ -298,30 +296,30 @@ const ManageBill = () => {
     e.preventDefault()
 
     // For only add_mode fields
-    const { allValidationsPass, updatedValidationState } = validateOnSubmit(
-      dataFields,
-      validations
-    )
+    // const { allValidationsPass, updatedValidationState } = validateOnSubmit(
+    //   dataFields,
+    //   validations
+    // )
 
-    setValidations(updatedValidationState)
+    // setValidations(updatedValidationState)
 
-    if (!allValidationsPass) {
-      return
-    }
+    // if (!allValidationsPass) {
+    //   return
+    // }
 
     // For only update_mode fields
-    if (paramMode === BILL_MODES.update) {
-      const { allValidationsPass, updatedValidationState } = validateOnSubmit(
-        updateModeFields,
-        validationsUpdateField
-      )
+    // if (paramMode === BILL_MODES.update) {
+    //   const { allValidationsPass, updatedValidationState } = validateOnSubmit(
+    //     updateModeFields,
+    //     validationsUpdateMode
+    //   )
 
-      setValidationsUpdateField(updatedValidationState)
+    //   setValidationsUpdateMode(updatedValidationState)
 
-      if (!allValidationsPass) {
-        return
-      }
-    }
+    //   if (!allValidationsPass) {
+    //     return
+    //   }
+    // }
 
     try {
       let res
@@ -458,10 +456,10 @@ const ManageBill = () => {
         name: selectedBill.former[0].name,
         email: selectedBill.former[0].email,
         phone: selectedBill.former[0].phone,
+        billFilePath: selectedBill.billFilePath,
         // former: empId,
       }))
-
-      billFilePath = selectedBill.billFilePath
+      console.log(selectedBill, "selectedBill")
     } else {
       // For other fields, directly set the value
       setDataFields((prevState: any) => ({
@@ -799,7 +797,7 @@ const ManageBill = () => {
               >
                 Cancel
               </Button>
-              {billFilePath && (
+              {dataFields?.billFilePath && (
                 <Button
                   variant="contained"
                   sx={{
@@ -817,7 +815,7 @@ const ManageBill = () => {
                     }}
                   />
                   <a
-                    href={`${backendBaseUrl}/uploads/${billFilePath}`}
+                    href={`${backendBaseUrl}/uploads/${dataFields.billFilePath}`}
                     target="_blank"
                     rel="noopener noreferrer"
                     style={{

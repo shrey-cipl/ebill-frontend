@@ -20,109 +20,42 @@ function DashboardBox({
   iconcolor,
   Icon,
 }: Props) {
-  function Item(props: BoxProps) {
-    const { sx, ...other } = props
-    return (
+  return (
+    <Box
+      sx={{
+        backgroundColor: backgroundcolor,
+        boxShadow: "rgba(0, 0, 0, 0.1) 0px 4px 12px",
+        padding: "20px 10px",
+      }}
+    >
       <Box
         sx={{
-          p: 1,
-          // m: 1,
-          bgcolor: (theme) =>
-            theme.palette.mode === "dark" ? "#101010" : "grey.100",
-          color: (theme) =>
-            theme.palette.mode === "dark" ? "grey.300" : "grey.800",
-          border: "1px solid",
-          borderColor: (theme) =>
-            theme.palette.mode === "dark" ? "grey.800" : "grey.300",
-          borderRadius: 2,
-          fontSize: "0.875rem",
-          fontWeight: "700",
-          ...sx,
-        }}
-        {...other}
-      />
-    )
-  }
-
-  return (
-    <>
-      <Item
-        sx={{
-          display: "flex",
-          py: 3,
-          // width: "208px",
-          height: "80px",
-          alignItems: "center",
-          // border: "2px solid black",
-          backgroundColor: backgroundcolor,
-          boxShadow: "rgba(0, 0, 0, 0.1) 0px 4px 12px",
+          color: "white",
+          backgroundColor: iconcolor,
+          display: "inline-flex",
+          // alignItems: "center",
+          padding: "5px",
+          borderRadius: "5px",
         }}
       >
-        <Box
-          sx={{
-            width: "100%",
-            // border: "1px solid black",
-          }}
-        >
-          {" "}
-          <Box
-            sx={{
-              width: "fit-content",
-
-              p: 1,
-
-              display: "flex",
-              justifyContent: "center",
-              m: "auto",
-              alignItems: "center",
-              // border: "1px solid black",
-              borderRadius: "50% ",
-              backgroundColor: iconcolor,
-              boxShadow:
-                "rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px",
-              color: "white",
-            }}
-          >
-            <Icon />
-          </Box>
-        </Box>
-
-        <Box
-          sx={{
-            width: "100%",
-            textAlign: "center",
-            alignItems: "center",
-            mt: 1.5,
-            // border: "1px solid black",
-          }}
-        >
-          <Typography
-            sx={{
-              fontSize: "32px",
-              // p: 2,
-              pb: 1.5,
-              fontWeight: "800",
-            }}
-          >
-            {filecount != undefined ? (
-              filecount
-            ) : (
-              <CircularProgress color="success" />
-            )}
-          </Typography>
-          <Typography
-            sx={{
-              fontSize: "16px",
-              pl: 1,
-              textAlign: "center",
-            }}
-          >
-            {" "}
-            {filetype}
-          </Typography>
-        </Box>
-      </Item>
-    </>
+        <Icon />
+      </Box>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          borderBottom: `4px solid ${iconcolor}`,
+          paddingBottom: "10px",
+          margin: "35px 0 0 0",
+        }}
+      >
+        <p style={{ fontWeight: 500, margin: 0, padding: 0 }}>{filetype}</p>
+        <p style={{ fontWeight: 500, fontSize: "30px", margin: 0, padding: 0 }}>
+          {filecount}
+        </p>
+      </div>
+    </Box>
   )
 }
 
