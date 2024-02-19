@@ -8,6 +8,11 @@ import AccessTimeIcon from "@mui/icons-material/AccessTime"
 import EventIcon from "@mui/icons-material/Event"
 import StarBorderPurple500Icon from "@mui/icons-material/StarBorderPurple500"
 import GroupIcon from "@mui/icons-material/Group"
+import { useEffect, useState } from "react"
+import { useAuth } from "@/context/JWTContext/AuthContext.provider"
+import axiosApi from "@/Util/axiosApi"
+
+// const [userBillcheck, setUserBillcheck] = useState()
 
 const Menuitems: any = {
   "Joint Secretary Admin": [
@@ -73,13 +78,13 @@ const Menuitems: any = {
       href: "/ListOfAllBills",
       present: "no",
     },
-    {
-      id: uniqueId(),
-      title: "User Bills",
-      icon: EditNoteIcon,
-      href: "/UserBills",
-      present: "yes",
-    },
+    // {
+    //   id: uniqueId(),
+    //   title: "User Bills",
+    //   icon: EditNoteIcon,
+    //   href: "/UserBills",
+    //   present: "yes",
+    // },
     {
       id: uniqueId(),
       title: "Reset Bill Status",
@@ -187,13 +192,13 @@ const Menuitems: any = {
       href: "/ListOfAllBills",
       present: "no",
     },
-    {
-      id: uniqueId(),
-      title: "User Bills",
-      icon: EditNoteIcon,
-      href: "/UserBills",
-      present: "yes",
-    },
+    // {
+    //   id: uniqueId(),
+    //   title: "User Bills",
+    //   icon: EditNoteIcon,
+    //   href: "/UserBills",
+    //   present: "yes",
+    // },
     {
       id: uniqueId(),
       title: "Reset Bill Status",
@@ -301,13 +306,7 @@ const Menuitems: any = {
       href: "/ListOfAllBills",
       present: "no",
     },
-    {
-      id: uniqueId(),
-      title: "User Bills",
-      icon: EditNoteIcon,
-      href: "/UserBills",
-      present: "yes",
-    },
+
     {
       id: uniqueId(),
       title: "Reset Bill Status",
@@ -415,20 +414,14 @@ const Menuitems: any = {
       href: "/ListOfAllBills",
       present: "no",
     },
-    {
-      id: uniqueId(),
-      title: "User Bills",
-      icon: EditNoteIcon,
-      href: "/UserBills",
-      present: "yes",
-    },
-    {
-      id: uniqueId(),
-      title: "Reset Bill Status",
-      icon: EditNoteIcon,
-      href: "/ResetOfAllBills",
-      present: "no",
-    },
+
+    // {
+    //   id: uniqueId(),
+    //   title: "Reset Bill Status",
+    //   icon: EditNoteIcon,
+    //   href: "/ResetOfAllBills",
+    //   present: "no",
+    // },
     // {
     //   id: uniqueId(),
     //   title: "Reports",
@@ -529,13 +522,13 @@ const Menuitems: any = {
       href: "/ListOfAllBills",
       present: "no",
     },
-    {
-      id: uniqueId(),
-      title: "User Bills",
-      icon: EditNoteIcon,
-      href: "/UserBills",
-      present: "yes",
-    },
+    // {
+    //   id: uniqueId(),
+    //   title: "User Bills",
+    //   icon: EditNoteIcon,
+    //   href: "/UserBills",
+    //   present: "yes",
+    // },
     {
       id: uniqueId(),
       title: "Reset Bill Status",
@@ -643,13 +636,7 @@ const Menuitems: any = {
       href: "/ListOfAllBills",
       present: "no",
     },
-    {
-      id: uniqueId(),
-      title: "User Bills",
-      icon: EditNoteIcon,
-      href: "/UserBills",
-      present: "yes",
-    },
+
     {
       id: uniqueId(),
       title: "Reset Bill Status",
@@ -757,13 +744,7 @@ const Menuitems: any = {
       href: "/ListOfAllBills",
       present: "no",
     },
-    {
-      id: uniqueId(),
-      title: "User Bills",
-      icon: EditNoteIcon,
-      href: "/UserBills",
-      present: "yes",
-    },
+
     {
       id: uniqueId(),
       title: "Reset Bill Status",
@@ -871,13 +852,7 @@ const Menuitems: any = {
       href: "/ListOfAllBills",
       present: "no",
     },
-    {
-      id: uniqueId(),
-      title: "User Bills",
-      icon: EditNoteIcon,
-      href: "/UserBills",
-      present: "yes",
-    },
+
     // {
     //   id: uniqueId(),
     //   title: "Reset Bill Status",
@@ -986,13 +961,7 @@ const Menuitems: any = {
       href: "/ListOfAllBills",
       present: "no",
     },
-    {
-      id: uniqueId(),
-      title: "User Bills",
-      icon: EditNoteIcon,
-      href: "/UserBills",
-      present: "yes",
-    },
+
     {
       id: uniqueId(),
       title: "Reset Bill Status",
@@ -1100,13 +1069,7 @@ const Menuitems: any = {
       href: "/ListOfAllBills",
       present: "no",
     },
-    {
-      id: uniqueId(),
-      title: "User Bills",
-      icon: EditNoteIcon,
-      href: "/UserBills",
-      present: "yes",
-    },
+
     {
       id: uniqueId(),
       title: "Reset Bill Status",
@@ -1214,13 +1177,7 @@ const Menuitems: any = {
       href: "/ListOfAllBills",
       present: "no",
     },
-    {
-      id: uniqueId(),
-      title: "User Bills",
-      icon: EditNoteIcon,
-      href: "/UserBills",
-      present: "yes",
-    },
+
     {
       id: uniqueId(),
       title: "Reset Bill Status",
@@ -1328,13 +1285,7 @@ const Menuitems: any = {
       href: "/ListOfAllBills",
       present: "no",
     },
-    {
-      id: uniqueId(),
-      title: "User Bills",
-      icon: EditNoteIcon,
-      href: "/UserBills",
-      present: "yes",
-    },
+
     {
       id: uniqueId(),
       title: "Reset Bill Status",
@@ -1442,13 +1393,7 @@ const Menuitems: any = {
       href: "/ListOfAllBills",
       present: "no",
     },
-    {
-      id: uniqueId(),
-      title: "User Bills",
-      icon: EditNoteIcon,
-      href: "/UserBills",
-      present: "yes",
-    },
+
     {
       id: uniqueId(),
       title: "Reset Bill Status",
@@ -1556,13 +1501,7 @@ const Menuitems: any = {
       href: "/ListOfAllBills",
       present: "no",
     },
-    {
-      id: uniqueId(),
-      title: "User Bills",
-      icon: EditNoteIcon,
-      href: "/UserBills",
-      present: "yes",
-    },
+
     {
       id: uniqueId(),
       title: "Reset Bill Status",
@@ -1670,13 +1609,7 @@ const Menuitems: any = {
       href: "/ListOfAllBills",
       present: "no",
     },
-    {
-      id: uniqueId(),
-      title: "User Bills",
-      icon: EditNoteIcon,
-      href: "/UserBills",
-      present: "yes",
-    },
+
     {
       id: uniqueId(),
       title: "Reset Bill Status",
@@ -1784,13 +1717,7 @@ const Menuitems: any = {
       href: "/ListOfAllBills",
       present: "no",
     },
-    {
-      id: uniqueId(),
-      title: "User Bills",
-      icon: EditNoteIcon,
-      href: "/UserBills",
-      present: "yes",
-    },
+
     {
       id: uniqueId(),
       title: "Reset Bill Status",
@@ -1898,13 +1825,7 @@ const Menuitems: any = {
       href: "/ListOfAllBills",
       present: "no",
     },
-    {
-      id: uniqueId(),
-      title: "User Bills",
-      icon: EditNoteIcon,
-      href: "/UserBills",
-      present: "yes",
-    },
+
     {
       id: uniqueId(),
       title: "Reset Bill Status",
@@ -2012,13 +1933,7 @@ const Menuitems: any = {
       href: "/ListOfAllBills",
       present: "no",
     },
-    {
-      id: uniqueId(),
-      title: "User Bills",
-      icon: EditNoteIcon,
-      href: "/UserBills",
-      present: "yes",
-    },
+
     {
       id: uniqueId(),
       title: "Reset Bill Status",
@@ -2126,13 +2041,7 @@ const Menuitems: any = {
       href: "/ListOfAllBills",
       present: "no",
     },
-    {
-      id: uniqueId(),
-      title: "User Bills",
-      icon: EditNoteIcon,
-      href: "/UserBills",
-      present: "yes",
-    },
+
     {
       id: uniqueId(),
       title: "Reset Bill Status",
@@ -2203,4 +2112,4 @@ const Menuitems: any = {
 }
 // ViewBill
 
-export default Menuitems
+export { Menuitems }
