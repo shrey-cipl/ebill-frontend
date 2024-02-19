@@ -182,7 +182,7 @@ function ResetPassword() {
       }
 
       let res = await axios.post(
-        `${BASE_URL}/api/user/resetPassword`,
+        `${BASE_URL}/api/former/resetPassword`,
         {
           oldPassword: oldPass,
           password: pass,
