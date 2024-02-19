@@ -35,6 +35,7 @@ export default function RootLayout({
     <>
       {path === "/login" ||
       path === "/Forgot" ||
+      path === "/passwordReset" ||
       path === "/resetpassword" ||
       path === "/FormersLogin" ? (
         <>

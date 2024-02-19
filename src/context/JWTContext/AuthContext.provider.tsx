@@ -133,7 +133,13 @@ export default function AuthProvider({ children }: AuthProviderProps) {
         email,
         password,
       })
-
+      console.log(response.data.data.firstTimeLogin, "response")
+      if (response.data.data.firstTimeLogin) {
+        console.log()
+        router.push("/passwordReset")
+      } else {
+        router.push("/")
+      }
       const { token, data } = response.data
       localStorage.setItem("login", JSON.stringify(response.data))
       setSession(token)
@@ -146,7 +152,6 @@ export default function AuthProvider({ children }: AuthProviderProps) {
       })
 
       //  response;
-      return router.push("/")
     } catch (err: any) {
       //   console.log(err, "errrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr")
       // alert("Invalid email or invalid password please try again");

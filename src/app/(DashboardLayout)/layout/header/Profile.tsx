@@ -13,7 +13,7 @@ import {
 import { useAuth } from "../../../../context/JWTContext/AuthContext.provider"
 import { IconMail, IconUser } from "@tabler/icons-react"
 
-import Marquee from "react-fast-marquee";
+import Marquee from "react-fast-marquee"
 
 const Profile = () => {
   const [anchorEl2, setAnchorEl2] = useState(null)
@@ -27,15 +27,17 @@ const Profile = () => {
   }
 
   const handleLogout = async () => {
-
     router.push("/login")
     await auth.signOut()
+  }
+  const handleResetPassword = async () => {
+    router.push("/passwordReset")
   }
 
   const data: any = auth?.user?.data?.name
   const role: any = auth?.user?.data?.role?.name
-   const mail:any=auth?.user?.data?.email
-   const space :any="      "
+  const mail: any = auth?.user?.data?.email
+  const space: any = "      "
   return (
     <Box>
       <IconButton
@@ -93,23 +95,34 @@ const Profile = () => {
             }}
           >
             <Marquee>
-      <p>{role?role:mail}</p>
-      <Box sx={{
-        width:"40px"
-      }}></Box>
-         </Marquee>
-
+              <p>{role ? role : mail}</p>
+              <Box
+                sx={{
+                  width: "40px",
+                }}
+              ></Box>
+            </Marquee>
           </ListItemText>
         </MenuItem>
-        <Box mt={1} py={1} px={2}>
+        <Box py={1} px={2}>
           <Button
             variant="outlined"
             color="primary"
-            onClick={handleLogout}
+            onClick={handleResetPassword}
             fullWidth
           >
-            Logout
+            Reset Password
           </Button>
+          <Box mt={1} py={1}>
+            <Button
+              variant="outlined"
+              color="primary"
+              onClick={handleLogout}
+              fullWidth
+            >
+              Logout
+            </Button>
+          </Box>
         </Box>
       </Menu>
     </Box>
