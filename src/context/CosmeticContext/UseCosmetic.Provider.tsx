@@ -1,40 +1,46 @@
-import { createContext, useContext, useMemo ,useState } from "react";
-import axios from "../../config/axios";
-import { useAuth } from "../JWTContext/AuthContext.provider";
+import { createContext, useContext, useMemo, useState } from "react"
+import axios from "../../config/axios"
+import { useAuth } from "../JWTContext/AuthContext.provider"
 
 const initialCosmeticData = {
-  // Define your initial cosmetic-related functions here 
+  // Define your initial cosmetic-related functions here
   modalLoading: false, // Initial value for modal loading
   setModalLoading: (loading: boolean) => {},
-};
-
-export const CosmeticContext = createContext(initialCosmeticData);
-
-interface CosmeticContextProviderProps {
-  children: React.ReactNode;
+  billType: [],
+  setBillType: (prev: any) => {},
 }
 
-export const useCosmetic = () => useContext(CosmeticContext);
+export const CosmeticContext = createContext(initialCosmeticData)
+
+interface CosmeticContextProviderProps {
+  children: React.ReactNode
+}
+
+export const useCosmetic = () => useContext(CosmeticContext)
 
 function CosmeticContextProvider({ children }: CosmeticContextProviderProps) {
-  const auth = useAuth();
-  const [modalLoading, setModalLoading] = useState(false);
+  const auth = useAuth()
+  const [modalLoading, setModalLoading] = useState(false)
+  const [billType, setBillType] = useState<any>([])
   // Define your cosmetic-related functions here
-
+  console.log(billType)
   const globalCosmeticContextValue = useMemo(
-    () => ({
-      // Add your cosmetic-related functions here
-      modalLoading,
-      setModalLoading,
-    } as any),
-    [modalLoading]
-  );
+    () =>
+      ({
+        // Add your cosmetic-related functions here
+        modalLoading,
+        setModalLoading,
+        setBillType,
+        billType,
+      } as any),
+    [modalLoading, billType]
+  )
 
   return (
     <CosmeticContext.Provider value={globalCosmeticContextValue}>
       {children}
     </CosmeticContext.Provider>
-  );
+  )
 }
 
-export default CosmeticContextProvider;
+export default CosmeticContextProvider
