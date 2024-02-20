@@ -4,10 +4,10 @@ import { useEffect, useState, useContext } from "react"
 import dayjs from "dayjs"
 import Typography from "@mui/material/Typography"
 import { styled } from "@mui/system"
-import { useRouter } from "next/navigation"
 
 import { GridColDef } from "@mui/x-data-grid"
 import DownloadIcon from "@mui/icons-material/Download"
+import Button from "@mui/material/Button"
 
 import axiosApi from "@/Util/axiosApi"
 import { useAuth } from "@/context/JWTContext/AuthContext.provider"
@@ -17,6 +17,7 @@ import CustomModal from "@/app/(DashboardLayout)/components/CustomModal/CustomMo
 import CustomGrid from "@/app/(DashboardLayout)/components/CustomGrid"
 
 import { CosmeticContext } from "@/context/CosmeticContext/UseCosmetic.Provider"
+import { exportDataToExcel, exportDataToPDF } from "@/Util/commonFunctions"
 
 const BoxWrapper = styled("div")(() => ({
   display: "grid",
@@ -28,10 +29,20 @@ const BoxWrapper = styled("div")(() => ({
   },
 }))
 
+const dataToExport = (data: any) => {
+  return data.map((item: any) => ({
+    "Bill No.": item.billNumber,
+    "Bill Type": item.billType,
+    "Bill From": dayjs(item.billPeriodFrom).format("DD-MM-YYYY"),
+    "Bill To": dayjs(item.billPeriodTo).format("DD-MM-YYYY"),
+    "Claimed Amt.": item.claimedAmount,
+  }))
+}
+
 const Bills = () => {
   const backendBaseUrl = process.env.NEXT_PUBLIC_BACKEND_BASE_URL
   const [billList, setBillList] = useState([])
-  const [claim, setClaim] = useState([])
+
   // Modal states
   const [modalState, setModalState] = useState(false)
   const [selectedBill, setSelectedBill] = useState<any>({})
@@ -39,10 +50,9 @@ const Bills = () => {
   const cosmeticContext = useContext(CosmeticContext)
   const { modalLoading, setModalLoading } = cosmeticContext
 
-  const router = useRouter()
   const authCtx: any = useAuth()
-  console.log(authCtx?.user?.data?._id, "xcxcxccxcxcxc")
   const id = authCtx?.user?.data?._id
+
   const handleFetchBills = async () => {
     const config = {
       url: `/api/bill/getBillsByFormerId/${id}`,
@@ -70,7 +80,7 @@ const Bills = () => {
 
   const handleFetchSingleBills = async (id: any) => {
     setModalLoading(true)
-    console.log(id)
+
     const config = {
       url: `/api/claim/getClaimByBillId/${id}`,
       method: "GET",
@@ -82,7 +92,7 @@ const Bills = () => {
 
     try {
       const res = await axiosApi(config.url, config.method, config.headers)
-      console.log(res.data, "ggggggg")
+
       // for (let item of res.data) {
       //   item.id = item._id
       // }
@@ -91,9 +101,7 @@ const Bills = () => {
       // setClaim(res.data)
       // if (String(res.status).charAt(0) === "2") {
       // }
-      console.log("no error")
     } catch (err: any) {
-      console.log("eroror")
       await handleViewBill({ nodata: "NO Claim Found" })
       console.log(err.message)
     } finally {
@@ -212,6 +220,30 @@ const Bills = () => {
     <PageContainer title="View Bills" description="List of all the bills">
       <DashboardNew title="View Bills" titleVariant="h5">
         <>
+          <div
+            style={{ display: "flex", justifyContent: "flex-end", gap: "5px" }}
+          >
+            <Button
+              sx={{ background: "#9C27B0" }}
+              variant="contained"
+              size="small"
+              onClick={() =>
+                exportDataToPDF(dataToExport(billList), "former-bills")
+              }
+            >
+              PDF
+            </Button>
+            <Button
+              sx={{ background: "#9C27B0" }}
+              variant="contained"
+              size="small"
+              onClick={() =>
+                exportDataToExcel(dataToExport(billList), "former-bills")
+              }
+            >
+              Excel
+            </Button>
+          </div>
           <CustomGrid
             rows={billList}
             columns={columns}

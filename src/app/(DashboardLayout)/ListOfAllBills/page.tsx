@@ -8,9 +8,25 @@ import DashboardNew from "../components/shared/DashboardNew"
 import { useAuth } from "@/context/JWTContext/AuthContext.provider"
 import axiosApi from "@/Util/axiosApi"
 import Link from "next/link"
+import Button from "@mui/material/Button"
 
 import { GridColDef } from "@mui/x-data-grid"
 import CustomGrid from "../components/CustomGrid"
+import { exportDataToExcel, exportDataToPDF } from "@/Util/commonFunctions"
+
+const dataToExport = (data: any) => {
+  return data.map((item: any) => ({
+    "Diary No.": item.diaryNumber,
+    "Bill No.": item.billNumber,
+    "Bill Type": item.billType,
+    "User Name": item.name,
+    "Receiving Date": dayjs(item.claimReceivingDate).format("DD-MM-YYYY"),
+    "Claim From": dayjs(item.claimPeriodFrom).format("DD-MM-YYYY"),
+    "Claimed To": dayjs(item.claimPeriodTo).format("DD-MM-YYYY"),
+    "Claimed Amt.": item.totalClaimedAmount,
+    "Admissible Amt.": item.totalAdmissibleAmount,
+  }))
+}
 
 const ListOfAllBills = () => {
   const [billList, setBillList] = useState([])
@@ -115,6 +131,30 @@ const ListOfAllBills = () => {
     <PageContainer title="List" description="List">
       <DashboardNew title="All Bills Report" titleVariant="h5">
         <>
+          <div
+            style={{ display: "flex", justifyContent: "flex-end", gap: "5px" }}
+          >
+            <Button
+              sx={{ background: "#9C27B0" }}
+              variant="contained"
+              size="small"
+              onClick={() =>
+                exportDataToPDF(dataToExport(billList), "list-of-all-bills")
+              }
+            >
+              PDF
+            </Button>
+            <Button
+              sx={{ background: "#9C27B0" }}
+              variant="contained"
+              size="small"
+              onClick={() =>
+                exportDataToExcel(dataToExport(billList), "list-of-all-bills")
+              }
+            >
+              Excel
+            </Button>
+          </div>
           <CustomGrid
             rows={billList}
             columns={columns}

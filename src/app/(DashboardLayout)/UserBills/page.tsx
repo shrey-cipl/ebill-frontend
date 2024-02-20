@@ -5,6 +5,7 @@ import dayjs from "dayjs"
 import Typography from "@mui/material/Typography"
 import { styled } from "@mui/system"
 import { useRouter } from "next/navigation"
+import Button from "@mui/material/Button"
 
 import { GridColDef } from "@mui/x-data-grid"
 import DownloadIcon from "@mui/icons-material/Download"
@@ -19,6 +20,7 @@ import { CosmeticContext } from "@/context/CosmeticContext/UseCosmetic.Provider"
 
 import { BILL_MODES } from "@/config/constants"
 import CustomGrid from "../components/CustomGrid"
+import { exportDataToExcel, exportDataToPDF } from "@/Util/commonFunctions"
 
 const BoxWrapper = styled("div")(() => ({
   display: "grid",
@@ -29,6 +31,19 @@ const BoxWrapper = styled("div")(() => ({
     fontSize: "12px",
   },
 }))
+
+const dataToExport = (data: any) => {
+  return data.map((item: any) => ({
+    "User Name": item.name,
+    Designation: item.designation,
+    Phone: item.phone,
+    "Bill No.": item.billNumber,
+    "Bill Type": item.billType,
+    "Bill From": dayjs(item.billPeriodFrom).format("DD-MM-YYYY"),
+    "Bill To": dayjs(item.billPeriodTo).format("DD-MM-YYYY"),
+    "Claimed Amt.": item.claimedAmount,
+  }))
+}
 
 const UserBills = () => {
   const backendBaseUrl = process.env.NEXT_PUBLIC_BACKEND_BASE_URL
@@ -245,6 +260,30 @@ const UserBills = () => {
     <PageContainer title="User Bills" description="List of all the bills">
       <DashboardNew title="User Bills" titleVariant="h5">
         <>
+          <div
+            style={{ display: "flex", justifyContent: "flex-end", gap: "5px" }}
+          >
+            <Button
+              sx={{ background: "#9C27B0" }}
+              variant="contained"
+              size="small"
+              onClick={() =>
+                exportDataToPDF(dataToExport(billList), "user-bills")
+              }
+            >
+              PDF
+            </Button>
+            <Button
+              sx={{ background: "#9C27B0" }}
+              variant="contained"
+              size="small"
+              onClick={() =>
+                exportDataToExcel(dataToExport(billList), "user-bills")
+              }
+            >
+              Excel
+            </Button>
+          </div>
           <CustomGrid
             rows={billList}
             columns={columns}

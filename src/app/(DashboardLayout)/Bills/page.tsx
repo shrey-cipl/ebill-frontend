@@ -31,6 +31,20 @@ const BoxWrapper = styled("div")(() => ({
   },
 }))
 
+const dataToExport = (data: any) => {
+  return data.map((item: any) => ({
+    "Diary No.": item.diaryNumber,
+    "Bill No.": item.billNumber,
+    "Bill Type": item.billType,
+    "User Name": item.name,
+    "Receiving Date": dayjs(item.claimReceivingDate).format("DD-MM-YYYY"),
+    "Claim From": dayjs(item.claimPeriodFrom).format("DD-MM-YYYY"),
+    "Claimed To": dayjs(item.claimPeriodTo).format("DD-MM-YYYY"),
+    "Claimed Amt.": item.totalClaimedAmount,
+    "Admissible Amt.": item.totalAdmissibleAmount,
+  }))
+}
+
 const Bills = () => {
   const backendBaseUrl = process.env.NEXT_PUBLIC_BACKEND_BASE_URL
   const [billList, setBillList] = useState([])
@@ -191,30 +205,6 @@ const Bills = () => {
     },
   ]
 
-  const handleExportToPDF = () => {
-    const dataToExport = billList.map((billItem: any) => ({
-      "Diary No.": billItem.diaryNumber,
-      "File No.": billItem.fileNumber,
-      "Bill Name": billItem.name,
-      "Bill Type": billItem.billType,
-      "Claimed Amt.": billItem.totalClaimedAmount,
-    }))
-
-    exportDataToPDF(dataToExport, "Bills")
-  }
-
-  const handleExportToExcel = () => {
-    const dataToExport = billList.map((billItem: any) => ({
-      "Diary No.": billItem.diaryNumber,
-      "File No.": billItem.fileNumber,
-      "Bill Name": billItem.name,
-      "Bill Type": billItem.billType,
-      "Claimed Amt.": billItem.totalClaimedAmount,
-    }))
-
-    exportDataToExcel(dataToExport, "Bills")
-  }
-
   return (
     <PageContainer title="Claims" description="List of all the bills">
       <DashboardNew title="Claims" titleVariant="h5">
@@ -236,7 +226,7 @@ const Bills = () => {
               sx={{ background: "#9C27B0" }}
               variant="contained"
               size="small"
-              onClick={handleExportToPDF}
+              onClick={() => exportDataToPDF(dataToExport(billList), "claims")}
             >
               PDF
             </Button>
@@ -244,7 +234,9 @@ const Bills = () => {
               sx={{ background: "#9C27B0" }}
               variant="contained"
               size="small"
-              onClick={handleExportToExcel}
+              onClick={() =>
+                exportDataToExcel(dataToExport(billList), "claims")
+              }
             >
               Excel
             </Button>

@@ -2,6 +2,7 @@ import { saveAs } from "file-saver"
 import * as XLSX from "xlsx"
 import jsPDF from "jspdf"
 import "jspdf-autotable"
+import dayjs from "dayjs"
 
 import { VALIDATION_TYPE } from "@/config/constants"
 
@@ -169,6 +170,9 @@ const validateOnSubmit = (dataToValidate, validationState) => {
 }
 
 const exportDataToExcel = (data, fileName) => {
+  const currentDate = dayjs(Date.now()).format("DD-MM-YYYY")
+  fileName = `${fileName}_${currentDate}`
+
   const worksheet = XLSX.utils.json_to_sheet(data)
   const workbook = XLSX.utils.book_new()
   XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1")
@@ -180,6 +184,9 @@ const exportDataToExcel = (data, fileName) => {
 }
 
 const exportDataToPDF = (data, fileName) => {
+  const currentDate = dayjs(Date.now()).format("DD-MM-YYYY")
+  fileName = `${fileName}_${currentDate}`
+
   const doc = new jsPDF({
     orientation: "landscape",
   })

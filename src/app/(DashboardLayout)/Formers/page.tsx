@@ -15,8 +15,19 @@ import { useAuth } from "@/context/JWTContext/AuthContext.provider"
 
 import { GridColDef } from "@mui/x-data-grid"
 import CustomGrid from "../components/CustomGrid"
+import { exportDataToExcel, exportDataToPDF } from "@/Util/commonFunctions"
+import { FORMER_MODES } from "@/config/constants"
 
-const FORMER_MODES = { add: "add_former", update: "update_former" }
+const dataToExport = (data: any) => {
+  return data.map((item: any) => ({
+    "User Name": item.name,
+    Designation: item.designation,
+    Phone: item.phone,
+    Email: item.email,
+    "Bank Acc. No.": item.bankAccountNumber,
+    Status: item.status,
+  }))
+}
 
 const Formers = () => {
   const [formersList, setFormersList] = useState([])
@@ -104,7 +115,9 @@ const Formers = () => {
     <PageContainer title="Former Employees" description="List of all the bills">
       <DashboardNew title="Hon'ble Ex-Chairman & Ex-Members" titleVariant="h5">
         <>
-          <div style={{ display: "flex", justifyContent: "flex-end" }}>
+          <div
+            style={{ display: "flex", justifyContent: "flex-end", gap: "5px" }}
+          >
             <Button
               sx={{ background: "#9C27B0" }}
               variant="contained"
@@ -114,6 +127,26 @@ const Formers = () => {
               }
             >
               Add New
+            </Button>
+            <Button
+              sx={{ background: "#9C27B0" }}
+              variant="contained"
+              size="small"
+              onClick={() =>
+                exportDataToPDF(dataToExport(formersList), "formers-list")
+              }
+            >
+              PDF
+            </Button>
+            <Button
+              sx={{ background: "#9C27B0" }}
+              variant="contained"
+              size="small"
+              onClick={() =>
+                exportDataToExcel(dataToExport(formersList), "formers-list")
+              }
+            >
+              Excel
             </Button>
           </div>
           <CustomGrid

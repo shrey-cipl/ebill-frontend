@@ -10,6 +10,19 @@ import CustomGrid from "../components/CustomGrid"
 
 import PageContainer from "../components/container/PageContainer"
 import DashboardNew from "../components/shared/DashboardNew"
+import { exportDataToExcel, exportDataToPDF } from "@/Util/commonFunctions"
+
+const dataToExport = (data: any) => {
+  return data.map((item: any) => ({
+    "I.P.": item.ip,
+    Method: item.method,
+    Path: item.path,
+    Date: dayjs(item.timestamp).format("DD-MM-YYYY"),
+    Time: dayjs(item.timestamp).format("h:mm a"),
+    Email: item.email,
+    "Login Status": item.status,
+  }))
+}
 
 const SystemLogs = () => {
   const [allLogs, setAllLogs] = useState([])
@@ -100,8 +113,6 @@ const SystemLogs = () => {
     log.path.includes(`/${filterBy}/`)
   )
 
-  console.log("aaa:", allLogs)
-
   return (
     <PageContainer title="System Logs" description="View all system logs">
       <DashboardNew title="System Logs" titleVariant="h5">
@@ -128,6 +139,30 @@ const SystemLogs = () => {
                 </Button>
               ))}
             </div>
+          </div>
+          <div
+            style={{ display: "flex", justifyContent: "flex-end", gap: "5px" }}
+          >
+            <Button
+              sx={{ background: "#9C27B0" }}
+              variant="contained"
+              size="small"
+              onClick={() =>
+                exportDataToPDF(dataToExport(filteredList), "system-logs")
+              }
+            >
+              PDF
+            </Button>
+            <Button
+              sx={{ background: "#9C27B0" }}
+              variant="contained"
+              size="small"
+              onClick={() =>
+                exportDataToExcel(dataToExport(filteredList), "system-logs")
+              }
+            >
+              Excel
+            </Button>
           </div>
           <CustomGrid
             rows={filteredList}
