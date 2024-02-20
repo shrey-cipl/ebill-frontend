@@ -588,12 +588,12 @@ const ManageBill = () => {
   return (
     <>
       <PageContainer
-        title={paramMode === BILL_MODES.add ? "Add Claims" : "Update Bill"}
+        title={paramMode === BILL_MODES.add ? "Add Claims" : "Update Claims"}
         description="Add bills here"
       >
         <DashboardNew
           title={
-            paramMode === BILL_MODES.add ? "Add New Claims" : "Update Bill"
+            paramMode === BILL_MODES.add ? "Add New Claims" : "Update Claims"
           }
           titleVariant="h5"
         >
