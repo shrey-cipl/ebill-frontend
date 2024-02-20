@@ -148,7 +148,7 @@ const SystemLogs = () => {
               variant="contained"
               size="small"
               onClick={() =>
-                exportDataToPDF(dataToExport(filteredList), "system-logs")
+                exportDataToPDF(dataToExport(filteredList), "System Logs")
               }
             >
               PDF
@@ -158,7 +158,7 @@ const SystemLogs = () => {
               variant="contained"
               size="small"
               onClick={() =>
-                exportDataToExcel(dataToExport(filteredList), "system-logs")
+                exportDataToExcel(dataToExport(filteredList), "System Logs")
               }
             >
               Excel

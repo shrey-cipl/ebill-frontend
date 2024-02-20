@@ -60,7 +60,7 @@ const FilterTable = ({ allReportsByfilter, get }: FilterTableProps) => {
               variant="contained"
               size="small"
               onClick={() =>
-                exportDataToPDF(dataToExport(allReportsByfilter), "report")
+                exportDataToPDF(dataToExport(allReportsByfilter), "Report")
               }
             >
               PDF
@@ -70,7 +70,7 @@ const FilterTable = ({ allReportsByfilter, get }: FilterTableProps) => {
               variant="contained"
               size="small"
               onClick={() =>
-                exportDataToExcel(dataToExport(allReportsByfilter), "report")
+                exportDataToExcel(dataToExport(allReportsByfilter), "Report")
               }
             >
               Excel

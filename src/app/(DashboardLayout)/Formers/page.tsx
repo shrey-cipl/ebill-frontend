@@ -133,7 +133,7 @@ const Formers = () => {
               variant="contained"
               size="small"
               onClick={() =>
-                exportDataToPDF(dataToExport(formersList), "formers-list")
+                exportDataToPDF(dataToExport(formersList), "Formers List")
               }
             >
               PDF
@@ -143,7 +143,7 @@ const Formers = () => {
               variant="contained"
               size="small"
               onClick={() =>
-                exportDataToExcel(dataToExport(formersList), "formers-list")
+                exportDataToExcel(dataToExport(formersList), "Formers List")
               }
             >
               Excel
