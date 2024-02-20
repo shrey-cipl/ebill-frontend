@@ -213,7 +213,7 @@ const exportDataToPDF = (data, fileName) => {
     )
     // System IP and datetime
     doc.text(
-      `   Date: ${dayjs(Date.now()).format("DD-MM-YYYY")}`,
+      `   Date: ${dayjs(Date.now()).format("DD-MM-YYYY h:mm A")}`,
       100,
       doc.internal.pageSize.height - 10
     )
