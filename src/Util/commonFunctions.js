@@ -207,7 +207,7 @@ const exportDataToPDF = (data, fileName) => {
     const pageCount = doc.internal.getNumberOfPages()
     // Page number
     doc.text(
-      "Page " + data.pageNumber + " of " + pageCount,
+      "Page " + data.pageNumber,
       data.settings.margin.left,
       doc.internal.pageSize.height - 10
     )

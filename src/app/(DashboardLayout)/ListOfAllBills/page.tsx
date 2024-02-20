@@ -139,7 +139,7 @@ const ListOfAllBills = () => {
               variant="contained"
               size="small"
               onClick={() =>
-                exportDataToPDF(dataToExport(billList), "list-of-all-bills")
+                exportDataToPDF(dataToExport(billList), "List of all Bills")
               }
             >
               PDF
@@ -149,7 +149,7 @@ const ListOfAllBills = () => {
               variant="contained"
               size="small"
               onClick={() =>
-                exportDataToExcel(dataToExport(billList), "list-of-all-bills")
+                exportDataToExcel(dataToExport(billList), "List of all Bills")
               }
             >
               Excel

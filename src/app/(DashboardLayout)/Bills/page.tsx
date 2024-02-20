@@ -226,7 +226,7 @@ const Bills = () => {
               sx={{ background: "#9C27B0" }}
               variant="contained"
               size="small"
-              onClick={() => exportDataToPDF(dataToExport(billList), "claims")}
+              onClick={() => exportDataToPDF(dataToExport(billList), "Claims")}
             >
               PDF
             </Button>
@@ -235,7 +235,7 @@ const Bills = () => {
               variant="contained"
               size="small"
               onClick={() =>
-                exportDataToExcel(dataToExport(billList), "claims")
+                exportDataToExcel(dataToExport(billList), "Claims")
               }
             >
               Excel
