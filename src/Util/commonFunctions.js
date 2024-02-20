@@ -184,8 +184,8 @@ const exportDataToExcel = (data, fileName) => {
 }
 
 const exportDataToPDF = (data, fileName) => {
-  const currentDate = dayjs(Date.now()).format("DD-MM-YYYY")
-  fileName = `${fileName}_${currentDate}`
+  // const currentDate = dayjs(Date.now()).format("DD-MM-YYYY")
+  // fileName = `${fileName}_${currentDate}`
 
   const doc = new jsPDF({
     orientation: "landscape",
@@ -213,7 +213,7 @@ const exportDataToPDF = (data, fileName) => {
     )
     // System IP and datetime
     doc.text(
-      `   Date: ${getCurrentDateTime()}`,
+      `   Date: ${dayjs(Date.now()).format("DD-MM-YYYY")}`,
       100,
       doc.internal.pageSize.height - 10
     )
