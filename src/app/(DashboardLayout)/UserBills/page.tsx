@@ -54,15 +54,17 @@ const UserBills = () => {
   const [selectedBill, setSelectedBill] = useState<any>({})
 
   const cosmeticContext = useContext(CosmeticContext)
-  const { modalLoading, setModalLoading } = cosmeticContext
+  const { modalLoading, setModalLoading, billType } = cosmeticContext
 
   const router = useRouter()
   const authCtx: any = useAuth()
   console.log(authCtx?.user?.data?._id, "xcxcxccxcxcxc")
   const id = authCtx?.user?.data?._id
+
+  console.log(billType[0], "billTypebillTypebillType")
   const handleFetchBills = async () => {
     const config = {
-      url: `/api/bill/getall`,
+      url: `/api/bill/getall?billType=${billType[0]}&billType=${billType[1]}&billType=${billType[2]}&billType=${billType[3]}`,
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -129,7 +131,7 @@ const UserBills = () => {
   // collect bills and updates list
   useEffect(() => {
     handleFetchBills()
-  }, [authCtx?.user?.token])
+  }, [billType])
 
   const handleViewBill = async (data: any) => {
     // const filteredBill = billList.find((bill: any) => bill._id === id)
@@ -188,7 +190,7 @@ const UserBills = () => {
               }}
               onClick={() => handleFetchSingleBills(params.row._id)}
             >
-              View
+              View Claim
             </button>
           )
         } else if (!params.row.claim[0]) {
@@ -216,7 +218,7 @@ const UserBills = () => {
                   })
               }}
             >
-              Create
+              Create Claim
             </button>
           )
         }

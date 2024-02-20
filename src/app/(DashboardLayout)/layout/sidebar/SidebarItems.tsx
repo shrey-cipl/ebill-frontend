@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React, { useContext, useEffect, useState } from "react"
 import { Menuitems } from "./MenuItems"
 import { usePathname } from "next/navigation"
 import { Box, List } from "@mui/material"
@@ -8,6 +8,11 @@ import { useAuth } from "@/context/JWTContext/AuthContext.provider"
 import axiosApi from "@/Util/axiosApi"
 import { uniqueId } from "lodash"
 import AssessmentIcon from "@mui/icons-material/Assessment"
+import {
+  CosmeticContext,
+  useCosmetic,
+} from "@/context/CosmeticContext/UseCosmetic.Provider"
+
 const SidebarItems = ({ toggleMobileSidebar }: any) => {
   const [billTypeSequence, SetbillTypeSequence] = useState<any>([])
   const pathname = usePathname()
@@ -19,6 +24,9 @@ const SidebarItems = ({ toggleMobileSidebar }: any) => {
   const [allData, setItems] = useState(
     role ? Menuitems[role] : Menuitems["former"]
   )
+  const cosmeticContext = useContext(CosmeticContext)
+  const { billType, setBillType } = cosmeticContext
+  // setBillType(["pops"])
 
   const obj: any = {
     id: uniqueId(),
@@ -30,7 +38,9 @@ const SidebarItems = ({ toggleMobileSidebar }: any) => {
 
   useEffect(() => {
     getDataSideBar()
-  }, [role])
+  }, [])
+
+  console.log(billType, "jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj")
 
   const getDataSideBar = async () => {
     const config = {
@@ -48,7 +58,13 @@ const SidebarItems = ({ toggleMobileSidebar }: any) => {
       // if (res && res.data) {
       //   setBillSequence(res.data[0])
       // }
-      console.log(res.data, "jjjjjjokokokokokkok")
+      console.log(
+        res.data[3].sequence[0],
+        res.data[1].sequence[0],
+        res.data,
+        "jjjjjjokokokokokkok"
+      )
+      setBillType([])
       {
         res.data[0].sequence[0] === auth?.user?.data?.role?.name &&
           (() => {
@@ -56,11 +72,11 @@ const SidebarItems = ({ toggleMobileSidebar }: any) => {
             const titleExists = menuItemsArray.some(
               (item: any) => item.title === obj.title
             )
+            setBillType((prev: any) => [...prev, res.data[0].billType])
             if (!titleExists) {
               menuItemsArray.push(obj)
             }
           })()
-        // SetbillTypeSequence([res.data[0].billType])
       }
       {
         res.data[1].sequence[0] === auth?.user?.data?.role?.name &&
@@ -69,11 +85,11 @@ const SidebarItems = ({ toggleMobileSidebar }: any) => {
             const titleExists = menuItemsArray.some(
               (item: any) => item.title === obj.title
             )
+            setBillType((prev: any) => [...prev, res.data[1].billType])
             if (!titleExists) {
               menuItemsArray.push(obj)
             }
           })()
-        // SetbillTypeSequence([res.data[0].billType])
       }
       {
         res.data[2].sequence[0] === auth?.user?.data?.role?.name &&
@@ -82,11 +98,11 @@ const SidebarItems = ({ toggleMobileSidebar }: any) => {
             const titleExists = menuItemsArray.some(
               (item: any) => item.title === obj.title
             )
+            setBillType((prev: any) => [...prev, res.data[2].billType])
             if (!titleExists) {
               menuItemsArray.push(obj)
             }
           })()
-        // SetbillTypeSequence([res.data[0].billType])
       }
       {
         res.data[3].sequence[0] === auth?.user?.data?.role?.name &&
@@ -95,11 +111,11 @@ const SidebarItems = ({ toggleMobileSidebar }: any) => {
             const titleExists = menuItemsArray.some(
               (item: any) => item.title === obj.title
             )
+            setBillType((prev: any) => [...prev, res.data[3].billType])
             if (!titleExists) {
               menuItemsArray.push(obj)
             }
           })()
-        SetbillTypeSequence([res.data[0].billType])
       }
       // console.log(Menuitems, "Menuitems")
       console.log(Menuitems[auth?.user?.data?.role?.name], "kkk")
@@ -108,6 +124,7 @@ const SidebarItems = ({ toggleMobileSidebar }: any) => {
     }
   }
   // console.log(billTypeSequence, "billtype")
+  console.log(billType, "sdcs")
   return (
     <Box sx={{ px: 3 }}>
       <List sx={{ pt: 0 }} className="sidebarNav" component="div">

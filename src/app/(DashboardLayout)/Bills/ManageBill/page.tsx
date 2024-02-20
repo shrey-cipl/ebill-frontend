@@ -109,6 +109,7 @@ const backendBaseUrl = process.env.NEXT_PUBLIC_BACKEND_BASE_URL
 const ManageBill = () => {
   const [dataFields, setDataFields] = useState(initialFieldState)
   const [BillList, setBillList] = useState([])
+  const [bool, setBool] = useState(false)
   const [billSequence, setBillSequence] = useState<any>([])
   const [lastForwardedTo, setlastForwardedTo] = useState<any>("")
   const [lastForwardedBy, setlastForwardedBy] = useState<any>("")
@@ -142,12 +143,9 @@ const ManageBill = () => {
 
   const authCtx: any = useAuth()
   const role: any = authCtx?.user?.data?.role?.name
-  console.log(
-    updateModeFields,
-    dataFields,
-    "kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk"
-  )
+
   // Populates form fields with bill data
+
   useEffect(() => {
     if (paramBillId) {
       getBillData(paramBillId, authCtx.user.token).then((billData: any) => {
@@ -553,15 +551,50 @@ const ManageBill = () => {
       return null
     }
   }
+  console.log(
+    updateModeFields,
+    dataFields,
+    "kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk"
+  )
 
+  useEffect(() => {
+    if (
+      (role === "Accounts I" ||
+        role === "Accounts II" ||
+        role === "Accounts IV") &&
+      updateModeFields.PFMS === null
+    ) {
+      console.log(
+        "dfwewwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww"
+      )
+      setBool(true)
+    } else if (
+      (role != "Accounts I" ||
+        role != "Accounts II" ||
+        role != "Accounts IV") &&
+      updateModeFields.PFMS === null
+    ) {
+      setBool(false)
+    } else if (updateModeFields.PFMS !== null) {
+      setBool((prev: any) => true)
+    }
+  }, [updateModeFields])
+
+  console.log(
+    role === "Accounts I" || role === "Accounts II" || role === "Accounts IV",
+    "ppppp"
+  )
+  console.log(updateModeFields.PFMS === null, "ooooo")
   return (
     <>
       <PageContainer
-        title={paramMode === BILL_MODES.add ? "Add Bill" : "Update Bill"}
+        title={paramMode === BILL_MODES.add ? "Add Claims" : "Update Bill"}
         description="Add bills here"
       >
         <DashboardNew
-          title={paramMode === BILL_MODES.add ? "Add New Bill" : "Update Bill"}
+          title={
+            paramMode === BILL_MODES.add ? "Add New Claims" : "Update Bill"
+          }
           titleVariant="h5"
         >
           <Box mt={2}>
@@ -721,43 +754,48 @@ const ManageBill = () => {
               {paramMode === BILL_MODES.update &&
                 FIELDS_MANAGE_BILL_UPDATE.map((field, i) => (
                   <FormControl key={i}>
-                    <Typography
-                      fontWeight={600}
-                      component="label"
-                      sx={{
-                        display: "block",
-                        fontSize: "13px",
-                        lineHeight: "12px",
-                      }}
-                      mb={1}
-                    >
-                      {field.fieldName}{" "}
-                      {field.required && (
-                        <span style={{ color: "red" }}>*</span>
-                      )}
-                    </Typography>
-                    <TextField
-                      name={field.id}
-                      type={field.type}
-                      value={updateModeFields[field.id]}
-                      onChange={handleUpdatedModeFields}
-                      sx={{ width: "100%" }}
-                      size="small"
-                      // disabled={disabledUpdateFields}
-                    />
+                    {bool ? (
+                      <>
+                        <Typography
+                          fontWeight={600}
+                          component="label"
+                          sx={{
+                            display: "block",
+                            fontSize: "13px",
+                            lineHeight: "12px",
+                          }}
+                          mb={1}
+                        >
+                          {field.fieldName}{" "}
+                          {field.required && (
+                            <span style={{ color: "red" }}>*</span>
+                          )}
+                        </Typography>
 
-                    {/* Validation Message */}
-                    {!validations[field.id]?.valid &&
-                    validations[field.id]?.errMsg ? (
-                      <p
-                        style={{
-                          color: "red",
-                          fontSize: "14px",
-                          margin: "0px",
-                        }}
-                      >
-                        {validations[field.id].errMsg}
-                      </p>
+                        <TextField
+                          name={field.id}
+                          type={field.type}
+                          value={updateModeFields[field.id]}
+                          onChange={handleUpdatedModeFields}
+                          sx={{ width: "100%" }}
+                          size="small"
+                          // disabled={disabledUpdateFields}
+                        />
+
+                        {/* Validation Message */}
+                        {!validations[field.id]?.valid &&
+                        validations[field.id]?.errMsg ? (
+                          <p
+                            style={{
+                              color: "red",
+                              fontSize: "14px",
+                              margin: "0px",
+                            }}
+                          >
+                            {validations[field.id].errMsg}
+                          </p>
+                        ) : null}
+                      </>
                     ) : null}
                   </FormControl>
                 ))}

@@ -29,7 +29,7 @@ const Menuitems: any = {
     },
     {
       id: uniqueId(),
-      title: "Bills",
+      title: "Claims",
       icon: EditNoteIcon,
       href: "/Bills",
       present: "yes",
@@ -143,7 +143,7 @@ const Menuitems: any = {
     },
     {
       id: uniqueId(),
-      title: "Bills",
+      title: "Claims",
       icon: EditNoteIcon,
       href: "/Bills",
       present: "yes",
@@ -257,7 +257,7 @@ const Menuitems: any = {
     },
     {
       id: uniqueId(),
-      title: "Bills",
+      title: "Claims",
       icon: EditNoteIcon,
       href: "/Bills",
       present: "yes",
@@ -912,7 +912,7 @@ const Menuitems: any = {
     },
     {
       id: uniqueId(),
-      title: "Bills",
+      title: "Claims",
       icon: EditNoteIcon,
       href: "/Bills",
       present: "yes",
@@ -1236,7 +1236,7 @@ const Menuitems: any = {
     },
     {
       id: uniqueId(),
-      title: "Bills",
+      title: "Claims",
       icon: EditNoteIcon,
       href: "/Bills",
       present: "yes",
@@ -1452,7 +1452,7 @@ const Menuitems: any = {
     },
     {
       id: uniqueId(),
-      title: "Bills",
+      title: "Claims",
       icon: EditNoteIcon,
       href: "/Bills",
       present: "yes",
@@ -1668,7 +1668,7 @@ const Menuitems: any = {
     },
     {
       id: uniqueId(),
-      title: "Bills",
+      title: "Claims",
       icon: EditNoteIcon,
       href: "/Bills",
       present: "yes",
