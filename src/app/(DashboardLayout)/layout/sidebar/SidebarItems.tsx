@@ -25,7 +25,7 @@ const SidebarItems = ({ toggleMobileSidebar }: any) => {
     role ? Menuitems[role] : Menuitems["former"]
   )
   const cosmeticContext = useContext(CosmeticContext)
-  const { billType, setBillType } = cosmeticContext
+  const { billType, setBillType, setUserbill } = cosmeticContext
   // setBillType(["pops"])
 
   const obj: any = {
@@ -65,6 +65,7 @@ const SidebarItems = ({ toggleMobileSidebar }: any) => {
         "jjjjjjokokokokokkok"
       )
       setBillType([])
+      setUserbill(false)
       {
         res.data[0].sequence[0] === auth?.user?.data?.role?.name &&
           (() => {
@@ -76,6 +77,7 @@ const SidebarItems = ({ toggleMobileSidebar }: any) => {
             if (!titleExists) {
               menuItemsArray.push(obj)
             }
+            setUserbill(true)
           })()
       }
       {
@@ -89,6 +91,7 @@ const SidebarItems = ({ toggleMobileSidebar }: any) => {
             if (!titleExists) {
               menuItemsArray.push(obj)
             }
+            setUserbill(true)
           })()
       }
       {
@@ -102,6 +105,7 @@ const SidebarItems = ({ toggleMobileSidebar }: any) => {
             if (!titleExists) {
               menuItemsArray.push(obj)
             }
+            setUserbill(true)
           })()
       }
       {
@@ -115,6 +119,7 @@ const SidebarItems = ({ toggleMobileSidebar }: any) => {
             if (!titleExists) {
               menuItemsArray.push(obj)
             }
+            setUserbill(true)
           })()
       }
       // console.log(Menuitems, "Menuitems")

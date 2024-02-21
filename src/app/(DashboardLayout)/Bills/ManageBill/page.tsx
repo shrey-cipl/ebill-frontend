@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useContext, useEffect, useState } from "react"
 
 import { useRouter } from "next/navigation"
 import { useSearchParams } from "next/navigation"
@@ -27,6 +27,11 @@ import { BILL_MODES, BILL_TYPE } from "@/config/constants"
 import { validateOnSubmit } from "@/Util/commonFunctions"
 
 import {
+  CosmeticContext,
+  useCosmetic,
+} from "@/context/CosmeticContext/UseCosmetic.Provider"
+
+import {
   FIELDS_MANAGE_BILL,
   FIELDS_MANAGE_BILL_UPDATE,
 } from "@/config/formFields"
@@ -41,6 +46,9 @@ const ButtonWrapper = styled("div")(() => ({
   gap: "10px",
   marginTop: "20px",
 }))
+
+const cosmeticContext = useContext(CosmeticContext)
+const { billType } = cosmeticContext
 
 const initialFieldState: any = {}
 const initialValidationState: any = {}
@@ -69,6 +77,22 @@ for (let arrEl of FIELDS_MANAGE_BILL_UPDATE) {
     errMsg: "",
   }
 }
+// const updateSelectOptions = (
+//   fields: any[],
+//   fieldNameToUpdate: any,
+//   updatedOptions: any[]
+// ) => {
+//   return fields.map((field: any) => {
+//     if (field.fieldName === fieldNameToUpdate && field.type === "select") {
+//       return { ...field, selectOptions: updatedOptions }
+//     } else {
+//       return field
+//     }
+//   })
+// }
+
+// Example usage
+// const mappthin = updateSelectOptions(FIELDS_MANAGE_BILL, "Bill Type", billType)
 
 const getBillData = async (id: any, token: any) => {
   const config = {
@@ -706,11 +730,13 @@ const ManageBill = () => {
                                   {bill.billNumber}
                                 </MenuItem>
                               ))
-                            : field.selectOptions?.map((option, i) => (
-                                <MenuItem value={option} key={i}>
-                                  {option}
-                                </MenuItem>
-                              ))}
+                            : field.selectOptions?.map(
+                                (option: any, i: any) => (
+                                  <MenuItem value={option} key={i}>
+                                    {option}
+                                  </MenuItem>
+                                )
+                              )}
                         </Select>
                       ) : (
                         <TextField

@@ -6,6 +6,8 @@ const initialCosmeticData = {
   // Define your initial cosmetic-related functions here
   modalLoading: false, // Initial value for modal loading
   setModalLoading: (loading: boolean) => {},
+  userbill: false,
+  setUserbill: (pre: boolean) => {},
   billType: [],
   setBillType: (prev: any) => {},
 }
@@ -21,9 +23,10 @@ export const useCosmetic = () => useContext(CosmeticContext)
 function CosmeticContextProvider({ children }: CosmeticContextProviderProps) {
   const auth = useAuth()
   const [modalLoading, setModalLoading] = useState(false)
+  const [userbill, setUserbill] = useState(false)
   const [billType, setBillType] = useState<any>([])
   // Define your cosmetic-related functions here
-  console.log(billType)
+  // console.log(billType)
   const globalCosmeticContextValue = useMemo(
     () =>
       ({
@@ -32,8 +35,10 @@ function CosmeticContextProvider({ children }: CosmeticContextProviderProps) {
         setModalLoading,
         setBillType,
         billType,
+        setUserbill,
+        userbill,
       } as any),
-    [modalLoading, billType]
+    [modalLoading, billType, userbill]
   )
 
   return (

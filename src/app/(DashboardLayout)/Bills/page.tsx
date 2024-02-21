@@ -1,5 +1,5 @@
 "use client"
-import { useEffect, useState } from "react"
+import { useContext, useEffect, useState } from "react"
 
 import dayjs from "dayjs"
 import Button from "@mui/material/Button"
@@ -20,6 +20,10 @@ import DownloadIcon from "@mui/icons-material/Download"
 import { BILL_MODES } from "@/config/constants"
 import CustomGrid from "../components/CustomGrid"
 import { exportDataToExcel, exportDataToPDF } from "@/Util/commonFunctions"
+import {
+  CosmeticContext,
+  useCosmetic,
+} from "@/context/CosmeticContext/UseCosmetic.Provider"
 
 const BoxWrapper = styled("div")(() => ({
   display: "grid",
@@ -54,6 +58,9 @@ const Bills = () => {
 
   const router = useRouter()
   const authCtx: any = useAuth()
+
+  const cosmeticContext = useContext(CosmeticContext)
+  const { billType, setBillType, userbill } = cosmeticContext
 
   const handleFetchBills = async () => {
     const config = {
@@ -204,7 +211,7 @@ const Bills = () => {
       },
     },
   ]
-
+  console.log(userbill, "userbill")
   return (
     <PageContainer title="Claims" description="List of all the bills">
       <DashboardNew title="Claims" titleVariant="h5">
@@ -212,16 +219,19 @@ const Bills = () => {
           <div
             style={{ display: "flex", justifyContent: "flex-end", gap: "5px" }}
           >
-            <Button
-              sx={{ background: "#9C27B0" }}
-              variant="contained"
-              size="small"
-              onClick={() =>
-                router.push(`/Bills/ManageBill?mode=${BILL_MODES.add}`)
-              }
-            >
-              Add New
-            </Button>
+            {userbill && (
+              <Button
+                sx={{ background: "#9C27B0" }}
+                variant="contained"
+                size="small"
+                onClick={() =>
+                  router.push(`/Bills/ManageBill?mode=${BILL_MODES.add}`)
+                }
+              >
+                Add New
+              </Button>
+            )}
+
             <Button
               sx={{ background: "#9C27B0" }}
               variant="contained"
