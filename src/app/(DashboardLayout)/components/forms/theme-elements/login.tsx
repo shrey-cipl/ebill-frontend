@@ -221,6 +221,7 @@ function Login() {
       // Add more options for General branch
     ],
     "Super Access": [
+      "Additional Secretary Office",
       "Secretary Office",
       "Chairman Office",
       // Add more options for General branch
