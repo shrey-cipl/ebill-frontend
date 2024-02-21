@@ -71,7 +71,7 @@ const validateOnSubmit = (dataToValidate, validationState) => {
 
       if (!validMobile) {
         validationStateCopy[key].valid = false
-        validationStateCopy[key].errMsg = "Mobile number should be 10-digits"
+        validationStateCopy[key].errMsg = "Phone number should be 10-digits"
       }
     }
 
