@@ -202,7 +202,7 @@ function ResetPassword() {
             variant: "success",
           }
         )
-        return auth.signOut()
+        role ? auth.signOut() : auth.signOutFor()
       }
     } catch (e) {
       console.error(e)
@@ -210,7 +210,7 @@ function ResetPassword() {
 
     clearInputs()
   }
-
+  const role: any = auth?.user?.data?.role?.name
   return (
     <Box
       sx={{

@@ -117,6 +117,22 @@ const FormerAddBill = () => {
     if (type === "file") setPreviewUrl(URL.createObjectURL(files[0]))
   }
 
+  function getCurrentDate() {
+    const today = new Date()
+    let dd: any = today.getDate()
+    let mm: any = today.getMonth() + 1 // January is 0!
+    const yyyy = today.getFullYear()
+
+    if (dd < 10) {
+      dd = "0" + dd
+    }
+
+    if (mm < 10) {
+      mm = "0" + mm
+    }
+
+    return yyyy + "-" + mm + "-" + dd
+  }
   return (
     <PageContainer title="Add Bills" description="Manage Former data here">
       <DashboardNew title="Add Bills" titleVariant="h5">
@@ -184,6 +200,27 @@ const FormerAddBill = () => {
                           }
                           sx={{ width: "100%" }}
                           required
+                        />
+                      ) : field.type === "date" ? (
+                        <TextField
+                          name={field.id}
+                          type={field.type}
+                          placeholder={field.placeholder}
+                          size="small"
+                          value={formerFieldState[field.id]}
+                          error={
+                            !validations[field.id].valid &&
+                            validations[field.id].errMsg
+                          }
+                          // id="outlined-error"
+                          onChange={(e) => handleFieldChange(e)}
+                          sx={{ width: "100%" }}
+                          required={field.required}
+                          InputProps={{
+                            inputProps: {
+                              max: getCurrentDate(),
+                            },
+                          }}
                         />
                       ) : (
                         <TextField

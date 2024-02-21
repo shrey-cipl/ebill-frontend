@@ -27,8 +27,7 @@ const Profile = () => {
   }
 
   const handleLogout = async () => {
-    router.push("/login")
-    await auth.signOut()
+    role ? await auth.signOut() : await auth.signOutFor()
   }
   const handleResetPassword = async () => {
     router.push("/passwordReset")

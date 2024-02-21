@@ -42,7 +42,7 @@ const DateWiseReport = () => {
 
   async function getReports() {
     try {
-      const url = "/api/claim/getall"
+      const url = "/api/former/getall"
       const method = "GET"
       const headers = {
         "Content-Type": "application/json",
@@ -98,6 +98,15 @@ const DateWiseReport = () => {
   useEffect(() => {
     getReports()
   }, [auth.user.token])
+
+  function formatDate(dateString: string) {
+    console.log(dateString, "formatDate(formData.to)")
+    const date = new Date(dateString)
+    const day = date.getDate().toString().padStart(2, "0")
+    const month = (date.getMonth() + 1).toString().padStart(2, "0")
+    const year = date.getFullYear().toString()
+    return `${day}-${month}-${year}`
+  }
 
   return (
     <>

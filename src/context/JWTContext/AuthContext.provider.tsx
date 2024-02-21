@@ -4,13 +4,13 @@ import { useRouter } from "next/navigation"
 import axios from "../../config/axios"
 import { isValidToken, setSession } from "../../Util/jwt"
 import AuthReducer from "./AuthContext.reducer"
-import { Alert } from "@mui/material"
 import { usePathname } from "next/navigation"
 
 const INITIALIZE = "INITIALIZE"
 const SIGN_IN = "SIGN_IN"
 const SIGN_OUT = "SIGN_OUT"
 const SIGN_IN_FOR = "SIGN_IN_FOR"
+const SIGN_OUT_FOR = "SIGN_OUT_FOR"
 
 const illegalStateFunction = (...args: any) => {
   throw new Error("You must wrap your components in <AuthProvider />")
@@ -25,6 +25,7 @@ const initialState = {
   user: {},
   signIn: illegalStateFunction,
   signOut: illegalStateFunction,
+  signOutFor: illegalStateFunction,
   signUp: illegalStateFunction,
   signInFor: illegalStateFunction,
   resetPassword: illegalStateFunction,
@@ -42,8 +43,6 @@ export default function AuthProvider({ children }: AuthProviderProps) {
   const router = useRouter()
 
   const pathname = usePathname()
-
-  console.log("Current Path:", pathname)
 
   useEffect(() => {
     const initialize = async () => {
@@ -133,7 +132,7 @@ export default function AuthProvider({ children }: AuthProviderProps) {
         email,
         password,
       })
-      console.log(response.data.data.firstTimeLogin, "response")
+      // console.log(response.data.data.firstTimeLogin, "response")
       if (response.data.data.firstTimeLogin) {
         console.log()
         router.push("/passwordReset")
@@ -167,8 +166,18 @@ export default function AuthProvider({ children }: AuthProviderProps) {
   }
   const signOut = async () => {
     setSession(null)
+    // console.log("Current Path:", pathname)
     router.push("/login")
     dispatch({ type: SIGN_OUT })
+
+    // localStorage.setItem("login", "logout")
+    localStorage.removeItem("login")
+  }
+  const signOutFor = async () => {
+    setSession(null)
+    // console.log("Current Path:", pathname)
+    router.push("/FormersLogin")
+    dispatch({ type: SIGN_OUT_FOR })
 
     // localStorage.setItem("login", "logout")
     localStorage.removeItem("login")
@@ -214,6 +223,7 @@ export default function AuthProvider({ children }: AuthProviderProps) {
           signIn,
           signOut,
           signInFor,
+          signOutFor,
         }),
         [state]
       )}

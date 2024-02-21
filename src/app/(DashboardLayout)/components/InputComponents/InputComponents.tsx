@@ -52,8 +52,8 @@ const InputFormerName = ({ formData, allReports, handleChange }: any) => {
           </MenuItem>
           {allReports.map((el: any, i: any) => {
             return (
-              <MenuItem value={el.former.name} key={i}>
-                {el.former.name}
+              <MenuItem value={el.name} key={i}>
+                {el.name}
               </MenuItem>
             )
           })}

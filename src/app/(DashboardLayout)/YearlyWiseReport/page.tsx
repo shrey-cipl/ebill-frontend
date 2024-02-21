@@ -38,7 +38,7 @@ const YearlyWiseReport = () => {
 
   async function getReports(token: any) {
     try {
-      const url = "/api/claim/getall"
+      const url = "/api/former/getall"
       const method = "GET"
       const headers = {
         "Content-Type": "application/json",
