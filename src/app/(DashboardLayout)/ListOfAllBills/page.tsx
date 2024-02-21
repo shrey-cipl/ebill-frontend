@@ -28,7 +28,7 @@ const dataToExport = (data: any) => {
   }))
 }
 
-const ListOfAllBills = () => {
+const ListOfAllClaims = () => {
   const [billList, setBillList] = useState([])
 
   const authCtx: any = useAuth()
@@ -139,7 +139,7 @@ const ListOfAllBills = () => {
               variant="contained"
               size="small"
               onClick={() =>
-                exportDataToPDF(dataToExport(billList), "List of all Bills")
+                exportDataToPDF(dataToExport(billList), "List of all Claims")
               }
             >
               PDF
@@ -149,7 +149,7 @@ const ListOfAllBills = () => {
               variant="contained"
               size="small"
               onClick={() =>
-                exportDataToExcel(dataToExport(billList), "List of all Bills")
+                exportDataToExcel(dataToExport(billList), "List of all Claims")
               }
             >
               Excel
@@ -182,4 +182,4 @@ const ListOfAllBills = () => {
   )
 }
 
-export default ListOfAllBills
+export default ListOfAllClaims

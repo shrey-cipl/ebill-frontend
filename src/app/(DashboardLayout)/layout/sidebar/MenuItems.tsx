@@ -73,9 +73,9 @@ const Menuitems: any = {
     // },
     {
       id: uniqueId(),
-      title: "List of all Bills",
+      title: "List of all Claims",
       icon: FormatListBulletedIcon,
-      href: "/ListOfAllBills",
+      href: "/ListOfAllClaims",
       present: "no",
     },
     // {
@@ -187,9 +187,9 @@ const Menuitems: any = {
     // },
     {
       id: uniqueId(),
-      title: "List of all Bills",
+      title: "List of all Claims",
       icon: FormatListBulletedIcon,
-      href: "/ListOfAllBills",
+      href: "/ListOfAllClaims",
       present: "no",
     },
     // {
@@ -301,9 +301,9 @@ const Menuitems: any = {
     // },
     {
       id: uniqueId(),
-      title: "List of all Bills",
+      title: "List of all Claims",
       icon: FormatListBulletedIcon,
-      href: "/ListOfAllBills",
+      href: "/ListOfAllClaims",
       present: "no",
     },
 
@@ -409,9 +409,9 @@ const Menuitems: any = {
     // },
     {
       id: uniqueId(),
-      title: "List of all Bills",
+      title: "List of all Claims",
       icon: FormatListBulletedIcon,
-      href: "/ListOfAllBills",
+      href: "/ListOfAllClaims",
       present: "no",
     },
 
@@ -517,9 +517,9 @@ const Menuitems: any = {
     // },
     {
       id: uniqueId(),
-      title: "List of all Bills",
+      title: "List of all Claims",
       icon: FormatListBulletedIcon,
-      href: "/ListOfAllBills",
+      href: "/ListOfAllClaims",
       present: "no",
     },
     // {
@@ -631,9 +631,9 @@ const Menuitems: any = {
     // },
     {
       id: uniqueId(),
-      title: "List of all Bills",
+      title: "List of all Claims",
       icon: FormatListBulletedIcon,
-      href: "/ListOfAllBills",
+      href: "/ListOfAllClaims",
       present: "no",
     },
 
@@ -739,9 +739,9 @@ const Menuitems: any = {
     // },
     {
       id: uniqueId(),
-      title: "List of all Bills",
+      title: "List of all Claims",
       icon: FormatListBulletedIcon,
-      href: "/ListOfAllBills",
+      href: "/ListOfAllClaims",
       present: "no",
     },
 
@@ -847,9 +847,9 @@ const Menuitems: any = {
     // },
     {
       id: uniqueId(),
-      title: "List of all Bills",
+      title: "List of all Claims",
       icon: FormatListBulletedIcon,
-      href: "/ListOfAllBills",
+      href: "/ListOfAllClaims",
       present: "no",
     },
 
@@ -956,9 +956,9 @@ const Menuitems: any = {
     // },
     {
       id: uniqueId(),
-      title: "List of all Bills",
+      title: "List of all Claims",
       icon: FormatListBulletedIcon,
-      href: "/ListOfAllBills",
+      href: "/ListOfAllClaims",
       present: "no",
     },
 
@@ -1064,9 +1064,9 @@ const Menuitems: any = {
     // },
     {
       id: uniqueId(),
-      title: "List of all Bills",
+      title: "List of all Claims",
       icon: FormatListBulletedIcon,
-      href: "/ListOfAllBills",
+      href: "/ListOfAllClaims",
       present: "no",
     },
 
@@ -1172,9 +1172,9 @@ const Menuitems: any = {
     // },
     {
       id: uniqueId(),
-      title: "List of all Bills",
+      title: "List of all Claims",
       icon: FormatListBulletedIcon,
-      href: "/ListOfAllBills",
+      href: "/ListOfAllClaims",
       present: "no",
     },
 
@@ -1280,9 +1280,9 @@ const Menuitems: any = {
     // },
     {
       id: uniqueId(),
-      title: "List of all Bills",
+      title: "List of all Claims",
       icon: FormatListBulletedIcon,
-      href: "/ListOfAllBills",
+      href: "/ListOfAllClaims",
       present: "no",
     },
 
@@ -1388,9 +1388,9 @@ const Menuitems: any = {
     // },
     {
       id: uniqueId(),
-      title: "List of all Bills",
+      title: "List of all Claims",
       icon: FormatListBulletedIcon,
-      href: "/ListOfAllBills",
+      href: "/ListOfAllClaims",
       present: "no",
     },
 
@@ -1496,9 +1496,9 @@ const Menuitems: any = {
     // },
     {
       id: uniqueId(),
-      title: "List of all Bills",
+      title: "List of all Claims",
       icon: FormatListBulletedIcon,
-      href: "/ListOfAllBills",
+      href: "/ListOfAllClaims",
       present: "no",
     },
 
@@ -1604,9 +1604,9 @@ const Menuitems: any = {
     // },
     {
       id: uniqueId(),
-      title: "List of all Bills",
+      title: "List of all Claims",
       icon: FormatListBulletedIcon,
-      href: "/ListOfAllBills",
+      href: "/ListOfAllClaims",
       present: "no",
     },
 
@@ -1712,9 +1712,9 @@ const Menuitems: any = {
     // },
     {
       id: uniqueId(),
-      title: "List of all Bills",
+      title: "List of all Claims",
       icon: FormatListBulletedIcon,
-      href: "/ListOfAllBills",
+      href: "/ListOfAllClaims",
       present: "no",
     },
 
@@ -1820,9 +1820,9 @@ const Menuitems: any = {
     // },
     {
       id: uniqueId(),
-      title: "List of all Bills",
+      title: "List of all Claims",
       icon: FormatListBulletedIcon,
-      href: "/ListOfAllBills",
+      href: "/ListOfAllClaims",
       present: "no",
     },
 
@@ -1928,9 +1928,9 @@ const Menuitems: any = {
     // },
     {
       id: uniqueId(),
-      title: "List of all Bills",
+      title: "List of all Claims",
       icon: FormatListBulletedIcon,
-      href: "/ListOfAllBills",
+      href: "/ListOfAllClaims",
       present: "no",
     },
 
@@ -2036,9 +2036,9 @@ const Menuitems: any = {
     // },
     {
       id: uniqueId(),
-      title: "List of all Bills",
+      title: "List of all Claims",
       icon: FormatListBulletedIcon,
-      href: "/ListOfAllBills",
+      href: "/ListOfAllClaims",
       present: "no",
     },
 
