@@ -886,7 +886,7 @@ const ManageBill = () => {
                       cursor: "pointer",
                     }}
                   >
-                    Perview
+                    Preview
                   </a>
                 </Button>
               )}
