@@ -47,9 +47,6 @@ const ButtonWrapper = styled("div")(() => ({
   marginTop: "20px",
 }))
 
-const cosmeticContext = useContext(CosmeticContext)
-const { billType } = cosmeticContext
-
 const initialFieldState: any = {}
 const initialValidationState: any = {}
 // Creates an initial state object (uses 'id')
