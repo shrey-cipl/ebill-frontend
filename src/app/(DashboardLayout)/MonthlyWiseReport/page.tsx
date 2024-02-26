@@ -1,108 +1,108 @@
-"use client"
-import React, { useEffect, useState } from "react"
-import dynamic from "next/dynamic"
+"use client";
+import React, { useEffect, useState } from "react";
+import dynamic from "next/dynamic";
 
-import { Box, Button, Select, Stack, Typography } from "@mui/material"
+import { Box, Button, Select, Stack, Typography } from "@mui/material";
 
-import axiosApi from "@/Util/axiosApi"
-import { styled } from "@mui/material/styles"
-import TableCell from "@mui/material/TableCell"
-import { useAuth } from "@/context/JWTContext/AuthContext.provider"
+import axiosApi from "@/Util/axiosApi";
+import { styled } from "@mui/material/styles";
+import TableCell from "@mui/material/TableCell";
+import { useAuth } from "@/context/JWTContext/AuthContext.provider";
 import {
   InputMonthly,
   InputFormerName,
   InputBillType,
   InputYearly,
-} from "../components/InputComponents/InputComponents"
-import FilterTable from "../components/filterTable/FilterTable"
+} from "../components/InputComponents/InputComponents";
+import FilterTable from "../components/filterTable/FilterTable";
 
-const DashboardNew = dynamic(() => import("../components/shared/DashboardNew"))
+const DashboardNew = dynamic(() => import("../components/shared/DashboardNew"));
 const PageContainer = dynamic(
   () => import("../components/container/PageContainer")
-)
+);
 
 const MonthlyWiseReport = () => {
-  const auth: any = useAuth()
-  const [get, setGet]: any = useState(false)
-  const [allReports, setAllReports]: any = useState([])
-  const [allReportsByfilter, setAllReportsByfilter]: any = useState([])
+  const auth: any = useAuth();
+  const [get, setGet]: any = useState(false);
+  const [allReports, setAllReports]: any = useState([]);
+  const [allReportsByfilter, setAllReportsByfilter]: any = useState([]);
   const [formData, setFormData] = useState<any>({
     name: "",
     billtype: "",
     month: "",
     year: "",
-  })
+  });
 
-  const currentYear = new Date().getFullYear()
-  const startYear = currentYear - 30 // Adjust the range as needed
-  const years = Array.from({ length: 31 }, (_, index) => startYear + index)
+  const currentYear = new Date().getFullYear();
+  const startYear = currentYear - 30; // Adjust the range as needed
+  const years = Array.from({ length: 31 }, (_, index) => startYear + index);
 
   async function getReports() {
     try {
-      const url = "/api/former/getall"
-      const method = "GET"
+      const url = "/api/former/getall";
+      const method = "GET";
       const headers = {
         "Content-Type": "application/json",
         authorization: `Bearer ${auth.user.token}`,
-      }
-      const res = await axiosApi(url, method, headers)
+      };
+      const res = await axiosApi(url, method, headers);
 
-      setAllReports([...res.data])
+      setAllReports([...res.data]);
       if (res.success != true || !res) {
-        console.log("Bad Request")
+        console.log("Bad Request");
       } else {
-        console.log("200")
+        console.log("200");
       }
     } catch (error) {
-      console.error("Error fetching ", error)
+      console.error("Error fetching ", error);
     }
   }
 
   async function getReportsbyfilter() {
-    setGet(true)
+    setGet(true);
     try {
       const url = `/api/claim/getall?billType=${formData.billtype}&month=${
         formData.month
       }&year=${formData.year}&name=${
         formData.name == "All" ? "" : formData.name
-      }`
-      const method = "GET"
+      }`;
+      const method = "GET";
       const headers = {
         "Content-Type": "application/json",
         authorization: `Bearer ${auth.user.token}`,
-      }
-      const res = await axiosApi(url, method, headers)
-      console.log(res, "allReports")
+      };
+      const res = await axiosApi(url, method, headers);
+      console.log(res, "allReports");
       for (let item of res.data) {
-        item.id = item._id
+        item.id = item._id;
         // item.name = item.former.name
         // item.designation = item.former.designation
         // item.phone = item.former.phone
       }
-      setAllReportsByfilter([...res.data])
+      setAllReportsByfilter([...res.data]);
 
       // console.log(posts,"abhi props");
       if (res.success != true || !res) {
-        console.log("Bad Request")
+        console.log("Bad Request");
       } else {
-        console.log("200")
+        console.log("200");
       }
     } catch (error) {
-      console.error("Error fetching ", error)
+      console.error("Error fetching ", error);
     }
   }
 
   const handleChange = (e: any) => {
-    const val = e.target.value
-    setFormData({ ...formData, [e.target.name]: val })
-  }
+    const val = e.target.value;
+    setFormData({ ...formData, [e.target.name]: val });
+  };
 
   useEffect(() => {
-    getReports()
-  }, [auth.user.token])
+    getReports();
+  }, [auth.user.token]);
 
   return (
-    <>
+    <PageContainer title="Monthly Report" description="List">
       <DashboardNew title="Monthly Report" titleVariant="h5">
         <>
           <Box
@@ -185,9 +185,9 @@ const MonthlyWiseReport = () => {
                   year: "",
                   from: "",
                   to: "",
-                })
-                setAllReportsByfilter([])
-                setGet(false)
+                });
+                setAllReportsByfilter([]);
+                setGet(false);
               }}
             >
               <Typography
@@ -208,8 +208,8 @@ const MonthlyWiseReport = () => {
       <br />
 
       <FilterTable allReportsByfilter={allReportsByfilter} get={get} />
-    </>
-  )
-}
+    </PageContainer>
+  );
+};
 
-export default MonthlyWiseReport
+export default MonthlyWiseReport;

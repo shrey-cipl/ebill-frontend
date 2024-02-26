@@ -22,7 +22,7 @@ const Users = () => {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        authorization: `Bearer ${authCtx.user.token}`,
+        authorization: `Bearer ${authCtx.user?.token}`,
       },
     }
 

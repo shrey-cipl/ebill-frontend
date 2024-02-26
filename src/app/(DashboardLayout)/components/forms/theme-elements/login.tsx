@@ -275,7 +275,7 @@ function Login() {
           justifyContent: "left",
           alignItems: "center",
           width: "auto",
-          height: "100%",
+          height: "100vh",
           overflow: "auto",
           top: "4px",
           backgroundImage: `url(/Banner.png)`,
@@ -287,7 +287,7 @@ function Login() {
           sx={{
             background: "#000000b3",
             width: "auto",
-            // height: "100vh",
+            height: "100vh",
             top: "0",
             left: "0",
             borderRadius: "0",

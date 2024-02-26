@@ -94,7 +94,7 @@ const ManageFormer = () => {
 
   useEffect(() => {
     if (paramFormerId) {
-      getFormerData(paramFormerId, authCtx.user.token).then((formerData) => {
+      getFormerData(paramFormerId, authCtx.user?.token).then((formerData) => {
         // console.log(formerData)
         if (formerData && formerData.data) {
           const {
@@ -154,7 +154,7 @@ const ManageFormer = () => {
         }
       })
     }
-  }, [paramFormerId, authCtx.user.token])
+  }, [paramFormerId, authCtx.user?.token])
 
   const handleClickShowPassword = () => setShowPassword(!showPassword)
 
@@ -196,7 +196,7 @@ const ManageFormer = () => {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            authorization: `Bearer ${authCtx.user.token}`,
+            authorization: `Bearer ${authCtx.user?.token}`,
           },
           data: {
             ...formerDataCopy,
@@ -219,7 +219,7 @@ const ManageFormer = () => {
           method: "PATCH",
           headers: {
             "Content-Type": "application/json",
-            authorization: `Bearer ${authCtx.user.token}`,
+            authorization: `Bearer ${authCtx.user?.token}`,
           },
           data: {
             ...formerDataCopy,

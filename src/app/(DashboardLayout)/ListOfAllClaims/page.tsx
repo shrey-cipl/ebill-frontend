@@ -13,6 +13,7 @@ import Button from "@mui/material/Button"
 import { GridColDef } from "@mui/x-data-grid"
 import CustomGrid from "../components/CustomGrid"
 import { exportDataToExcel, exportDataToPDF } from "@/Util/commonFunctions"
+import { Box, Dialog, DialogContent } from "@mui/material"
 
 const dataToExport = (data: any) => {
   return data.map((item: any) => ({
@@ -30,6 +31,14 @@ const dataToExport = (data: any) => {
 
 const ListOfAllClaims = () => {
   const [billList, setBillList] = useState([])
+
+  const [open, setOpen] = useState(false)
+  const handleOpenPopup: any = () => {
+    setOpen(true)
+  }
+  const handleClosePopup: any = () => {
+    setOpen(false)
+  }
 
   const authCtx: any = useAuth()
 
@@ -113,7 +122,7 @@ const ListOfAllClaims = () => {
       headerName: "CHANNEL LOG",
       renderCell: (params) => {
         return (
-          <Link
+          <Button
             style={{
               color: "#4C7AFF",
               textDecoration: "none",
@@ -121,14 +130,14 @@ const ListOfAllClaims = () => {
             href={`/Bills/View?bill_id=${params.row._id}`}
           >
             Log
-          </Link>
+          </Button>
         )
       },
     },
   ]
 
   return (
-    <PageContainer title="List" description="List">
+    <PageContainer title="List of all Claims" description="List">
       <DashboardNew title="All Bills Report" titleVariant="h5">
         <>
           <div

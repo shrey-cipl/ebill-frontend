@@ -94,7 +94,7 @@ const Page = () => {
       const method = "GET"
       const headers = {
         "Content-Type": "application/json",
-        authorization: `Bearer ${authCtx.user.token}`,
+        authorization: `Bearer ${authCtx.user?.token}`,
       }
       const res = await axiosApi(url, method, headers)
       setAllReportsByfilter([...res.data.movement])
@@ -109,7 +109,7 @@ const Page = () => {
   }
   useEffect(() => {
     getBillMovement()
-  }, [authCtx.user.token])
+  }, [authCtx.user?.token])
   //   const getBillData = async (id: any, token: any) => {
   //     const config = {
   //       url: `/api/claim/get/${paramBillId}`,

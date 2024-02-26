@@ -1,22 +1,22 @@
-"use client"
+"use client";
 
-import { useEffect, useState } from "react"
+import { useEffect, useState } from "react";
 
-import Button from "@mui/material/Button"
+import Button from "@mui/material/Button";
 
-import { useRouter } from "next/navigation"
-import Link from "next/link"
-import dayjs from "dayjs"
+import { useRouter } from "next/navigation";
+import Link from "next/link";
+import dayjs from "dayjs";
 
-import PageContainer from "../components/container/PageContainer"
-import DashboardNew from "../components/shared/DashboardNew"
-import axiosApi from "@/Util/axiosApi"
-import { useAuth } from "@/context/JWTContext/AuthContext.provider"
+import PageContainer from "../components/container/PageContainer";
+import DashboardNew from "../components/shared/DashboardNew";
+import axiosApi from "@/Util/axiosApi";
+import { useAuth } from "@/context/JWTContext/AuthContext.provider";
 
-import { GridColDef } from "@mui/x-data-grid"
-import CustomGrid from "../components/CustomGrid"
-import { exportDataToExcel, exportDataToPDF } from "@/Util/commonFunctions"
-import { FORMER_MODES } from "@/config/constants"
+import { GridColDef } from "@mui/x-data-grid";
+import CustomGrid from "../components/CustomGrid";
+import { exportDataToExcel, exportDataToPDF } from "@/Util/commonFunctions";
+import { FORMER_MODES } from "@/config/constants";
 
 const dataToExport = (data: any) => {
   return data.map((item: any) => ({
@@ -26,14 +26,14 @@ const dataToExport = (data: any) => {
     Email: item.email,
     "Bank Acc. No.": item.bankAccountNumber,
     Status: item.status,
-  }))
-}
+  }));
+};
 
 const Formers = () => {
-  const [formersList, setFormersList] = useState([])
+  const [formersList, setFormersList] = useState([]);
 
-  const router = useRouter()
-  const authCtx: any = useAuth()
+  const router = useRouter();
+  const authCtx: any = useAuth();
 
   const handleFetchFormers = async () => {
     const config = {
@@ -41,28 +41,28 @@ const Formers = () => {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        authorization: `Bearer ${authCtx.user.token}`,
+        authorization: `Bearer ${authCtx.user?.token}`,
       },
-    }
+    };
 
     try {
-      const res = await axiosApi(config.url, config.method, config.headers)
+      const res = await axiosApi(config.url, config.method, config.headers);
 
       if (res && res.data) {
         for (let item of res.data) {
-          item.id = item._id
-          item.bankAccountNumber = item.bankDetails.bankAccountNumber
+          item.id = item._id;
+          item.bankAccountNumber = item.bankDetails.bankAccountNumber;
         }
-        setFormersList(res.data)
+        setFormersList(res.data);
       }
     } catch (err) {
-      console.log(err)
+      console.log(err);
     }
-  }
+  };
 
   useEffect(() => {
-    handleFetchFormers()
-  }, [authCtx.user.token])
+    handleFetchFormers();
+  }, [authCtx.user?.token]);
 
   const columns: GridColDef[] = [
     {
@@ -83,7 +83,7 @@ const Formers = () => {
       headerName: "CREATED AT",
 
       valueFormatter: (params) => {
-        return dayjs(params.value).format("DD-MM-YYYY h:mm A")
+        return dayjs(params.value).format("DD-MM-YYYY h:mm A");
       },
     },
     {
@@ -91,7 +91,7 @@ const Formers = () => {
       headerName: "UPDATED ON",
 
       valueFormatter: (params) => {
-        return dayjs(params.value).format("DD-MM-YYYY h:mm A")
+        return dayjs(params.value).format("DD-MM-YYYY h:mm A");
       },
     },
     { field: "isActive", headerName: "ACTIVE" },
@@ -106,14 +106,17 @@ const Formers = () => {
           >
             Update
           </Link>
-        )
+        );
       },
     },
-  ]
+  ];
 
   return (
-    <PageContainer title="Former Employees" description="List of all the bills">
-      <DashboardNew title="Hon'ble Ex-Chairman & Ex-Members" titleVariant="h5">
+    <PageContainer
+      title="Ex Chairman & Members"
+      description="List of all the bills"
+    >
+      <DashboardNew title="Ex Chairman & Members" titleVariant="h5">
         <>
           <div
             style={{ display: "flex", justifyContent: "flex-end", gap: "5px" }}
@@ -164,16 +167,16 @@ const Formers = () => {
               if (params.field === "isActive") {
                 return params.row.isActive === "Active"
                   ? "text-green"
-                  : "text-red"
+                  : "text-red";
               }
 
-              return ""
+              return "";
             }}
           />
         </>
       </DashboardNew>
     </PageContainer>
-  )
-}
+  );
+};
 
-export default Formers
+export default Formers;

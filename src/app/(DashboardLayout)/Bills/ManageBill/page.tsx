@@ -255,7 +255,7 @@ const ManageBill = () => {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
-          authorization: `Bearer ${authCtx.user.token}`,
+          authorization: `Bearer ${authCtx.user?.token}`,
         },
       }
 
@@ -315,30 +315,30 @@ const ManageBill = () => {
     e.preventDefault()
 
     // For only add_mode fields
-    // const { allValidationsPass, updatedValidationState } = validateOnSubmit(
-    //   dataFields,
-    //   validations
-    // )
+    const { allValidationsPass, updatedValidationState } = validateOnSubmit(
+      dataFields,
+      validations
+    )
 
-    // setValidations(updatedValidationState)
+    setValidations(updatedValidationState)
 
-    // if (!allValidationsPass) {
-    //   return
-    // }
+    if (!allValidationsPass) {
+      return
+    }
 
     // For only update_mode fields
-    // if (paramMode === BILL_MODES.update) {
-    //   const { allValidationsPass, updatedValidationState } = validateOnSubmit(
-    //     updateModeFields,
-    //     validationsUpdateMode
-    //   )
+    if (paramMode === BILL_MODES.update) {
+      const { allValidationsPass, updatedValidationState } = validateOnSubmit(
+        updateModeFields,
+        validationsUpdateMode
+      )
 
-    //   setValidationsUpdateMode(updatedValidationState)
+      setValidationsUpdateMode(updatedValidationState)
 
-    //   if (!allValidationsPass) {
-    //     return
-    //   }
-    // }
+      if (!allValidationsPass) {
+        return
+      }
+    }
 
     try {
       let res
@@ -376,7 +376,7 @@ const ManageBill = () => {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            authorization: `Bearer ${authCtx.user.token}`,
+            authorization: `Bearer ${authCtx.user?.token}`,
           },
           data: {
             ...obj,
@@ -427,7 +427,7 @@ const ManageBill = () => {
           method: "PATCH",
           headers: {
             "Content-Type": "application/json",
-            authorization: `Bearer ${authCtx.user.token}`,
+            authorization: `Bearer ${authCtx.user?.token}`,
           },
 
           data: {
@@ -525,7 +525,7 @@ const ManageBill = () => {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        authorization: `Bearer ${authCtx.user.token}`,
+        authorization: `Bearer ${authCtx.user?.token}`,
       },
     }
 

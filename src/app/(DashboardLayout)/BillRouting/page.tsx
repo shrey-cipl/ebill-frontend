@@ -31,7 +31,7 @@ const BillRouting = () => {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
-          authorization: `Bearer ${authCtx.user.token}`,
+          authorization: `Bearer ${authCtx.user?.token}`,
         },
       }
 
@@ -39,7 +39,8 @@ const BillRouting = () => {
         const res = await axiosApi(config.url, config.method, config.headers)
 
         if (res && res.data) {
-          setBillSequence(res.data[0])
+          console.log(res.data[0].sequence)
+          setBillSequence(res.data[0].sequence)
         }
       } catch (err: any) {
         console.log(err.message)
@@ -70,7 +71,7 @@ const BillRouting = () => {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
-        authorization: `Bearer ${authCtx.user.token}`,
+        authorization: `Bearer ${authCtx.user?.token}`,
       },
       data: {
         sequence: [...billSequence.sequence],
@@ -106,7 +107,7 @@ const BillRouting = () => {
     const newArray = [...array.slice(0, index), ...array.slice(index + 1)]
     setBillSequence((prevState: any) => ({ ...prevState, sequence: newArray }))
   }
-
+  console.log(billSequence, "as")
   return (
     <PageContainer title="Bill Routing" description="Manage Former data here">
       <DashboardNew title="Bill Routing" titleVariant="h5">
@@ -118,7 +119,7 @@ const BillRouting = () => {
         >
           <Box
             sx={{
-              width: "500px",
+              width: "1000px",
             }}
           >
             <form>
@@ -128,7 +129,7 @@ const BillRouting = () => {
                 size="small"
                 value={selectedBillType}
                 onChange={(e: any) => setSelectedBillType(e?.target?.value)}
-                sx={{ width: "100%" }}
+                sx={{ width: "90%" }}
               >
                 {BILL_TYPE?.map((item, i) => (
                   <MenuItem key={i} value={item}>
@@ -138,71 +139,103 @@ const BillRouting = () => {
               </Select>
               <Box
                 sx={{
+                  // display: "flex",
                   width: "90%",
                   mt: 3,
                 }}
               >
-                {billSequence?.sequence?.map(
-                  (sequenceItem: any, i: any, array: any) => {
-                    //   console.log("bankai:", array)
-                    return (
-                      <Box key={i}>
-                        <div>Role</div>
-                        <Box
+                {billSequence.length != 0 && (
+                  <Box
+                    sx={{
+                      display: "flex",
+                      width: "440px",
+                      justifyContent: "space-between",
+                    }}
+                  >
+                    <div>Officer</div>
+                    <div>LinkOfficer</div>
+                  </Box>
+                )}
+
+                {billSequence?.map((sequenceItem: any, i: any, array: any) => {
+                  console.log("bankai:", sequenceItem)
+                  return (
+                    <>
+                      <Box
+                        key={i}
+                        sx={{
+                          my: 2,
+                        }}
+                      ></Box>
+                      <Box
+                        sx={{
+                          display: "flex",
+                          gap: "20px",
+                          alignItems: "center",
+                        }}
+                      >
+                        <Select
+                          // name={former.id}
+                          size="small"
+                          value={sequenceItem.officer}
+                          //  onChange={(e: any) => setSelectedBillType(e?.target?.value)}
+                          onChange={(e: any) => handleSequence(e, i)}
+                          sx={{ width: "100%" }}
+                        >
+                          {ROLES?.map((item: any, i: any) => (
+                            <MenuItem key={i} value={item}>
+                              {item}
+                            </MenuItem>
+                          ))}
+                        </Select>
+
+                        <Select
+                          // name={former.id}
+                          size="small"
+                          value={sequenceItem.officer}
+                          //  onChange={(e: any) => setSelectedBillType(e?.target?.value)}
+                          onChange={(e: any) => handleSequence(e, i)}
+                          sx={{ width: "100%" }}
+                        >
+                          {ROLES?.map((item: any, i: any) => (
+                            <MenuItem key={i} value={item}>
+                              {item}
+                            </MenuItem>
+                          ))}
+                        </Select>
+
+                        <Button
+                          variant="contained"
+                          color="primary"
                           sx={{
-                            display: "flex",
-                            gap: "20px",
-                            alignItems: "center",
+                            height: "30px",
+                          }}
+                          onClick={() => {
+                            addItemAtIndex(array, "", i + 1)
                           }}
                         >
-                          <Select
-                            // name={former.id}
-                            size="small"
-                            value={sequenceItem}
-                            //  onChange={(e: any) => setSelectedBillType(e?.target?.value)}
-                            onChange={(e: any) => handleSequence(e, i)}
-                            sx={{ width: "100%" }}
-                          >
-                            {ROLES?.map((item: any, i: any) => (
-                              <MenuItem key={i} value={item}>
-                                {item}
-                              </MenuItem>
-                            ))}
-                          </Select>
-
-                          <Button
-                            variant="contained"
-                            color="primary"
-                            sx={{
-                              height: "30px",
-                            }}
-                            onClick={() => {
-                              addItemAtIndex(array, "", i + 1)
-                            }}
-                          >
-                            <AddIcon /> Add
-                          </Button>
-                          <Button
-                            variant="contained"
-                            sx={{
-                              backgroundColor: "red",
-                              height: "30px",
-                              px: 3,
-                              "&:hover": {
-                                backgroundColor: "#e68282", // Change the color on hover
-                              },
-                            }}
-                            onClick={() => {
-                              removeItemAtIndex(array, i)
-                            }}
-                          >
-                            <CloseIcon /> Remove
-                          </Button>
-                        </Box>
+                          <AddIcon /> Add
+                        </Button>
+                        <Button
+                          variant="contained"
+                          sx={{
+                            backgroundColor: "red",
+                            height: "30px",
+                            px: 3,
+                            "&:hover": {
+                              backgroundColor: "#e68282", // Change the color on hover
+                            },
+                          }}
+                          onClick={() => {
+                            removeItemAtIndex(array, i)
+                          }}
+                        >
+                          <CloseIcon /> Remove
+                        </Button>
                       </Box>
-                    )
-                  }
-                )}
+                    </>
+                  )
+                })}
               </Box>
               <Box
                 sx={{

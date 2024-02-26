@@ -1,5 +1,5 @@
-"use client"
-import React, { useState } from "react"
+"use client";
+import React, { useState } from "react";
 import {
   Button,
   Typography,
@@ -8,62 +8,62 @@ import {
   MenuItem,
   TextField,
   FormControl,
-} from "@mui/material"
+} from "@mui/material";
 
-import PageContainer from "../../components/container/PageContainer"
-import DashboardNew from "../../components/shared/DashboardNew"
-import { useAuth } from "@/context/JWTContext/AuthContext.provider"
-import axiosApi from "@/Util/axiosApi"
-import { useRouter } from "next/navigation"
-import { enqueueSnackbar } from "notistack"
-import Tooltip from "@mui/material/Tooltip"
+import PageContainer from "../../components/container/PageContainer";
+import DashboardNew from "../../components/shared/DashboardNew";
+import { useAuth } from "@/context/JWTContext/AuthContext.provider";
+import axiosApi from "@/Util/axiosApi";
+import { useRouter } from "next/navigation";
+import { enqueueSnackbar } from "notistack";
+import Tooltip from "@mui/material/Tooltip";
 
-import { FIELDS_FORMERS_ADD_BILL } from "@/config/formFields"
-import { validateOnSubmit } from "@/Util/commonFunctions"
+import { FIELDS_FORMERS_ADD_BILL } from "@/config/formFields";
+import { validateOnSubmit } from "@/Util/commonFunctions";
 
-const initialFieldState: any = {}
-const initialValidationState: any = {}
+const initialFieldState: any = {};
+const initialValidationState: any = {};
 // Creates an initial state object (uses 'id')
 for (let arrEl of FIELDS_FORMERS_ADD_BILL) {
-  if (!initialFieldState[arrEl.id]) initialFieldState[arrEl.id] = ""
+  if (!initialFieldState[arrEl.id]) initialFieldState[arrEl.id] = "";
 
   // Setup collective validation state
   initialValidationState[arrEl.id] = {
     validationType: arrEl.validationType,
     valid: false,
     errMsg: "",
-  }
+  };
 }
 
 const FormerAddBill = () => {
-  const [formerFieldState, setFormerFieldState] = useState(initialFieldState)
-  const [validations, setValidations] = useState(initialValidationState)
-  const [previewUrl, setPreviewUrl] = useState<string | null>(null)
+  const [formerFieldState, setFormerFieldState] = useState(initialFieldState);
+  const [validations, setValidations] = useState(initialValidationState);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
 
-  const authCtx: any = useAuth()
-  const router = useRouter()
+  const authCtx: any = useAuth();
+  const router = useRouter();
 
   const handleSubmit = async (e: any) => {
-    e.preventDefault()
+    e.preventDefault();
 
     const { allValidationsPass, updatedValidationState } = validateOnSubmit(
       formerFieldState,
       validations
-    )
+    );
 
-    setValidations(updatedValidationState)
+    setValidations(updatedValidationState);
 
     if (!allValidationsPass) {
-      return
+      return;
     }
 
-    const formDataToSend = new FormData()
+    const formDataToSend = new FormData();
 
-    const fieldKeysArr = Object.keys(formerFieldState)
+    const fieldKeysArr = Object.keys(formerFieldState);
 
     fieldKeysArr.forEach((key) =>
       formDataToSend.append(key, formerFieldState[key])
-    )
+    );
 
     try {
       const config = {
@@ -71,30 +71,30 @@ const FormerAddBill = () => {
         method: "POST",
         headers: {
           "Content-Type": "multipart/form-data",
-          authorization: `Bearer ${authCtx.user.token}`,
+          authorization: `Bearer ${authCtx.user?.token}`,
         },
         data: formDataToSend,
-      }
+      };
 
       const res: any = await axiosApi(
         config.url,
         config.method,
         config.headers,
         config.data
-      )
+      );
 
       if (res) {
         enqueueSnackbar(res.message, {
           preventDuplicate: true,
           variant: "success",
-        })
+        });
 
-        router.push("/Formers/ViewBill")
+        router.push("/Formers/ViewBill");
       }
     } catch (err) {
-      console.log(err)
+      console.log(err);
     }
-  }
+  };
 
   // useEffect(() => {
   //   console.log(formerFieldState)
@@ -107,31 +107,31 @@ const FormerAddBill = () => {
   // }, [formerFieldState])
 
   const handleFieldChange = (e: any) => {
-    const { name, value, type, files } = e.target
+    const { name, value, type, files } = e.target;
 
     setFormerFieldState((prevState: any) => ({
       ...prevState,
       [name]: type === "file" ? files[0] : value,
-    }))
+    }));
 
-    if (type === "file") setPreviewUrl(URL.createObjectURL(files[0]))
-  }
+    if (type === "file") setPreviewUrl(URL.createObjectURL(files[0]));
+  };
 
   function getCurrentDate() {
-    const today = new Date()
-    let dd: any = today.getDate()
-    let mm: any = today.getMonth() + 1 // January is 0!
-    const yyyy = today.getFullYear()
+    const today = new Date();
+    let dd: any = today.getDate();
+    let mm: any = today.getMonth() + 1; // January is 0!
+    const yyyy = today.getFullYear();
 
     if (dd < 10) {
-      dd = "0" + dd
+      dd = "0" + dd;
     }
 
     if (mm < 10) {
-      mm = "0" + mm
+      mm = "0" + mm;
     }
 
-    return yyyy + "-" + mm + "-" + dd
+    return yyyy + "-" + mm + "-" + dd;
   }
   return (
     <PageContainer title="Add Bills" description="Manage Former data here">
@@ -249,7 +249,7 @@ const FormerAddBill = () => {
                       </span>
                     ) : null}
                   </FormControl>
-                )
+                );
               })}
             </div>
             <div
@@ -291,7 +291,7 @@ const FormerAddBill = () => {
         </>
       </DashboardNew>
     </PageContainer>
-  )
-}
+  );
+};
 
-export default FormerAddBill
+export default FormerAddBill;

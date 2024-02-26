@@ -1,9 +1,9 @@
-import React, { useEffect } from "react"
-import { useRouter } from "next/navigation"
-import { useState } from "react"
-import Snackbar, { SnackbarOrigin } from "@mui/material/Snackbar"
+import React, { useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import Snackbar, { SnackbarOrigin } from "@mui/material/Snackbar";
 
-import RefreshIcon from "@mui/icons-material/Refresh"
+import RefreshIcon from "@mui/icons-material/Refresh";
 
 import {
   Alert,
@@ -16,83 +16,83 @@ import {
   styled,
   TextField,
   Tooltip,
-} from "@mui/material"
+} from "@mui/material";
 
-import { Visibility, VisibilityOff } from "@mui/icons-material"
+import { Visibility, VisibilityOff } from "@mui/icons-material";
 
-import { useAuth } from "../../../../../context/JWTContext/AuthContext.provider"
+import { useAuth } from "../../../../../context/JWTContext/AuthContext.provider";
 
-const emailValidationRegex = /^[\w-\\.]+@([\w-]+\.)+[\w-]{2,4}$/
+const emailValidationRegex = /^[\w-\\.]+@([\w-]+\.)+[\w-]{2,4}$/;
 const mobileValidationRegex =
-  /^((\+*)((0[ -]*)*|((91 )*))((\d{12})+|(\d{10})+))|\{5}([- ]*)\d{6}$/
+  /^((\+*)((0[ -]*)*|((91 )*))((\d{12})+|(\d{10})+))|\{5}([- ]*)\d{6}$/;
 
 function Formers() {
-  const auth = useAuth()
-  const router = useRouter()
-  const [email, setEmail] = useState<any>("")
-  const [password, setPassword]: any = useState(null)
-  const [showPassword, setShowPassword] = useState(false)
-  const [inputCaptcha, setInputCaptcha] = useState<any>("")
-  const [captchaCode, SetCaptchaCode] = useState<any>("")
-  const handleClickShowPassword = () => setShowPassword(!showPassword)
+  const auth = useAuth();
+  const router = useRouter();
+  const [email, setEmail] = useState<any>("");
+  const [password, setPassword]: any = useState(null);
+  const [showPassword, setShowPassword] = useState(false);
+  const [inputCaptcha, setInputCaptcha] = useState<any>("");
+  const [captchaCode, SetCaptchaCode] = useState<any>("");
+  const handleClickShowPassword = () => setShowPassword(!showPassword);
   const [toast, setToast] = useState<any>({
     open: false,
     severity: "",
     message: "",
-  })
+  });
   const loginUser = async () => {
     if (password === "" || inputCaptcha === "") {
-      SetCaptchaCode(Math.random().toString(36).substr(2, 6))
+      SetCaptchaCode(Math.random().toString(36).substr(2, 6));
       setToast({
         message: "Please fill all fields",
         open: true,
         severity: "error",
-      })
-      return
+      });
+      return;
     } else {
       if (captchaCode === inputCaptcha) {
         if (emailValidationRegex.test(email)) {
-          let ress: any = await auth.signInFor(email, password)
+          let ress: any = await auth.signInFor(email, password);
 
           if (ress?.success == false) {
             setToast({
               message: "Incorrect credentials",
               open: true,
               severity: "error",
-            })
+            });
           }
         } else {
-          SetCaptchaCode(Math.random().toString(36).substr(2, 6))
+          SetCaptchaCode(Math.random().toString(36).substr(2, 6));
           setToast({
             message: "Please enter a valid email address",
             open: true,
             severity: "error",
-          })
+          });
         }
       } else {
-        SetCaptchaCode(Math.random().toString(36).substr(2, 6))
+        SetCaptchaCode(Math.random().toString(36).substr(2, 6));
         setToast({
           message: "Please enter the correct Captcha",
           open: true,
           severity: "error",
-        })
+        });
       }
     }
-  }
+  };
   useEffect(() => {
-    SetCaptchaCode(Math.random().toString(36).substr(2, 6))
-  }, [])
+    SetCaptchaCode(Math.random().toString(36).substr(2, 6));
+  }, []);
 
   const refreshCapcha = () => {
-    SetCaptchaCode(Math.random().toString(36).substr(2, 6))
-  }
+    SetCaptchaCode(Math.random().toString(36).substr(2, 6));
+  };
   const Heading1 = styled(Typography)(({ theme }) => ({
     padding: theme.spacing(1),
     color: "black",
     fontFamily: "Nunito, sans-serif",
     lineHeight: "41.72px",
     fontWeight: 700,
-  }))
+  }));
 
   const LoginButton = styled(Button)`
     width: auto;
@@ -107,7 +107,7 @@ function Formers() {
     &:hover {
       background-color: #e15a11;
     }
-  `
+  `;
 
   const ResendOTP = styled(Typography)`
     width: 150px;
@@ -123,27 +123,26 @@ function Formers() {
     margin: auto;
     text-align: center;
     justify-content: center;
-  `
+  `;
 
   const handleMouseDownPassword = (
     event: React.MouseEvent<HTMLButtonElement>
   ) => {
-    event.preventDefault()
-  }
+    event.preventDefault();
+  };
   const handleClose = () => {
     setToast({
       open: false,
       severity: "",
       message: "",
-    })
-  }
+    });
+  };
   return (
     <Box sx={{ height: "100%" }}>
       <Snackbar
         anchorOrigin={{ vertical: "top", horizontal: "center" }}
         open={toast.open}
         onClose={handleClose}
-        // message="I love snacks"
         key={"top" + "center"}
         autoHideDuration={2000}
       >
@@ -164,8 +163,8 @@ function Formers() {
           justifyContent: "left",
           alignItems: "center",
           width: "auto",
-          // height: "100vh",
-          height: "100%",
+          height: "100vh",
+          // height: "100%",
           overflow: "auto",
           top: "4px",
           backgroundImage: `url(/Banner.png)`,
@@ -177,7 +176,7 @@ function Formers() {
           sx={{
             background: "#000000b3",
             width: "auto",
-            // height: "100vh",
+            height: "100vh",
             top: "0",
             left: "0",
             borderRadius: "0",
@@ -376,12 +375,12 @@ function Formers() {
                 // variant="outlined"
                 type="text"
                 onPaste={(event: any) => {
-                  event.preventDefault()
-                  return false
+                  event.preventDefault();
+                  return false;
                 }}
                 onDrop={(event: any) => {
-                  event.preventDefault()
-                  return false
+                  event.preventDefault();
+                  return false;
                 }}
                 onKeyDown={(event) => {
                   if (event.key == "Enter") {
@@ -391,7 +390,7 @@ function Formers() {
                 value={inputCaptcha}
                 sx={{ width: "55%", background: "white", borderRadius: "4px" }}
                 onChange={(event) => {
-                  setInputCaptcha(event.target.value)
+                  setInputCaptcha(event.target.value);
                 }}
                 inputProps={{
                   style: {
@@ -437,7 +436,7 @@ function Formers() {
               }}
               variant="body1"
               onClick={() => {
-                router.push("/login")
+                router.push("/login");
               }}
             >
               Login for User
@@ -446,7 +445,7 @@ function Formers() {
         </Box>
       </Box>
     </Box>
-  )
+  );
 }
 
-export default Formers
+export default Formers;
