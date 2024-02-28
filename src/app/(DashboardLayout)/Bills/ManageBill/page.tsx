@@ -545,7 +545,7 @@ const ManageBill = () => {
 
   const getData = async (selectedBillType: any) => {
     const config = {
-      url: `/api/billRouting/getall?billType=${selectedBillType}`,
+      url: `/api/billRouting/getall?billType=${selectedBillType}&latest=true`,
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -580,6 +580,7 @@ const ManageBill = () => {
       console.log(err.message)
     }
   }
+ 
 
   function findNextItem(array: any, item1: any, item2: any) {
     const index = array.findIndex(

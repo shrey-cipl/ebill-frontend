@@ -53,7 +53,7 @@ const SidebarItems = ({ toggleMobileSidebar }: any) => {
   const getDataSideBar = async () => {
     console.log("ds")
     const config = {
-      url: `/api/billRouting/getall`,
+      url: `/api/billRouting/getall?latest=true`,
       method: "GET",
       headers: {
         "Content-Type": "application/json",
