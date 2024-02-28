@@ -1,5 +1,5 @@
-"use client";
-import React, { useState } from "react";
+"use client"
+import React, { useEffect, useState } from "react"
 import {
   Button,
   Typography,
@@ -8,62 +8,79 @@ import {
   MenuItem,
   TextField,
   FormControl,
-} from "@mui/material";
+} from "@mui/material"
 
-import PageContainer from "../../components/container/PageContainer";
-import DashboardNew from "../../components/shared/DashboardNew";
-import { useAuth } from "@/context/JWTContext/AuthContext.provider";
-import axiosApi from "@/Util/axiosApi";
-import { useRouter } from "next/navigation";
-import { enqueueSnackbar } from "notistack";
-import Tooltip from "@mui/material/Tooltip";
+import PageContainer from "../../components/container/PageContainer"
+import DashboardNew from "../../components/shared/DashboardNew"
+import { useAuth } from "@/context/JWTContext/AuthContext.provider"
+import axiosApi from "@/Util/axiosApi"
+import { useRouter } from "next/navigation"
+import { enqueueSnackbar } from "notistack"
+import Tooltip from "@mui/material/Tooltip"
 
-import { FIELDS_FORMERS_ADD_BILL } from "@/config/formFields";
-import { validateOnSubmit } from "@/Util/commonFunctions";
+import { FIELDS_FORMERS_ADD_BILL } from "@/config/formFields"
+import { validateOnSubmit } from "@/Util/commonFunctions"
 
-const initialFieldState: any = {};
-const initialValidationState: any = {};
+const initialFieldState: any = {}
+const initialValidationState: any = {}
 // Creates an initial state object (uses 'id')
 for (let arrEl of FIELDS_FORMERS_ADD_BILL) {
-  if (!initialFieldState[arrEl.id]) initialFieldState[arrEl.id] = "";
+  if (!initialFieldState[arrEl.id]) initialFieldState[arrEl.id] = ""
 
   // Setup collective validation state
   initialValidationState[arrEl.id] = {
     validationType: arrEl.validationType,
     valid: false,
     errMsg: "",
-  };
+  }
 }
 
 const FormerAddBill = () => {
-  const [formerFieldState, setFormerFieldState] = useState(initialFieldState);
-  const [validations, setValidations] = useState(initialValidationState);
-  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const [formerFieldState, setFormerFieldState] = useState(initialFieldState)
+  const [validations, setValidations] = useState(initialValidationState)
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null)
+  const [former, setFormer] = useState<any>()
 
-  const authCtx: any = useAuth();
-  const router = useRouter();
+  const authCtx: any = useAuth()
+  const router = useRouter()
+
+  console.log(formerFieldState,"formerFieldState")
 
   const handleSubmit = async (e: any) => {
-    e.preventDefault();
+    e.preventDefault()
+
+    //   console.log(formerFieldState,validations,"jkdjdsjdjkds");
+    //   const keysToRemove = ["former"]
+    // const filteredformerFieldState = [...formerFieldState].filter(
+    //   (key:any) => !keysToRemove.includes(key)
+    // )
+    // const filteredvalidations = [validations].filter(
+    //   (key:any) => !keysToRemove.includes(key)
+    // )
 
     const { allValidationsPass, updatedValidationState } = validateOnSubmit(
       formerFieldState,
       validations
-    );
+    )
 
-    setValidations(updatedValidationState);
+    // console.log(
+    //   allValidationsPass,
+    //   updatedValidationState,
+    //   "updatedValidationState"
+    // )
+    setValidations(updatedValidationState)
 
     if (!allValidationsPass) {
-      return;
+      return
     }
 
-    const formDataToSend = new FormData();
+    const formDataToSend = new FormData()
 
-    const fieldKeysArr = Object.keys(formerFieldState);
+    const fieldKeysArr = Object.keys(formerFieldState)
 
     fieldKeysArr.forEach((key) =>
       formDataToSend.append(key, formerFieldState[key])
-    );
+    )
 
     try {
       const config = {
@@ -74,27 +91,30 @@ const FormerAddBill = () => {
           authorization: `Bearer ${authCtx.user?.token}`,
         },
         data: formDataToSend,
-      };
+      }
 
       const res: any = await axiosApi(
         config.url,
         config.method,
         config.headers,
         config.data
-      );
+      )
 
       if (res) {
         enqueueSnackbar(res.message, {
           preventDuplicate: true,
           variant: "success",
-        });
-
-        router.push("/Formers/ViewBill");
+        })
+        if (authCtx?.user?.data?.role) {
+          router.push("/UserBills")
+        } else {
+          router.push("/Formers/ViewBill")
+        }
       }
     } catch (err) {
-      console.log(err);
+      console.log(err)
     }
-  };
+  }
 
   // useEffect(() => {
   //   console.log(formerFieldState)
@@ -107,32 +127,56 @@ const FormerAddBill = () => {
   // }, [formerFieldState])
 
   const handleFieldChange = (e: any) => {
-    const { name, value, type, files } = e.target;
+    const { name, value, type, files } = e.target
+
+    console.log(name, value, "Bill")
 
     setFormerFieldState((prevState: any) => ({
       ...prevState,
       [name]: type === "file" ? files[0] : value,
-    }));
+    }))
 
-    if (type === "file") setPreviewUrl(URL.createObjectURL(files[0]));
-  };
+    if (type === "file") setPreviewUrl(URL.createObjectURL(files[0]))
+  }
 
   function getCurrentDate() {
-    const today = new Date();
-    let dd: any = today.getDate();
-    let mm: any = today.getMonth() + 1; // January is 0!
-    const yyyy = today.getFullYear();
+    const today = new Date()
+    let dd: any = today.getDate()
+    let mm: any = today.getMonth() + 1 // January is 0!
+    const yyyy = today.getFullYear()
 
     if (dd < 10) {
-      dd = "0" + dd;
+      dd = "0" + dd
     }
 
     if (mm < 10) {
-      mm = "0" + mm;
+      mm = "0" + mm
     }
 
-    return yyyy + "-" + mm + "-" + dd;
+    return yyyy + "-" + mm + "-" + dd
   }
+
+  const getFormers = async () => {
+    const config = {
+      url: `/api/former/getAll`,
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        authorization: `Bearer ${authCtx.user?.token}`,
+      },
+    }
+
+    const res: any = await axiosApi(config.url, config.method, config.headers)
+
+    setFormer(res?.data)
+  }
+
+  console.log(formerFieldState, "formerFieldState")
+
+  useEffect(() => {
+    getFormers()
+  }, [authCtx.user?.token])
+
   return (
     <PageContainer title="Add Bills" description="Manage Former data here">
       <DashboardNew title="Add Bills" titleVariant="h5">
@@ -168,7 +212,31 @@ const FormerAddBill = () => {
                       }
                       placement="top-start"
                     >
-                      {field.type === "select" ? (
+                      {field.type === "selectFormer" ? (
+                        authCtx?.user?.data?.role && (
+                          <Select
+                            name={field.id}
+                            size="small"
+                            // value={former.map((el: any) => el._id)}
+                            onChange={(e) => handleFieldChange(e)}
+                            sx={{ width: "100%" }}
+                            required
+                            // error={
+                            //   !validations[field.id]?.valid &&
+                            //   validations[field.id]?.errMsg
+                            // }
+                          >
+                            {former?.map((option: any, i: any) => {
+                              console.log(option, "Option")
+                              return (
+                                <MenuItem value={option._id} key={i}>
+                                  {option.name}
+                                </MenuItem>
+                              )
+                            })}
+                          </Select>
+                        )
+                      ) : field.type === "select" ? (
                         <Select
                           name={field.id}
                           size="small"
@@ -177,8 +245,8 @@ const FormerAddBill = () => {
                           sx={{ width: "100%" }}
                           required
                           error={
-                            !validations[field.id].valid &&
-                            validations[field.id].errMsg
+                            !validations[field.id]?.valid &&
+                            validations[field.id]?.errMsg
                           }
                         >
                           {field.selectOptions?.map((option, i) => (
@@ -194,12 +262,17 @@ const FormerAddBill = () => {
                           placeholder={field.placeholder}
                           size="small"
                           onChange={(e) => handleFieldChange(e)}
-                          error={
-                            !validations[field.id].valid &&
-                            validations[field.id].errMsg
-                          }
                           sx={{ width: "100%" }}
                           required
+                          error={
+                            !validations[field.id]?.valid &&
+                            validations[field.id]?.errMsg
+                          }
+                          helperText={
+                            !validations[field.id]?.valid &&
+                            validations[field.id]?.errMsg &&
+                            validations[field.id]?.errMsg
+                          }
                         />
                       ) : field.type === "date" ? (
                         <TextField
@@ -208,10 +281,6 @@ const FormerAddBill = () => {
                           placeholder={field.placeholder}
                           size="small"
                           value={formerFieldState[field.id]}
-                          error={
-                            !validations[field.id].valid &&
-                            validations[field.id].errMsg
-                          }
                           // id="outlined-error"
                           onChange={(e) => handleFieldChange(e)}
                           sx={{ width: "100%" }}
@@ -221,6 +290,15 @@ const FormerAddBill = () => {
                               max: getCurrentDate(),
                             },
                           }}
+                          error={
+                            !validations[field.id]?.valid &&
+                            validations[field.id]?.errMsg
+                          }
+                          helperText={
+                            !validations[field.id]?.valid &&
+                            validations[field.id]?.errMsg &&
+                            validations[field.id]?.errMsg
+                          }
                         />
                       ) : (
                         <TextField
@@ -229,27 +307,26 @@ const FormerAddBill = () => {
                           placeholder={field.placeholder}
                           size="small"
                           value={formerFieldState[field.id]}
-                          error={
-                            !validations[field.id].valid &&
-                            validations[field.id].errMsg
-                          }
                           // id="outlined-error"
                           onChange={(e) => handleFieldChange(e)}
                           sx={{ width: "100%" }}
                           required={field.required}
+                          error={
+                            !validations[field.id]?.valid &&
+                            validations[field.id]?.errMsg
+                          }
+                          helperText={
+                            !validations[field.id]?.valid &&
+                            validations[field.id]?.errMsg &&
+                            validations[field.id]?.errMsg
+                          }
                         />
                       )}
                     </Tooltip>
 
                     {/* Validation Message */}
-                    {!validations[field.id].valid &&
-                    validations[field.id].errMsg ? (
-                      <span style={{ color: "red", fontSize: "13px" }}>
-                        {validations[field.id].errMsg}
-                      </span>
-                    ) : null}
                   </FormControl>
-                );
+                )
               })}
             </div>
             <div
@@ -291,7 +368,7 @@ const FormerAddBill = () => {
         </>
       </DashboardNew>
     </PageContainer>
-  );
-};
+  )
+}
 
-export default FormerAddBill;
+export default FormerAddBill

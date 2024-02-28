@@ -150,7 +150,7 @@ const UserBills = () => {
       width: 100,
     },
     { field: "billNumber", headerName: "BILL NO." },
-    { field: "name", headerName: "NAME" },
+    { field: "name", headerName: "NAME"  },
     { field: "claimedAmount", headerName: "CLAIMED AMOUNT" },
     { field: "billPeriodFrom", headerName: "BILL FROM" },
     { field: "billPeriodTo", headerName: "BILL TO" },

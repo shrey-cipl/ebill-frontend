@@ -4,7 +4,7 @@ const FIELDS_MANAGE_BILL = [
   {
     id: "diaryNumber",
     fieldName: "Diary Number",
-    type: "number",
+    type: "text",
     placeholder: "Enter diary number here",
     required: true,
     validationType: VALIDATION_TYPE.alphaNumeric,
@@ -59,7 +59,7 @@ const FIELDS_MANAGE_BILL = [
   {
     id: "fileNumber",
     fieldName: "File Number",
-    type: "number",
+    type: "text",
     placeholder: "Enter file number here",
     required: true,
     validationType: VALIDATION_TYPE.alphaNumeric,
@@ -82,6 +82,7 @@ const FIELDS_MANAGE_BILL = [
     id: "totalClaimedAmount",
     fieldName: "Total Claimed Amount",
     type: "number",
+    min: 0,
     placeholder: "Enter total claimed amount here",
     required: true,
     validationType: VALIDATION_TYPE.amount,
@@ -116,7 +117,7 @@ const FIELDS_MANAGE_BILL = [
       "Closed after Approval",
     ],
     required: true,
-    validationType: VALIDATION_TYPE.none,
+    validationType: VALIDATION_TYPE.empty,
   },
   {
     id: "lastForwardedTo",
@@ -124,7 +125,7 @@ const FIELDS_MANAGE_BILL = [
     type: "select",
     selectOptions: ROLES,
     required: true,
-    validationType: VALIDATION_TYPE.none,
+    validationType: VALIDATION_TYPE.empty,
   },
   {
     id: "currentremark",
@@ -132,7 +133,7 @@ const FIELDS_MANAGE_BILL = [
     type: "text",
     placeholder: "Enter your remark here",
     required: true,
-    validationType: VALIDATION_TYPE.none,
+    validationType: VALIDATION_TYPE.empty,
   },
 ]
 
@@ -141,6 +142,7 @@ const FIELDS_MANAGE_BILL_UPDATE = [
     id: "sanctionedAmount",
     fieldName: "Sanctioned Amount",
     type: "number",
+
     placeholder: "Enter sanctioned amount here",
     required: true,
     validationType: VALIDATION_TYPE.amount,
@@ -152,14 +154,15 @@ const FIELDS_MANAGE_BILL_UPDATE = [
     type: "number",
     placeholder: "Enter pfms amount here",
     required: true,
-    validationType: VALIDATION_TYPE.none,
+    validationType: VALIDATION_TYPE.empty,
   },
   {
     id: "billProcessingStartDate",
     fieldName: "Bill Processing Start Date",
     type: "date",
+
     required: true,
-    validationType: VALIDATION_TYPE.none,
+    validationType: VALIDATION_TYPE.empty,
   },
 ]
 
@@ -306,7 +309,7 @@ const FIELDS_FORMERS_ADD_BILL = [
     type: "select",
     selectOptions: BILL_TYPE,
     required: true,
-    validationType: VALIDATION_TYPE.none,
+    validationType: VALIDATION_TYPE.empty,
   },
   {
     id: "claimedAmount",
@@ -336,6 +339,14 @@ const FIELDS_FORMERS_ADD_BILL = [
     type: "file",
     required: true,
     validationType: VALIDATION_TYPE.file,
+  },
+  {
+    id: "former",
+    fieldName: "Select Former",
+    type: "selectFormer",
+    selectOptions: [],
+    required: true,
+    validationType: VALIDATION_TYPE.empty,
   },
 ]
 

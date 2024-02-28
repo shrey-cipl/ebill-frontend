@@ -16,7 +16,7 @@ import Box from "@mui/material/Box"
 import { styled } from "@mui/system"
 import dayjs from "dayjs"
 import Tooltip from "@mui/material/Tooltip"
-
+import InputLabel from "@mui/material/InputLabel"
 import PageContainer from "../../components/container/PageContainer"
 import DashboardNew from "../../components/shared/DashboardNew"
 import { useAuth } from "@/context/JWTContext/AuthContext.provider"
@@ -60,6 +60,18 @@ for (let arrEl of FIELDS_MANAGE_BILL) {
     errMsg: "",
   }
 }
+for (let arrEl of FIELDS_MANAGE_BILL_UPDATE) {
+  if (!initialFieldState[arrEl.id]) initialFieldState[arrEl.id] = ""
+
+  // Setup collective validation state
+  initialValidationState[arrEl.id] = {
+    validationType: arrEl.validationType,
+    valid: false,
+    errMsg: "",
+  }
+}
+
+console.log(initialValidationState, "initialValidationState")
 
 const initialUpdateModeFields: any = {}
 const initialUpdateModeValidationState: any = {}
@@ -311,14 +323,22 @@ const ManageBill = () => {
   }, [paramUserpageId, BillList])
 
   // Posts form data
+
   const handleFormSubmit = async (e: any) => {
     e.preventDefault()
 
     // For only add_mode fields
+
+    console.log(dataFields, "dataFields  in paggeeee e e  e e")
+    console.log(validations, "validations  in paggeeee e e  e ex")
+
     const { allValidationsPass, updatedValidationState } = validateOnSubmit(
       dataFields,
       validations
     )
+
+    console.log(allValidationsPass, "allValidationsPass")
+    console.log(updatedValidationState, "updatedValidationState")
 
     setValidations(updatedValidationState)
 
@@ -450,6 +470,10 @@ const ManageBill = () => {
 
       router.push("/Bills")
     } catch (err: any) {
+      enqueueSnackbar(err.message, {
+        preventDuplicate: true,
+        variant: "success",
+      })
       console.log("ManageBill Error:", err)
     }
   }
@@ -572,11 +596,6 @@ const ManageBill = () => {
       return null
     }
   }
-  console.log(
-    updateModeFields,
-    dataFields,
-    "kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk"
-  )
 
   useEffect(() => {
     if (
@@ -585,9 +604,7 @@ const ManageBill = () => {
         role === "Accounts IV") &&
       updateModeFields.PFMS === null
     ) {
-      console.log(
-        "dfwewwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww"
-      )
+      setDataFields({ ...dataFields, ...updateModeFields })
       setBool(true)
     } else if (
       (role != "Accounts I" ||
@@ -597,15 +614,11 @@ const ManageBill = () => {
     ) {
       setBool(false)
     } else if (updateModeFields.PFMS !== null) {
+      setDataFields({ ...dataFields, ...updateModeFields })
       setBool((prev: any) => true)
     }
   }, [updateModeFields])
 
-  console.log(
-    role === "Accounts I" || role === "Accounts II" || role === "Accounts IV",
-    "ppppp"
-  )
-  console.log(updateModeFields.PFMS === null, "ooooo")
   return (
     <>
       <PageContainer
@@ -686,79 +699,123 @@ const ManageBill = () => {
                       }
                       placement="top-start"
                     >
-                      {field.id == "lastForwardedTo" ? (
-                        <Select
-                          name={field.id}
-                          size="small"
-                          value={billSequence[0]}
-                          onChange={(e) => handleFieldChange(e)}
-                          sx={{ width: "100%" }}
-                          disabled={
-                            disabledPermananty ||
-                            disabledFromUserBills ||
-                            disabledUpdateFields
-                          }
-                        >
-                          {billSequence.map((bill: any, i: any) => (
-                            <MenuItem value={bill} key={i}>
-                              {bill}
-                            </MenuItem>
-                          ))}
-                        </Select>
-                      ) : field.type === "select" ? (
-                        <Select
-                          name={field.id}
-                          size="small"
-                          value={dataFields[field.id]}
-                          onChange={(e) => handleFieldChange(e)}
-                          sx={{ width: "100%" }}
-                          disabled={
-                            disabledPermananty ||
-                            disabledFromUserBills ||
-                            disabledUpdateFields
-                          }
-                        >
-                          {field.id === "billNumber"
-                            ? BillList.map((bill: any) => (
-                                <MenuItem
-                                  value={bill.billNumber}
-                                  key={bill._id}
-                                >
-                                  {bill.billNumber}
+                      <>
+                        {field.id == "lastForwardedTo" ? (
+                          <>
+                            <Select
+                              name={field.id}
+                              size="small"
+                              value={billSequence[0]}
+                              onChange={(e) => handleFieldChange(e)}
+                              sx={{ width: "100%" }}
+                              disabled={
+                                disabledPermananty ||
+                                disabledFromUserBills ||
+                                disabledUpdateFields
+                              }
+                              error={
+                                !validations[field.id]?.valid &&
+                                validations[field.id]?.errMsg
+                              }
+                            >
+                              {billSequence.map((bill: any, i: any) => (
+                                <MenuItem value={bill} key={i}>
+                                  {bill}
                                 </MenuItem>
-                              ))
-                            : field.selectOptions?.map(
-                                (option: any, i: any) => (
-                                  <MenuItem value={option} key={i}>
-                                    {option}
-                                  </MenuItem>
-                                )
-                              )}
-                        </Select>
-                      ) : (
-                        <TextField
-                          name={field.id}
-                          type={field.type}
-                          size="small"
-                          placeholder={field?.placeholder}
-                          value={dataFields[field.id]}
-                          onChange={(e) => handleFieldChange(e)}
-                          sx={{ width: "100%" }}
-                          disabled={
-                            disabledPermananty ||
-                            disabledFromUserBills ||
-                            disabledUpdateFields
-                          }
-                          multiline={
-                            field.id === "currentremark" ? true : false
-                          }
-                          rows={4}
-                        />
-                      )}
+                              ))}
+                            </Select>
+                            <InputLabel
+                              sx={{
+                                color: "#fba088",
+                                fontSize: "13px",
+                                ml: 1,
+                              }}
+                            >
+                              {validations[field.id]?.errMsg}
+                            </InputLabel>
+                          </>
+                        ) : field.type === "select" ? (
+                          <>
+                            <Select
+                              name={field.id}
+                              size="small"
+                              value={dataFields[field.id]}
+                              onChange={(e) => handleFieldChange(e)}
+                              sx={{ width: "100%" }}
+                              disabled={
+                                disabledPermananty ||
+                                disabledFromUserBills ||
+                                disabledUpdateFields
+                              }
+                              error={
+                                !validations[field.id]?.valid &&
+                                validations[field.id]?.errMsg
+                              }
+                            >
+                              {field.id === "billNumber"
+                                ? BillList.map((bill: any) => (
+                                    <MenuItem
+                                      value={bill.billNumber}
+                                      key={bill._id}
+                                    >
+                                      {bill.billNumber}
+                                    </MenuItem>
+                                  ))
+                                : field.selectOptions?.map(
+                                    (option: any, i: any) => (
+                                      <MenuItem value={option} key={i}>
+                                        {option}
+                                      </MenuItem>
+                                    )
+                                  )}
+                            </Select>
+                            <InputLabel
+                              sx={{
+                                color: "#fba088",
+                                fontSize: "13px",
+                                ml: 1,
+                              }}
+                            >
+                              {validations[field.id]?.errMsg}
+                            </InputLabel>
+                          </>
+                        ) : (
+                          <TextField
+                            name={field.id}
+                            type={field.type}
+                            inputProps={{
+                              min: field.type === "number" ? 0 : undefined,
+                            }}
+                            size="small"
+                            placeholder={field?.placeholder}
+                            value={dataFields[field.id]}
+                            onChange={(e) => handleFieldChange(e)}
+                            sx={{ width: "100%" }}
+                            disabled={
+                              disabledPermananty ||
+                              disabledFromUserBills ||
+                              disabledUpdateFields
+                            }
+                            multiline={
+                              field.id === "currentremark" ? true : false
+                            }
+                            rows={4}
+                            error={
+                              !validations[field.id]?.valid &&
+                              validations[field.id]?.errMsg
+                            }
+                            helperText={
+                              !validations[field.id]?.valid &&
+                              validations[field.id]?.errMsg &&
+                              validations[field.id]?.errMsg
+                            }
+                          />
+                        )}
+                      </>
                     </Tooltip>
 
                     {/* Validation Message */}
-                    {!validations[field.id]?.valid &&
+                    {/* {!validations[field.id]?.valid &&
                     validations[field.id]?.errMsg ? (
                       <p
                         style={{
@@ -769,7 +826,7 @@ const ManageBill = () => {
                       >
                         {validations[field.id].errMsg}
                       </p>
-                    ) : null}
+                    ) : null} */}
                   </FormControl>
                 )
               })}
@@ -802,11 +859,19 @@ const ManageBill = () => {
                           onChange={handleUpdatedModeFields}
                           sx={{ width: "100%" }}
                           size="small"
-                          // disabled={disabledUpdateFields}
+                          error={
+                            !validations[field.id]?.valid &&
+                            validations[field.id]?.errMsg
+                          }
+                          helperText={
+                            !validations[field.id]?.valid &&
+                            validations[field.id]?.errMsg &&
+                            validations[field.id]?.errMsg
+                          }
                         />
 
                         {/* Validation Message */}
-                        {!validations[field.id]?.valid &&
+                        {/* {!validations[field.id]?.valid &&
                         validations[field.id]?.errMsg ? (
                           <p
                             style={{
@@ -817,7 +882,7 @@ const ManageBill = () => {
                           >
                             {validations[field.id].errMsg}
                           </p>
-                        ) : null}
+                        ) : null} */}
                       </>
                     ) : null}
                   </FormControl>

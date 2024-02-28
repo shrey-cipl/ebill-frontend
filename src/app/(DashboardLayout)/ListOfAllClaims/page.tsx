@@ -1,46 +1,50 @@
-"use client"
-import { useEffect, useState } from "react"
+"use client";
+import { useEffect, useState } from "react";
 
-import dayjs from "dayjs"
+import dayjs from "dayjs";
 
-import PageContainer from "../components/container/PageContainer"
-import DashboardNew from "../components/shared/DashboardNew"
-import { useAuth } from "@/context/JWTContext/AuthContext.provider"
-import axiosApi from "@/Util/axiosApi"
-import Link from "next/link"
-import Button from "@mui/material/Button"
+import PageContainer from "../components/container/PageContainer";
+import DashboardNew from "../components/shared/DashboardNew";
+import { useAuth } from "@/context/JWTContext/AuthContext.provider";
+import axiosApi from "@/Util/axiosApi";
+import Link from "next/link";
+import Button from "@mui/material/Button";
 
-import { GridColDef } from "@mui/x-data-grid"
-import CustomGrid from "../components/CustomGrid"
-import { exportDataToExcel, exportDataToPDF } from "@/Util/commonFunctions"
-import { Box, Dialog, DialogContent } from "@mui/material"
+import { GridColDef } from "@mui/x-data-grid";
+import CustomGrid from "../components/CustomGrid";
+import { exportDataToExcel, exportDataToPDF } from "@/Util/commonFunctions";
+import { Box, Dialog, DialogContent } from "@mui/material";
+import ViewLog from "../components/View/ViewLog";
 
 const dataToExport = (data: any) => {
-  return data.map((item: any) => ({
+  return data.map((item: any, i: any) => ({
+    "S.No": i + 1,
+    Name: item.name,
     "Diary No.": item.diaryNumber,
-    "Bill No.": item.billNumber,
     "Bill Type": item.billType,
-    "User Name": item.name,
+    "Bill No.": item.billNumber,
     "Receiving Date": dayjs(item.claimReceivingDate).format("DD-MM-YYYY"),
+    "Claimed Amount": item.totalClaimedAmount,
+    "Sanctioned Amount": item.sanctionedAmount,
     "Claim From": dayjs(item.claimPeriodFrom).format("DD-MM-YYYY"),
     "Claimed To": dayjs(item.claimPeriodTo).format("DD-MM-YYYY"),
-    "Claimed Amt.": item.totalClaimedAmount,
-    "Admissible Amt.": item.totalAdmissibleAmount,
-  }))
-}
+    "Admissible Amount": item.totalAdmissibleAmount,
+  }));
+};
 
 const ListOfAllClaims = () => {
-  const [billList, setBillList] = useState([])
+  const [billList, setBillList] = useState([]);
+  const [id, setId] = useState("");
 
-  const [open, setOpen] = useState(false)
+  const [open, setOpen] = useState(false);
   const handleOpenPopup: any = () => {
-    setOpen(true)
-  }
+    setOpen(true);
+  };
   const handleClosePopup: any = () => {
-    setOpen(false)
-  }
+    setOpen(false);
+  };
 
-  const authCtx: any = useAuth()
+  const authCtx: any = useAuth();
 
   const handleFetchBills = async () => {
     const config = {
@@ -50,28 +54,32 @@ const ListOfAllClaims = () => {
         "Content-Type": "application/json",
         authorization: `Bearer ${authCtx?.user?.token}`,
       },
-    }
+    };
 
     try {
-      const res = await axiosApi(config.url, config.method, config.headers)
+      const res = await axiosApi(config.url, config.method, config.headers);
 
       if (res && res.data) {
         for (let item of res.data) {
-          item.id = item._id
-          item.billNumber = item.bill.billNumber
+          item.id = item._id;
+          item.billNumber = item.bill.billNumber;
         }
 
-        setBillList(res.data)
+        setBillList(res.data);
       }
     } catch (err: any) {
-      console.log(err.message)
+      console.log(err.message);
     }
-  }
+  };
 
   // collect bills and updates list
   useEffect(() => {
-    handleFetchBills()
-  }, [authCtx?.user?.token])
+    handleFetchBills();
+  }, [authCtx?.user?.token]);
+
+  const DialogBox = {
+    padding: "10px 20px",
+  };
 
   const columns: GridColDef[] = [
     {
@@ -87,7 +95,7 @@ const ListOfAllClaims = () => {
       field: "claimReceivingDate",
       headerName: "RECEIVING DATE",
       valueFormatter: (params) => {
-        return dayjs(params.value).format("YYYY-MM-DD")
+        return dayjs(params.value).format("YYYY-MM-DD");
       },
     },
     { field: "totalClaimedAmount", headerName: "CLAIMED AMOUNT" },
@@ -97,7 +105,7 @@ const ListOfAllClaims = () => {
       field: "pendingBranch",
       headerName: "PENDING BRANCH",
       valueFormatter: (params) => {
-        return `Pending at ${params.value}`
+        return `Pending at ${params.value}`;
       },
     },
     {
@@ -105,7 +113,7 @@ const ListOfAllClaims = () => {
       headerName: "CREATED AT",
 
       valueFormatter: (params) => {
-        return dayjs(params.value).format("DD-MM-YYYY h:mm A")
+        return dayjs(params.value).format("DD-MM-YYYY h:mm A");
       },
     },
     {
@@ -113,7 +121,7 @@ const ListOfAllClaims = () => {
       headerName: "UPDATED ON",
 
       valueFormatter: (params) => {
-        return dayjs(params.value).format("DD-MM-YYYY h:mm A")
+        return dayjs(params.value).format("DD-MM-YYYY h:mm A");
       },
     },
     { field: "lastForwardedTo", headerName: "FORWARD TO" },
@@ -127,14 +135,18 @@ const ListOfAllClaims = () => {
               color: "#4C7AFF",
               textDecoration: "none",
             }}
-            href={`/Bills/View?bill_id=${params.row._id}`}
+            onClick={() => {
+              setId(params.row._id);
+              handleOpenPopup();
+            }}
+            // href={`/Bills/View?bill_id=${params.row._id}`}
           >
             Log
           </Button>
-        )
+        );
       },
     },
-  ]
+  ];
 
   return (
     <PageContainer title="List of all Claims" description="List">
@@ -179,16 +191,26 @@ const ListOfAllClaims = () => {
               if (params.field === "currentStatus") {
                 return params.row.currentStatus === "Open"
                   ? "text-green"
-                  : "text-red"
+                  : "text-red";
               }
 
-              return ""
+              return "";
             }}
           />
+          {open && (
+            <Dialog
+              fullWidth
+              sx={DialogBox}
+              open={open}
+              onClose={handleClosePopup}
+            >
+              <ViewLog Id={id} />
+            </Dialog>
+          )}
         </>
       </DashboardNew>
     </PageContainer>
-  )
-}
+  );
+};
 
-export default ListOfAllClaims
+export default ListOfAllClaims;

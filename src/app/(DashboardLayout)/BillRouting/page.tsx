@@ -192,7 +192,7 @@ const BillRouting = () => {
                         <Select
                           // name={former.id}
                           size="small"
-                          value={sequenceItem.officer}
+                          value={sequenceItem.linkOfficer}
                           //  onChange={(e: any) => setSelectedBillType(e?.target?.value)}
                           onChange={(e: any) => handleSequence(e, i)}
                           sx={{ width: "100%" }}
