@@ -47,10 +47,8 @@ const ListOfAllClaims = () => {
   const authCtx: any = useAuth();
 
   const handleFetchBills = async () => {
-    
-    let userRole = encodeURIComponent(authCtx?.user?.data?.role?.name);
     const config = {
-      url: `/api/claim/getall?claimAccesedByUser=${userRole}`,
+      url: `/api/claim/getall?claimAccesedByUser=${authCtx?.user?.data?.role?.name}`,
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -80,7 +78,10 @@ const ListOfAllClaims = () => {
   }, [authCtx?.user?.token]);
 
   const DialogBox = {
-    padding: "10px 20px",
+    // padding: "10px 20px",
+    ".css-19n55yn-MuiPaper-root-MuiDialog-paper":{
+      maxWidth:"1000px"
+    }
   };
 
   const columns: GridColDef[] = [
@@ -200,13 +201,14 @@ const ListOfAllClaims = () => {
             }}
           />
           {open && (
-            <Dialog
-              fullWidth
+            <Dialog  
               sx={DialogBox}
               open={open}
               onClose={handleClosePopup}
             >
+            
               <ViewLog Id={id} />
+             
             </Dialog>
           )}
         </>

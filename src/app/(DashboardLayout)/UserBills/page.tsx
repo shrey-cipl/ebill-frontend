@@ -64,7 +64,7 @@ const UserBills = () => {
   console.log(billType[0], "billTypebillTypebillType")
   const handleFetchBills = async () => {
     const config = {
-      url: `/api/bill/getall?billType=${encodeURIComponent(billType[0])}&billType=${encodeURIComponent(billType[1])}&billType=${encodeURIComponent(billType[2])}&billType=${encodeURIComponent(billType[3])}`,
+      url: `/api/bill/getall?billType=${billType[0]}&billType=${billType[1]}&billType=${billType[2]}&billType=${billType[3]}`,
       method: "GET",
       headers: {
         "Content-Type": "application/json",

@@ -63,10 +63,8 @@ const Bills = () => {
   const { billType, setBillType, userbill } = cosmeticContext
 
   const handleFetchBills = async () => {
-    
-    let userRole = encodeURIComponent(authCtx?.user?.data?.role?.name);
     const config = {
-      url: `/api/claim/getall?lastForwardedToOfficerOrLinkOfficer=${userRole}`,
+      url: `/api/claim/getall?lastForwardedTo=${authCtx?.user?.data?.role?.name}`,
       method: "GET",
       headers: {
         "Content-Type": "application/json",
