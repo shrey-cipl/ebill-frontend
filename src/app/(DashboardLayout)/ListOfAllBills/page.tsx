@@ -34,8 +34,10 @@ const ListOfAllClaims = () => {
   const authCtx: any = useAuth()
 
   const handleFetchBills = async () => {
+    
+    let userRole = encodeURIComponent(authCtx?.user?.data?.role?.name);
     const config = {
-      url: `/api/claim/getall?claimAccesedByUser=${authCtx?.user?.data?.role?.name}`,
+      url: `/api/claim/getall?claimAccesedByUser=${userRole}`,
       method: "GET",
       headers: {
         "Content-Type": "application/json",

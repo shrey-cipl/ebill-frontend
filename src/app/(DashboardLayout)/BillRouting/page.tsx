@@ -27,7 +27,7 @@ const BillRouting = () => {
   useEffect(() => {
     const getData = async () => {
       const config = {
-        url: `/api/billRouting/getall?billType=${selectedBillType}&latest=true`,
+        url: `/api/billRouting/getall?billType=${encodeURIComponent(selectedBillType)}&latest=true`,
         method: "GET",
         headers: {
           "Content-Type": "application/json",
