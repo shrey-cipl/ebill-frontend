@@ -146,6 +146,7 @@ const ManageBill = () => {
   const [billSequence, setBillSequence] = useState<any>([])
   const [lastForwardedTo, setlastForwardedTo] = useState<any>("")
   const [lastForwardedBy, setlastForwardedBy] = useState<any>("")
+  const [lastForwardedToLink, setlastForwardedToLink] = useState<any>("")
   const [tableData, setTableData] = useState<TableRowData[]>([
     {
       phone: "",
@@ -159,7 +160,7 @@ const ManageBill = () => {
   const [updateModeFields, setUpdateModeFields] = useState(
     initialUpdateModeFields
   )
-
+  const [init_id, setInit_id] = useState<any>("")
   // Validation States
   const [validations, setValidations] = useState(initialValidationState)
   const [validationsUpdateMode, setValidationsUpdateMode] = useState(
@@ -178,11 +179,20 @@ const ManageBill = () => {
   const role: any = authCtx?.user?.data?.role?.name
 
   // Populates form fields with bill data
+  console.log(
+    dataFields,
+    "00000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+  )
+  // useEffect(() => {
+  //   console.log(lastForwardedTo, "init_idinit_id")
+
+  // }, [lastForwardedTo])
 
   useEffect(() => {
     if (paramBillId) {
       getBillData(paramBillId, authCtx.user.token).then((billData: any) => {
-        // console.log("billDATA: ", billData)
+        console.log("billDATA: ", billData)
+
         if (billData && billData.data) {
           const {
             diaryNumber,
@@ -204,11 +214,31 @@ const ManageBill = () => {
             PFMS,
             billProcessingStartDate,
             telephoneNumbers,
+            billRouting,
           } = billData.data
           console.log(
             billData,
             "jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj"
           )
+          let flag = false
+          billRouting.sequence.map((it: any, i: any) => {
+            if (
+              (lastForwardedBy === billRouting.sequence[i].officer ||
+                lastForwardedBy === billRouting.sequence[i].linkOfficer) &&
+              (lastForwardedTo === billRouting.sequence[i + 1].officer ||
+                lastForwardedTo === billRouting.sequence[i + 1].linkOfficer) &&
+              (role === billRouting.sequence[i + 1].officer ||
+                role === billRouting.sequence[i + 1].linkOfficer)
+            ) {
+              if (!flag) {
+                setBillSequence([
+                  billRouting.sequence[i + 2].officer,
+                  billRouting.sequence[i + 2].linkOfficer,
+                ])
+              }
+              flag = true
+            }
+          })
           setlastForwardedTo(lastForwardedTo)
           setlastForwardedBy(lastForwardedBy)
 
@@ -261,41 +291,37 @@ const ManageBill = () => {
   }, [paramBillId, authCtx.user.token])
 
   useEffect(() => {
-    const getBills = async () => {
-      const config = {
-        url: `/api/bill/getAll`,
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          authorization: `Bearer ${authCtx.user?.token}`,
-        },
-      }
-
-      try {
-        const res = await axiosApi(config.url, config.method, config.headers)
-        setBillList(res.data)
-      } catch (err: any) {
-        console.log(err.message)
-      }
-    }
-
-    // if (paramMode === BILL_MODES.add) {
     getBills()
-    // }
   }, [paramMode, authCtx.user.token])
 
+  const getBills = async () => {
+    const config = {
+      url: `/api/bill/getAll`,
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        authorization: `Bearer ${authCtx.user?.token}`,
+      },
+    }
+
+    try {
+      const res = await axiosApi(config.url, config.method, config.headers)
+      console.log(res.data, "jkkkkkkkkkkkkkkkkkkj")
+      setBillList(res.data)
+    } catch (err: any) {
+      console.log(err.message)
+    }
+  }
   // Auto selects bill number and its corresponding data
   // when re-directed from 'UserBills page'
 
   useEffect(() => {
+    console.log(paramUserpageId, "paramuser")
     if (paramUserpageId) {
       const selectedBill: any = BillList.find(
         (bill: any) => bill._id === paramUserpageId
       )
-      console.log(
-        selectedBill,
-        "ppppppppppppppppppppppppppppppppppppppppppppppppppppppppppp"
-      )
+
       if (selectedBill) {
         // used only in add-mode
         selectedBillId = selectedBill._id
@@ -323,28 +349,74 @@ const ManageBill = () => {
   }, [paramUserpageId, BillList])
 
   // Posts form data
+  const setLastForwardedToLinkAsync = async (
+    lastForwardedToo: any,
+    billSequencee: any
+  ) => {
+    console.log(
+      "lastForwardedTo::::",
+      lastForwardedToo,
+      "billSequence:::::",
+      billSequencee
+    )
+    let newLink
+    if (lastForwardedTo === billSequence[0]) {
+      newLink = billSequence[1]
+    } else {
+      newLink = billSequence[0]
+    }
+    setlastForwardedToLink(newLink)
+  }
+
+  const createObj = async (
+    fieldsCopy: any,
+    selectedBillId: any,
+    init_id: any,
+    authCtx: any,
+    selectedFormerId: any,
+    dataFields: any,
+    tableData: any,
+    lastForwardedToLink: any
+  ) => {
+    if (tableData[0]?.phone !== "") {
+      return {
+        ...fieldsCopy,
+        bill: selectedBillId,
+        billRouting: init_id,
+        lastForwardedBy: authCtx.user.data.role.name,
+        former: selectedFormerId,
+        fileNumber: dataFields.fileNumber,
+        telephoneNumbers: tableData,
+        lastForwardedToLink,
+      }
+    } else {
+      return {
+        ...fieldsCopy,
+        billRouting: init_id,
+        bill: selectedBillId,
+        lastForwardedBy: authCtx.user.data.role.name,
+        former: selectedFormerId,
+        fileNumber: dataFields.fileNumber,
+        lastForwardedToLink,
+      }
+    }
+  }
 
   const handleFormSubmit = async (e: any) => {
     e.preventDefault()
 
     // For only add_mode fields
 
-    console.log(dataFields, "dataFields  in paggeeee e e  e e")
-    console.log(validations, "validations  in paggeeee e e  e ex")
+    // const { allValidationsPass, updatedValidationState } = validateOnSubmit(
+    //   dataFields,
+    //   validations
+    // )
 
-    const { allValidationsPass, updatedValidationState } = validateOnSubmit(
-      dataFields,
-      validations
-    )
+    // setValidations(updatedValidationState)
 
-    console.log(allValidationsPass, "allValidationsPass")
-    console.log(updatedValidationState, "updatedValidationState")
-
-    setValidations(updatedValidationState)
-
-    if (!allValidationsPass) {
-      return
-    }
+    // if (!allValidationsPass) {
+    //   return
+    // }
 
     // For only update_mode fields
     if (paramMode === BILL_MODES.update) {
@@ -362,34 +434,34 @@ const ManageBill = () => {
 
     try {
       let res
-
       if (paramMode === BILL_MODES.add) {
         // creates a copy of the state
         const fieldsCopy: any = { ...dataFields }
-
+        let a = await setLastForwardedToLinkAsync(
+          dataFields.lastForwardedTo,
+          billSequence
+        )
+        console.log(
+          "lastForwardedToLink:::::::::::::::::::::::::::::",
+          lastForwardedToLink
+        )
         delete fieldsCopy.name
         delete fieldsCopy.email
         delete fieldsCopy.phone
         delete fieldsCopy.billNumber
 
-        let obj =
-          tableData[0]?.phone !== ""
-            ? {
-                ...fieldsCopy,
-                bill: selectedBillId,
+        // setlastForwardedToLink(billSequence[1])
 
-                lastForwardedBy: authCtx.user.data.role.name,
-                former: selectedFormerId,
-                fileNumber: dataFields.fileNumber,
-                telephoneNumbers: tableData,
-              }
-            : {
-                ...fieldsCopy,
-                bill: selectedBillId,
-                lastForwardedBy: authCtx.user.data.role.name,
-                former: selectedFormerId,
-                fileNumber: dataFields.fileNumber,
-              }
+        let obj = await createObj(
+          fieldsCopy,
+          selectedBillId,
+          init_id,
+          authCtx,
+          selectedFormerId,
+          dataFields,
+          tableData,
+          lastForwardedToLink
+        )
 
         const config = {
           url: `/api/claim/create`,
@@ -409,6 +481,10 @@ const ManageBill = () => {
           config.headers,
           config.data
         )
+        console.log(
+          obj,
+          "qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq"
+        )
       } else if (paramMode === BILL_MODES.update) {
         const { currentStatus, lastForwardedTo, currentremark } = dataFields
 
@@ -421,7 +497,7 @@ const ManageBill = () => {
                 currentremark,
                 lastForwardedBy: authCtx.user.data.role.name,
                 // Update Fields
-
+                lastForwardedToLink,
                 sanctionedAmount: updateModeFields.sanctionedAmount,
                 PFMS: updateModeFields.PFMS,
                 billProcessingStartDate:
@@ -435,7 +511,7 @@ const ManageBill = () => {
                 currentremark,
                 lastForwardedBy: authCtx.user.data.role.name,
                 // Update Fields
-
+                lastForwardedToLink,
                 sanctionedAmount: updateModeFields.sanctionedAmount,
                 PFMS: updateModeFields.PFMS,
                 billProcessingStartDate:
@@ -483,6 +559,16 @@ const ManageBill = () => {
     // (only for Bill Number field)
     const { name, value } = e.target
 
+    if (name == "lastForwardedTo") {
+      let newLink
+      if (value === billSequence[0]) {
+        newLink = billSequence[1]
+      } else {
+        newLink = billSequence[0]
+      }
+      setlastForwardedToLink(newLink)
+    }
+
     if (name === "billNumber") {
       // here 'value' contains bill number
       const selectedBill: any = BillList.find(
@@ -502,7 +588,7 @@ const ManageBill = () => {
         billFilePath: selectedBill.billFilePath,
         // former: empId,
       }))
-      console.log(selectedBill, "selectedBill")
+      // console.log(selectedBill, "selectedBill")
     } else {
       // For other fields, directly set the value
       setDataFields((prevState: any) => ({
@@ -535,11 +621,6 @@ const ManageBill = () => {
         setBillSequence([])
         getData(dataFields.billType)
       }
-    } else {
-      if (dataFields.billType) {
-        setBillSequence([])
-        getData(dataFields.billType)
-      }
     }
   }, [dataFields.billType])
 
@@ -555,46 +636,21 @@ const ManageBill = () => {
 
     try {
       const res = await axiosApi(config.url, config.method, config.headers)
+      // console.log(res, "ressssssssssssssssssssssssssssa")
+      // console.log(
+      //   res.data[0]._id,
+      //   "hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh"
+      // )
 
       if (res && res.data) {
-        if (paramMode == BILL_MODES.add && role == res.data[0].sequence[0]) {
-          let fg = res.data[0].sequence[1]
-          setBillSequence([fg])
-        }
-
-        if (paramMode == "update_bill") {
-          {
-            role == lastForwardedTo
-              ? findNextItem(
-                  res.data[0].sequence,
-                  lastForwardedBy,
-                  lastForwardedTo
-                )
-              : setBillSequence([])
-          }
-        }
-        // setBillSequence(res.data[0].sequence)
-        // sequenceOptions = res.data[0]
+        setInit_id(res.data[0]._id)
+        const officerValues = res.data[0]?.sequence[1]?.officer || ""
+        const linkOfficerValues = res.data[0]?.sequence[1]?.linkOfficer || ""
+        console.log(officerValues, linkOfficerValues)
+        setBillSequence([officerValues, linkOfficerValues])
       }
     } catch (err: any) {
       console.log(err.message)
-    }
-  }
- 
-
-  function findNextItem(array: any, item1: any, item2: any) {
-    const index = array.findIndex(
-      (item: any, i: any) => item === item2 && array[i - 1] === item1
-    )
-
-    if (index !== -1 && index < array.length - 1) {
-      const nextItem = array[index + 1]
-
-      setBillSequence([nextItem])
-      // return nextItem;
-    } else {
-      console.log("No matching sequence found or it's the last item.")
-      return null
     }
   }
 
@@ -620,6 +676,7 @@ const ManageBill = () => {
     }
   }, [updateModeFields])
 
+  // console.log(billSequence, "ghghgg")
   return (
     <>
       <PageContainer

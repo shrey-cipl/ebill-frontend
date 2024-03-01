@@ -53,28 +53,48 @@ const BillRouting = () => {
   }, [selectedBillType, authCtx?.user?.token])
 
   const handleSequence = (e: any, i: any) => {
-    const billSequenceCopy = [...billSequence.sequence]
+    console.log(e, "sdsd")
+    // const billSequenceCopy = [...billSequence.sequence]
+    let updated = [...billSequence]
+    const val = e.target.value
+    const name = e.target.name
+    console.log(name.charAt(0))
+    if (name.includes("officer")) {
+      updated[name.charAt(0)].officer = val
+      setBillSequence(updated)
+    } else {
+      updated[name.charAt(0)].linkOfficer = val
+      setBillSequence(updated)
+    }
 
-    billSequenceCopy[i] = e.target.value
+    // Update the billSequence array at the specified index
+    // console.log(key, "key ")
+    // setBillSequence((prevState: any) => {
+    //   const updatedSequence = [...prevState]
+    //   updatedSequence[i][key] = val
+    //   return updatedSequence
+    // })
+    // console.log(val, name, "scfswcewscfwercfwercfdewfcwe")
 
-    setBillSequence((prevState: any) => ({
-      ...prevState,
-      sequence: billSequenceCopy,
-    }))
+    // setBillSequence((prevState: any) => ({
+    //   ...prevState,
+    //   sequence: billSequenceCopy,
+    // }))
   }
 
   const handleFormSubmit = async (e: any) => {
     e.preventDefault()
 
     const config = {
-      url: `/api/billRouting/update/${billSequence._id}`,
-      method: "PATCH",
+      url: `/api/billRouting/create`,
+      method: "POST",
       headers: {
         "Content-Type": "application/json",
         authorization: `Bearer ${authCtx.user?.token}`,
       },
       data: {
-        sequence: [...billSequence.sequence],
+        billType: selectedBillType,
+        sequence: [...billSequence],
       },
     }
 
@@ -107,7 +127,7 @@ const BillRouting = () => {
     const newArray = [...array.slice(0, index), ...array.slice(index + 1)]
     setBillSequence((prevState: any) => ({ ...prevState, sequence: newArray }))
   }
-  console.log(billSequence, "as")
+  // console.log(billSequence, "jhwedhkbas")
   return (
     <PageContainer title="Bill Routing" description="Manage Former data here">
       <DashboardNew title="Bill Routing" titleVariant="h5">
@@ -158,7 +178,7 @@ const BillRouting = () => {
                 )}
 
                 {billSequence?.map((sequenceItem: any, i: any, array: any) => {
-                  console.log("bankai:", sequenceItem)
+                  // console.log("bankai:", sequenceItem)
                   return (
                     <>
                       <Box
@@ -175,7 +195,8 @@ const BillRouting = () => {
                         }}
                       >
                         <Select
-                          // name={former.id}
+                          key={i}
+                          name={i + "officer"}
                           size="small"
                           value={sequenceItem.officer}
                           //  onChange={(e: any) => setSelectedBillType(e?.target?.value)}
@@ -190,7 +211,8 @@ const BillRouting = () => {
                         </Select>
 
                         <Select
-                          // name={former.id}
+                          key={i}
+                          name={i + "link"}
                           size="small"
                           value={sequenceItem.linkOfficer}
                           //  onChange={(e: any) => setSelectedBillType(e?.target?.value)}
@@ -245,7 +267,7 @@ const BillRouting = () => {
                 }}
               >
                 <Box>
-                  {billSequence?.sequence?.length > 0 ? (
+                  {billSequence.length != 0 && (
                     <Button
                       variant="contained"
                       color="primary"
@@ -257,7 +279,7 @@ const BillRouting = () => {
                     >
                       Submit
                     </Button>
-                  ) : null}
+                  )}
                 </Box>
               </Box>
             </form>
