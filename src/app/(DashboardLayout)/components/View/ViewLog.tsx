@@ -15,6 +15,7 @@ import axiosApi from "@/Util/axiosApi";
 import { useAuth } from "@/context/JWTContext/AuthContext.provider";
 import TableContainer from "@mui/material/TableContainer/TableContainer";
 import DashboardNew from "../../components/shared/DashboardNew";
+import { Container } from "@mui/material";
 
 const TabelCellStyled = styled(TableCell)(() => ({
   fontSize: "12px",
@@ -130,25 +131,28 @@ const ViewLog = ({ Id }: any) => {
   //   };
 
   return (
-    <Box
+    <Container
       sx={{
         padding: "10px",
+// width:"800px",
+
       }}
     >
       <h3> Channel Log </h3>
       {allReportsByfilter.length !== 0 ? (
-        <DashboardNew>
-          <Box sx={{ overflow: "auto", width: { xs: "600px", sm: "100%" } }}>
+        // <DashboardNew >
+          <Box sx={{  }}>
             <TableContainer>
               <Table
                 sx={{
                   // display: "block",
                   overflowX: "auto",
-                  // maxWidth: 500,
-                  minWidth: "500px",
+                 width:"100%",
+                 minWidth: "700px",
+
                   // "& .MuiTableCell-root": { border: "1px solid #333" },
                 }}
-                size="medium"
+                // size="medium"
               >
                 <TableHead>
                   <TableRow sx={{ background: "#4C7AFF" }}>
@@ -186,9 +190,9 @@ const ViewLog = ({ Id }: any) => {
               </Table>
             </TableContainer>
           </Box>
-        </DashboardNew>
+        // </DashboardNew>
       ) : null}
-    </Box>
+    </Container>
   );
 };
 

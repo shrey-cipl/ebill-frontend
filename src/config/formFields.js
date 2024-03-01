@@ -350,10 +350,46 @@ const FIELDS_FORMERS_ADD_BILL = [
   },
 ]
 
+const ADMISSIBLE_AMOUNT = [
+  {
+    id: "billType",
+    fieldName: "Bill Type",
+    type: "text",
+    placeholder: "Enter Bill Type",
+    required: true,
+    validationType: VALIDATION_TYPE.none,
+  },
+  {
+    id: "totalAdmissibleAmount",
+    fieldName: "Total Admissible Amount",
+    type: "number",
+    placeholder: "Enter Admissible Amt",
+    required: true,
+    validationType: VALIDATION_TYPE.none,
+  },
+  // {
+  //   id: "email",
+  //   fieldName: "E-Mail",
+  //   type: "number",
+  //   placeholder: "Enter email here",
+  //   required: true,
+  //   validationType: VALIDATION_TYPE.email,
+  // },
+  // {
+  //   id: "phone",
+  //   fieldName: "Phone",
+  //   type: "number",
+  //   placeholder: "Enter phone number here",
+  //   required: true,
+  //   validationType: VALIDATION_TYPE.mobile,
+  // },
+]
+
 export {
   FIELDS_MANAGE_BILL,
   FIELDS_MANAGE_BILL_UPDATE,
   FIELDS_MANAGE_FORMERS,
   FIELDS_USERS,
   FIELDS_FORMERS_ADD_BILL,
+  ADMISSIBLE_AMOUNT
 }

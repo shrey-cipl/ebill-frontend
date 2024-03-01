@@ -53,7 +53,7 @@ const SidebarItems = ({ toggleMobileSidebar }: any) => {
   const getDataSideBar = async () => {
     console.log("ds")
     const config = {
-      url: `/api/billRouting/getall?latest=true`,
+      url: `/api/billRouting/getall`,
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -142,7 +142,6 @@ const SidebarItems = ({ toggleMobileSidebar }: any) => {
             setUserbill(true)
           })()
       }
-      // console.log(Menuitems, "Menuitems")
       console.log(Menuitems[auth?.user?.data?.role?.name], "kkk")
     } catch (err: any) {
       console.log(err.message)

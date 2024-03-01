@@ -27,7 +27,7 @@ const BillRouting = () => {
   useEffect(() => {
     const getData = async () => {
       const config = {
-        url: `/api/billRouting/getall?billType=${encodeURIComponent(selectedBillType)}&latest=true`,
+        url: `/api/billRouting/getall?billType=${selectedBillType}`,
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -53,48 +53,28 @@ const BillRouting = () => {
   }, [selectedBillType, authCtx?.user?.token])
 
   const handleSequence = (e: any, i: any) => {
-    console.log(e, "sdsd")
-    // const billSequenceCopy = [...billSequence.sequence]
-    let updated = [...billSequence]
-    const val = e.target.value
-    const name = e.target.name
-    console.log(name.charAt(0))
-    if (name.includes("officer")) {
-      updated[name.charAt(0)].officer = val
-      setBillSequence(updated)
-    } else {
-      updated[name.charAt(0)].linkOfficer = val
-      setBillSequence(updated)
-    }
+    const billSequenceCopy = [...billSequence.sequence]
 
-    // Update the billSequence array at the specified index
-    // console.log(key, "key ")
-    // setBillSequence((prevState: any) => {
-    //   const updatedSequence = [...prevState]
-    //   updatedSequence[i][key] = val
-    //   return updatedSequence
-    // })
-    // console.log(val, name, "scfswcewscfwercfwercfdewfcwe")
+    billSequenceCopy[i] = e.target.value
 
-    // setBillSequence((prevState: any) => ({
-    //   ...prevState,
-    //   sequence: billSequenceCopy,
-    // }))
+    setBillSequence((prevState: any) => ({
+      ...prevState,
+      sequence: billSequenceCopy,
+    }))
   }
 
   const handleFormSubmit = async (e: any) => {
     e.preventDefault()
 
     const config = {
-      url: `/api/billRouting/create`,
-      method: "POST",
+      url: `/api/billRouting/update/${billSequence._id}`,
+      method: "PATCH",
       headers: {
         "Content-Type": "application/json",
         authorization: `Bearer ${authCtx.user?.token}`,
       },
       data: {
-        billType: selectedBillType,
-        sequence: [...billSequence],
+        sequence: [...billSequence.sequence],
       },
     }
 
@@ -127,7 +107,7 @@ const BillRouting = () => {
     const newArray = [...array.slice(0, index), ...array.slice(index + 1)]
     setBillSequence((prevState: any) => ({ ...prevState, sequence: newArray }))
   }
-  // console.log(billSequence, "jhwedhkbas")
+  console.log(billSequence, "as")
   return (
     <PageContainer title="Bill Routing" description="Manage Former data here">
       <DashboardNew title="Bill Routing" titleVariant="h5">
@@ -178,7 +158,7 @@ const BillRouting = () => {
                 )}
 
                 {billSequence?.map((sequenceItem: any, i: any, array: any) => {
-                  // console.log("bankai:", sequenceItem)
+                  console.log("bankai:", sequenceItem)
                   return (
                     <>
                       <Box
@@ -195,8 +175,7 @@ const BillRouting = () => {
                         }}
                       >
                         <Select
-                          key={i}
-                          name={i + "officer"}
+                          // name={former.id}
                           size="small"
                           value={sequenceItem.officer}
                           //  onChange={(e: any) => setSelectedBillType(e?.target?.value)}
@@ -211,8 +190,7 @@ const BillRouting = () => {
                         </Select>
 
                         <Select
-                          key={i}
-                          name={i + "link"}
+                          // name={former.id}
                           size="small"
                           value={sequenceItem.linkOfficer}
                           //  onChange={(e: any) => setSelectedBillType(e?.target?.value)}
@@ -267,7 +245,7 @@ const BillRouting = () => {
                 }}
               >
                 <Box>
-                  {billSequence.length != 0 && (
+                  {billSequence?.sequence?.length > 0 ? (
                     <Button
                       variant="contained"
                       color="primary"
@@ -279,7 +257,7 @@ const BillRouting = () => {
                     >
                       Submit
                     </Button>
-                  )}
+                  ) : null}
                 </Box>
               </Box>
             </form>
