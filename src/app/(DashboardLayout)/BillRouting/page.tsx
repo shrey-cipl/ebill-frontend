@@ -236,7 +236,11 @@ const BillRouting = () => {
                             height: "30px",
                           }}
                           onClick={() => {
-                            addItemAtIndex(array, "", i + 1)
+                            addItemAtIndex(
+                              array,
+                              { officer: "", linkOfficer: "" },
+                              i + 1
+                            )
                           }}
                         >
                           <AddIcon /> Add

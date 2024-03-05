@@ -257,9 +257,10 @@ const ManageBill = () => {
             totalAdmissibleAmount,
             maxAdmissibleAmount,
             currentStatus,
-            lastForwardedTo,
+
             currentremark,
             billFilePath: bill.billFilePath,
+            lastForwardedTo: "",
           })
 
           setUpdateModeFields({
@@ -317,9 +318,15 @@ const ManageBill = () => {
 
   useEffect(() => {
     console.log(paramUserpageId, "paramuser")
+    console.log(paramUserpageId, "f")
     if (paramUserpageId) {
       const selectedBill: any = BillList.find(
         (bill: any) => bill._id === paramUserpageId
+      )
+
+      console.log(
+        selectedBill,
+        "ppppppppppppppppppppppppppppppppppppppppppppppp"
       )
 
       if (selectedBill) {
@@ -378,6 +385,7 @@ const ManageBill = () => {
     tableData: any,
     lastForwardedToLink: any
   ) => {
+    console.log(fieldsCopy, "p][[[[[[[[[[[[[[[[[[[[[")
     if (tableData[0]?.phone !== "") {
       return {
         ...fieldsCopy,
@@ -401,68 +409,102 @@ const ManageBill = () => {
       }
     }
   }
+  function replaceNullWithEmpty(obj: any) {
+    // Iterate over each field in the object
+    for (let key in obj) {
+      // Check if the field value is null
+      if (obj[key] === null) {
+        // Replace null with an empty string
+        obj[key] = ""
+      }
+    }
+    return obj
+  }
 
   const handleFormSubmit = async (e: any) => {
     e.preventDefault()
-
-    // For only add_mode fields
-    // console.log(
-    //   dataFields,
-    //   validations,
-    //   "gggggggggggggggggggggggggggggggggggggg"
-    // )
-
-    // const { allValidationsPass, updatedValidationState } = validateOnSubmit(
-    //   dataFields,
-    //   validations
-    // )
-    // console.log(
-    //   allValidationsPass,
-    //   updatedValidationState,
-    //   "gggggggggggggggggggggggggggggggggggggg"
-    // )
-    // setValidations(updatedValidationState)
-
-    // if (!allValidationsPass) {
-    //   return
-    // }
-
-    // For only update_mode fields
-    if (paramMode === BILL_MODES.update) {
+    if (paramMode === BILL_MODES.add) {
       console.log(
-        updateModeFields,
-        validationsUpdateMode,
-        "check ssssssssssssssssssssssssss"
+        dataFields,
+        validations,
+        "kkkkkkkkkkkkkkkkkkkkkkpppppppppppppppppppppppppppppppppppppppppk"
       )
+
+      delete dataFields.PFMS
+      delete dataFields.billProcessingStartDate
+      delete dataFields.sanctionedAmount
+      delete validations.PFMS
+      delete validations.billProcessingStartDate
+      delete validations.sanctionedAmount
       const { allValidationsPass, updatedValidationState } = validateOnSubmit(
-        updateModeFields,
-        validationsUpdateMode
+        dataFields,
+        validations
       )
       console.log(
         allValidationsPass,
         updatedValidationState,
         "kkkkkkkkkkkkkkkkkkkkkkk"
       )
-      setValidationsUpdateMode(updatedValidationState)
+
+      setValidations(updatedValidationState)
 
       if (!allValidationsPass) {
         return
       }
     }
+    // if (paramMode === BILL_MODES.update) {
+    //   const { allValidationsPass, updatedValidationState } = validateOnSubmit(
+    //     updateModeFields,
+    //     validationsUpdateMode
+    //   )
+    //   console.log(
+    //     allValidationsPass,
+    //     updatedValidationState,
+    //     "kkkkkkkkkkkkkkkkkkkkkkk"
+    //   )
+    //   setValidationsUpdateMode(updatedValidationState)
 
+    //   if (!allValidationsPass) {
+    //     return
+    //   }
+    // }
+    if (paramMode === BILL_MODES.update) {
+      delete dataFields.maxAdmissibleAmount
+      // delete dataFields.lastForwardedTo
+      let objjj = bool
+        ? { ...updateModeFields, ...dataFields }
+        : { ...dataFields }
+
+      console.log(
+        objjj,
+        validationsUpdateMode,
+        "objjjjjjjjjjjjjjjjjjjjjjjjjjjjjj"
+      )
+
+      let result = replaceNullWithEmpty(objjj)
+
+      const { allValidationsPass, updatedValidationState } = validateOnSubmit(
+        result,
+        validationsUpdateMode
+      )
+      console.log(
+        allValidationsPass,
+        updatedValidationState,
+        "allValidationsPass, updatedValidationState"
+      )
+      // setValidationsUpdateMode(updatedValidationState)
+      setValidations(updatedValidationState)
+
+      if (!allValidationsPass) {
+        return
+      }
+    }
     try {
       let res
       if (paramMode === BILL_MODES.add) {
         // creates a copy of the state
         const fieldsCopy: any = { ...dataFields }
-        let a = await setLastForwardedToLinkAsync(
-          dataFields.lastForwardedTo,
-          billSequence
-        )
-        console.log(
-          "lastForwardedToLink:::::::::::::::::::::::::::::",
-          lastForwardedToLink
-        )
+
         delete fieldsCopy.name
         delete fieldsCopy.email
         delete fieldsCopy.phone
@@ -480,7 +522,7 @@ const ManageBill = () => {
           tableData,
           lastForwardedToLink
         )
-
+        console.log(obj, "'''''''''''''''''''''''''''''''''''")
         const config = {
           url: `/api/claim/create`,
           method: "POST",

@@ -180,11 +180,12 @@ const AdmissibleAmt = () => {
             {initialFieldState.map((ele: any, i: any) => {
               return (
                 <Box
-                //   sx={{
-                //     display: "flex",
-                //     alignItems: "center",
-                //     justifyContent: "center",
-                //   }}
+                  //   sx={{
+                  //     display: "flex",
+                  //     alignItems: "center",
+                  //     justifyContent: "center",
+                  //   }}
+                  key={i}
                 >
                   <Box
                     sx={{
