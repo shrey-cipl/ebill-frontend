@@ -1,23 +1,23 @@
-"use client";
-import { useEffect, useState, useContext } from "react";
+"use client"
+import { useEffect, useState, useContext } from "react"
 
-import dayjs from "dayjs";
-import Typography from "@mui/material/Typography";
-import { styled } from "@mui/system";
+import dayjs from "dayjs"
+import Typography from "@mui/material/Typography"
+import { styled } from "@mui/system"
 
-import { GridColDef } from "@mui/x-data-grid";
-import DownloadIcon from "@mui/icons-material/Download";
-import Button from "@mui/material/Button";
+import { GridColDef } from "@mui/x-data-grid"
+import DownloadIcon from "@mui/icons-material/Download"
+import Button from "@mui/material/Button"
 
-import axiosApi from "@/Util/axiosApi";
-import { useAuth } from "@/context/JWTContext/AuthContext.provider";
-import PageContainer from "@/app/(DashboardLayout)/components/container/PageContainer";
-import DashboardNew from "@/app/(DashboardLayout)/components/shared/DashboardNew";
-import CustomModal from "@/app/(DashboardLayout)/components/CustomModal/CustomModal";
-import CustomGrid from "@/app/(DashboardLayout)/components/CustomGrid";
+import axiosApi from "@/Util/axiosApi"
+import { useAuth } from "@/context/JWTContext/AuthContext.provider"
+import PageContainer from "@/app/(DashboardLayout)/components/container/PageContainer"
+import DashboardNew from "@/app/(DashboardLayout)/components/shared/DashboardNew"
+import CustomModal from "@/app/(DashboardLayout)/components/CustomModal/CustomModal"
+import CustomGrid from "@/app/(DashboardLayout)/components/CustomGrid"
 
-import { CosmeticContext } from "@/context/CosmeticContext/UseCosmetic.Provider";
-import { exportDataToExcel, exportDataToPDF } from "@/Util/commonFunctions";
+import { CosmeticContext } from "@/context/CosmeticContext/UseCosmetic.Provider"
+import { exportDataToExcel, exportDataToPDF } from "@/Util/commonFunctions"
 
 const BoxWrapper = styled("div")(() => ({
   display: "grid",
@@ -27,7 +27,7 @@ const BoxWrapper = styled("div")(() => ({
   "& > p": {
     fontSize: "12px",
   },
-}));
+}))
 
 const dataToExport = (data: any) => {
   return data.map((item: any) => ({
@@ -36,22 +36,22 @@ const dataToExport = (data: any) => {
     "Bill From": dayjs(item.billPeriodFrom).format("DD-MM-YYYY"),
     "Bill To": dayjs(item.billPeriodTo).format("DD-MM-YYYY"),
     "Claimed Amt.": item.claimedAmount,
-  }));
-};
+  }))
+}
 
 const Bills = () => {
-  const backendBaseUrl = process.env.NEXT_PUBLIC_BACKEND_BASE_URL;
-  const [billList, setBillList] = useState([]);
+  const backendBaseUrl = process.env.NEXT_PUBLIC_BACKEND_BASE_URL
+  const [billList, setBillList] = useState([])
 
   // Modal states
-  const [modalState, setModalState] = useState(false);
-  const [selectedBill, setSelectedBill] = useState<any>({});
+  const [modalState, setModalState] = useState(false)
+  const [selectedBill, setSelectedBill] = useState<any>({})
 
-  const cosmeticContext = useContext(CosmeticContext);
-  const { modalLoading, setModalLoading } = cosmeticContext;
+  const cosmeticContext = useContext(CosmeticContext)
+  const { modalLoading, setModalLoading } = cosmeticContext
 
-  const authCtx: any = useAuth();
-  const id = authCtx?.user?.data?._id;
+  const authCtx: any = useAuth()
+  const id = authCtx?.user?.data?._id
 
   const handleFetchBills = async () => {
     const config = {
@@ -61,25 +61,25 @@ const Bills = () => {
         "Content-Type": "application/json",
         authorization: `Bearer ${authCtx?.user?.token}`,
       },
-    };
+    }
 
     try {
-      const res = await axiosApi(config.url, config.method, config.headers);
+      const res = await axiosApi(config.url, config.method, config.headers)
 
       for (let item of res.data) {
-        item.id = item._id;
+        item.id = item._id
       }
 
-      setBillList(res.data);
+      setBillList(res.data)
       // if (String(res.status).charAt(0) === "2") {
       // }
     } catch (err: any) {
-      console.log(err.message);
+      console.log(err.message)
     }
-  };
+  }
 
   const handleFetchSingleBills = async (id: any) => {
-    setModalLoading(true);
+    setModalLoading(true)
 
     const config = {
       url: `/api/claim/getClaimByBillId/${id}`,
@@ -88,39 +88,39 @@ const Bills = () => {
         "Content-Type": "application/json",
         authorization: `Bearer ${authCtx?.user?.token}`,
       },
-    };
+    }
 
     try {
-      const res = await axiosApi(config.url, config.method, config.headers);
+      const res = await axiosApi(config.url, config.method, config.headers)
 
       // for (let item of res.data) {
       //   item.id = item._id
       // }
-      await handleViewBill(res.data);
+      await handleViewBill(res.data)
 
       // setClaim(res.data)
       // if (String(res.status).charAt(0) === "2") {
       // }
     } catch (err: any) {
-      await handleViewBill({ nodata: "NO Claim Found" });
-      console.log(err.message);
+      await handleViewBill({ nodata: "NO Claim Found" })
+      console.log(err.message)
     } finally {
-      setModalLoading(false); // Set modal loading to false after fetching modal data
+      setModalLoading(false) // Set modal loading to false after fetching modal data
     }
-  };
+  }
   // collect bills and updates list
   useEffect(() => {
-    handleFetchBills();
-  }, [authCtx?.user?.token]);
+    handleFetchBills()
+  }, [authCtx?.user?.token])
 
   const handleViewBill = async (data: any) => {
     // const filteredBill = billList.find((bill: any) => bill._id === id)
 
     // if (filteredBill) {
-    await setSelectedBill({ ...data });
-    setModalState(true);
+    await setSelectedBill({ ...data })
+    setModalState(true)
     // }
-  };
+  }
 
   const columns: GridColDef[] = [
     {
@@ -135,14 +135,14 @@ const Bills = () => {
       field: "billPeriodFrom",
       headerName: "BILL FROM",
       valueFormatter: (params) => {
-        return dayjs(params.value).format("DD-MM-YYYY");
+        return dayjs(params.value).format("DD-MM-YYYY")
       },
     },
     {
       field: "billPeriodTo",
       headerName: "BILL TO",
       valueFormatter: (params) => {
-        return dayjs(params.value).format("DD-MM-YYYY");
+        return dayjs(params.value).format("DD-MM-YYYY")
       },
     },
     {
@@ -150,7 +150,7 @@ const Bills = () => {
       headerName: "CREATED AT",
 
       valueFormatter: (params) => {
-        return dayjs(params.value).format("DD-MM-YYYY h:mm A");
+        return dayjs(params.value).format("DD-MM-YYYY h:mm A")
       },
     },
     {
@@ -158,7 +158,7 @@ const Bills = () => {
       headerName: "UPDATED ON",
 
       valueFormatter: (params) => {
-        return dayjs(params.value).format("DD-MM-YYYY h:mm A");
+        return dayjs(params.value).format("DD-MM-YYYY h:mm A")
       },
     },
     {
@@ -179,14 +179,14 @@ const Bills = () => {
           >
             View
           </button>
-        );
+        )
       },
     },
     {
       field: "Download",
       headerName: "DOWNLOAD",
       renderCell: (params) => {
-        const downloadLink = params.row.billFilePath;
+        const downloadLink = params.row.billFilePath
 
         return downloadLink ? (
           <>
@@ -211,12 +211,10 @@ const Bills = () => {
           </>
         ) : (
           <span style={{ color: "gray" }}>No file</span>
-        );
+        )
       },
     },
-  ];
-
-  console.log(selectedBill, "selectedBill");
+  ]
 
   return (
     <PageContainer title="View Bills" description="List of all the bills">
@@ -261,10 +259,10 @@ const Bills = () => {
               if (params.field === "currentStatus") {
                 return params.row.currentStatus === "Open"
                   ? "text-green"
-                  : "text-red";
+                  : "text-red"
               }
 
-              return "";
+              return ""
             }}
           />
 
@@ -330,40 +328,13 @@ const Bills = () => {
                   <Typography fontWeight={600}>Status:</Typography>
                   <Typography>{selectedBill.currentStatus}</Typography>
                 </BoxWrapper>
-                {selectedBill.billForwardedToBankDate && (
-                  <BoxWrapper>
-                    <Typography fontWeight={600}>
-                      Bill Forwarded to Bank:
-                    </Typography>
-                    <Typography>
-                      {selectedBill.billForwardedToBankDate
-                        ? dayjs(selectedBill.billForwardedToBankDate).format(
-                            "YYYY-MM-DD"
-                          )
-                        : ""}
-                    </Typography>
-                  </BoxWrapper>
-                )}
-                {
-                  selectedBill.sanctionedAmount &&
-                  <BoxWrapper>
-                  <Typography fontWeight={600}>
-                    Sanctioned Amount:
-                  </Typography>
-                  <Typography>
-                    {selectedBill.sanctionedAmount
-                      ? selectedBill.sanctionedAmount
-                      : ""}
-                  </Typography>
-                </BoxWrapper>
-                }
               </CustomModal>
             </>
           )}
         </>
       </DashboardNew>
     </PageContainer>
-  );
-};
+  )
+}
 
-export default Bills;
+export default Bills

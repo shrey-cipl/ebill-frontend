@@ -111,8 +111,8 @@ export default function AuthProvider({ children }: AuthProviderProps) {
         },
       })
 
-      //  response;
-      return router.push("/")
+      router.push("/")
+      return response
     } catch (err: any) {
       //   console.log(err, "errrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr")
       // alert("Invalid email or invalid password please try again");
@@ -151,6 +151,7 @@ export default function AuthProvider({ children }: AuthProviderProps) {
       })
 
       //  response;
+      return response
     } catch (err: any) {
       //   console.log(err, "errrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr")
       // alert("Invalid email or invalid password please try again");

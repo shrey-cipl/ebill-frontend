@@ -1,7 +1,7 @@
-"use client";
-import React, { useEffect, useState } from "react";
-import PageContainer from "../components/container/PageContainer";
-import DashboardNew from "../components/shared/DashboardNew";
+"use client"
+import React, { useEffect, useState } from "react"
+import PageContainer from "../components/container/PageContainer"
+import DashboardNew from "../components/shared/DashboardNew"
 import {
   Box,
   Button,
@@ -12,19 +12,19 @@ import {
   TextField,
   Tooltip,
   Typography,
-} from "@mui/material";
-import { InputFormerName } from "../components/InputComponents/InputComponents";
-import { ADMISSIBLE_AMOUNT } from "@/config/formFields";
-import axiosApi from "@/Util/axiosApi";
-import { useAuth } from "@/context/JWTContext/AuthContext.provider";
-import { enqueueSnackbar } from "notistack";
+} from "@mui/material"
+import { InputFormerName } from "../components/InputComponents/InputComponents"
+
+import axiosApi from "@/Util/axiosApi"
+import { useAuth } from "@/context/JWTContext/AuthContext.provider"
+import { enqueueSnackbar } from "notistack"
 
 const AdmissibleAmt = () => {
-  const authCtx: any = useAuth();
+  const authCtx: any = useAuth()
 
-  const [admiss, setAdmiss] = useState<any>([]);
+  const [admiss, setAdmiss] = useState<any>([])
 
-  const [flag, setFlag] = useState(false);
+  const [flag, setFlag] = useState(false)
 
   const initialFieldState: any = admiss.map((ele: any) => {
     return {
@@ -32,10 +32,10 @@ const AdmissibleAmt = () => {
       totalAdmissibleAmount: ele.totalAdmissibleAmount
         ? ele.totalAdmissibleAmount
         : "",
-    };
-  });
+    }
+  })
 
-  const [formData, setFormData] = useState<any>(initialFieldState);
+  const [formData, setFormData] = useState<any>(initialFieldState)
 
   useEffect(() => {
     const initialFieldState = admiss.map((ele: any) => {
@@ -44,27 +44,27 @@ const AdmissibleAmt = () => {
         totalAdmissibleAmount: ele.totalAdmissibleAmount
           ? ele.totalAdmissibleAmount
           : "",
-      };
-    });
-    setFormData(initialFieldState);
-  }, [admiss]);
+      }
+    })
+    setFormData(initialFieldState)
+  }, [admiss])
 
   const handleFieldChange = (e: any, index: any) => {
-    const { name, value, type, files } = e.target;
+    const { name, value, type, files } = e.target
 
     setFormData((prevState: any) => {
-      const newState = [...prevState];
+      const newState = [...prevState]
 
       if (index >= 0) {
         newState[index] = {
           ...newState[index],
           [name]: value,
-        };
+        }
       }
 
-      return newState;
-    });
-  };
+      return newState
+    })
+  }
 
   const getData = async () => {
     const config = {
@@ -74,15 +74,15 @@ const AdmissibleAmt = () => {
         "Content-Type": "application/json",
         authorization: `Bearer ${authCtx.user?.token}`,
       },
-    };
+    }
 
-    const res: any = await axiosApi(config.url, config.method, config.headers);
+    const res: any = await axiosApi(config.url, config.method, config.headers)
 
-    setAdmiss(res?.data);
-  };
+    setAdmiss(res?.data)
+  }
 
   const handleSubmit = async (e: any, index: any) => {
-    e.preventDefault();
+    e.preventDefault()
 
     try {
       const config = {
@@ -93,36 +93,36 @@ const AdmissibleAmt = () => {
           authorization: `Bearer ${authCtx.user?.token}`,
         },
         data: formData[index],
-      };
+      }
 
       const res: any = await axiosApi(
         config.url,
         config.method,
         config.headers,
         config.data
-      );
+      )
 
-      console.log(res);
+      console.log(res)
 
       if (res) {
         enqueueSnackbar(res.message, {
           preventDuplicate: true,
           variant: "success",
-        });
-        setFlag(true);
+        })
+        setFlag(true)
       }
-      return res;
+      return res
     } catch (error: any) {
       enqueueSnackbar(error.message, {
         preventDuplicate: true,
         variant: "error",
-      });
+      })
     }
-  };
+  }
 
   useEffect(() => {
-    getData();
-  }, [authCtx.user?.token]);
+    getData()
+  }, [authCtx.user?.token])
 
   return (
     <PageContainer title="Admissible Amount" description="Admiss Amt">
@@ -145,8 +145,8 @@ const AdmissibleAmt = () => {
                 display: "flex",
                 alignItems: "center",
                 // justifyContent:"",
-                margin:"auto",
-                width:"45%"
+                margin: "auto",
+                width: "45%",
               }}
             >
               <Typography
@@ -156,7 +156,7 @@ const AdmissibleAmt = () => {
                   display: "block",
                   fontSize: "13px",
                   lineHeight: "12px",
-                  mr:18
+                  mr: 18,
                 }}
                 mb={1}
               >
@@ -170,7 +170,7 @@ const AdmissibleAmt = () => {
                   display: "block",
                   fontSize: "13px",
                   lineHeight: "12px",
-                //   ml:15
+                  //   ml:15
                 }}
                 mb={1}
               >
@@ -252,13 +252,13 @@ const AdmissibleAmt = () => {
                     </Box>
                   </Box>
                 </Box>
-              );
+              )
             })}
           </Box>
         </>
       </DashboardNew>
     </PageContainer>
-  );
-};
+  )
+}
 
-export default AdmissibleAmt;
+export default AdmissibleAmt

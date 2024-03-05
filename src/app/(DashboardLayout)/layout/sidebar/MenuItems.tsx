@@ -6,10 +6,9 @@ import AssessmentIcon from "@mui/icons-material/Assessment"
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth"
 import AccessTimeIcon from "@mui/icons-material/AccessTime"
 import EventIcon from "@mui/icons-material/Event"
+import CurrencyRupeeIcon from "@mui/icons-material/CurrencyRupee"
 import StarBorderPurple500Icon from "@mui/icons-material/StarBorderPurple500"
 import GroupIcon from "@mui/icons-material/Group"
-import CurrencyRupeeIcon from '@mui/icons-material/CurrencyRupee';
-
 import { useEffect, useState } from "react"
 import { useAuth } from "@/context/JWTContext/AuthContext.provider"
 import axiosApi from "@/Util/axiosApi"
@@ -579,13 +578,6 @@ const Menuitems: any = {
       href: "/YearlyWiseReport",
       present: "no",
     },
-    {
-      id: uniqueId(),
-      title: "Admissible Amount",
-      icon: CurrencyRupeeIcon,
-      href: "/AdmissibleAmt",
-      present: "yes",
-    },
     // {
     //   id: uniqueId(),
     //   title: "Users",
@@ -594,7 +586,6 @@ const Menuitems: any = {
     //   present: "yes",
     // },
   ],
-  
   "System Admin": [
     {
       navlabel: true,
@@ -627,6 +618,13 @@ const Menuitems: any = {
       title: "Ex Chairman & Members",
       icon: StarBorderPurple500Icon,
       href: "/Formers",
+      present: "yes",
+    },
+    {
+      id: uniqueId(),
+      title: "Admissible Amount",
+      icon: CurrencyRupeeIcon,
+      href: "/AdmissibleAmt",
       present: "yes",
     },
     {
@@ -700,13 +698,6 @@ const Menuitems: any = {
       title: "Users",
       icon: GroupIcon,
       href: "/Users",
-      present: "yes",
-    },
-    {
-      id: uniqueId(),
-      title: "Admissible Amount",
-      icon: CurrencyRupeeIcon,
-      href: "/AdmissibleAmt",
       present: "yes",
     },
   ],

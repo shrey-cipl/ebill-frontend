@@ -27,7 +27,9 @@ const BillRouting = () => {
   useEffect(() => {
     const getData = async () => {
       const config = {
-        url: `/api/billRouting/getall?billType=${selectedBillType}`,
+        url: `/api/billRouting/getall?billType=${encodeURIComponent(
+          selectedBillType
+        )}&latest=true`,
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -53,28 +55,48 @@ const BillRouting = () => {
   }, [selectedBillType, authCtx?.user?.token])
 
   const handleSequence = (e: any, i: any) => {
-    const billSequenceCopy = [...billSequence.sequence]
+    console.log(e, "sdsd")
+    // const billSequenceCopy = [...billSequence.sequence]
+    let updated = [...billSequence]
+    const val = e.target.value
+    const name = e.target.name
+    console.log(name.charAt(0))
+    if (name.includes("officer")) {
+      updated[name.charAt(0)].officer = val
+      setBillSequence(updated)
+    } else {
+      updated[name.charAt(0)].linkOfficer = val
+      setBillSequence(updated)
+    }
 
-    billSequenceCopy[i] = e.target.value
+    // Update the billSequence array at the specified index
+    // console.log(key, "key ")
+    // setBillSequence((prevState: any) => {
+    //   const updatedSequence = [...prevState]
+    //   updatedSequence[i][key] = val
+    //   return updatedSequence
+    // })
+    // console.log(val, name, "scfswcewscfwercfwercfdewfcwe")
 
-    setBillSequence((prevState: any) => ({
-      ...prevState,
-      sequence: billSequenceCopy,
-    }))
+    // setBillSequence((prevState: any) => ({
+    //   ...prevState,
+    //   sequence: billSequenceCopy,
+    // }))
   }
 
   const handleFormSubmit = async (e: any) => {
     e.preventDefault()
 
     const config = {
-      url: `/api/billRouting/update/${billSequence._id}`,
-      method: "PATCH",
+      url: `/api/billRouting/create`,
+      method: "POST",
       headers: {
         "Content-Type": "application/json",
         authorization: `Bearer ${authCtx.user?.token}`,
       },
       data: {
-        sequence: [...billSequence.sequence],
+        billType: selectedBillType,
+        sequence: [...billSequence],
       },
     }
 
@@ -96,18 +118,19 @@ const BillRouting = () => {
   }
 
   function addItemAtIndex(array: any, item: any, index: any) {
-    // Create a new array with the item inserted at the specified index
+    // Create a new array with the item inserted at the specified
+
     const newArray = [...array.slice(0, index), item, ...array.slice(index)]
 
-    setBillSequence((prevState: any) => ({ ...prevState, sequence: newArray }))
+    setBillSequence(newArray)
   }
 
   function removeItemAtIndex(array: any, index: any) {
     // Create a new array without the item at the specified index
     const newArray = [...array.slice(0, index), ...array.slice(index + 1)]
-    setBillSequence((prevState: any) => ({ ...prevState, sequence: newArray }))
+    setBillSequence(newArray)
   }
-  console.log(billSequence, "as")
+  console.log(billSequence, "jhwedhkbas")
   return (
     <PageContainer title="Bill Routing" description="Manage Former data here">
       <DashboardNew title="Bill Routing" titleVariant="h5">
@@ -158,7 +181,7 @@ const BillRouting = () => {
                 )}
 
                 {billSequence?.map((sequenceItem: any, i: any, array: any) => {
-                  console.log("bankai:", sequenceItem)
+                  // console.log("bankai:", sequenceItem)
                   return (
                     <>
                       <Box
@@ -175,7 +198,8 @@ const BillRouting = () => {
                         }}
                       >
                         <Select
-                          // name={former.id}
+                          key={i}
+                          name={i + "officer"}
                           size="small"
                           value={sequenceItem.officer}
                           //  onChange={(e: any) => setSelectedBillType(e?.target?.value)}
@@ -190,7 +214,8 @@ const BillRouting = () => {
                         </Select>
 
                         <Select
-                          // name={former.id}
+                          key={i}
+                          name={i + "link"}
                           size="small"
                           value={sequenceItem.linkOfficer}
                           //  onChange={(e: any) => setSelectedBillType(e?.target?.value)}
@@ -245,7 +270,7 @@ const BillRouting = () => {
                 }}
               >
                 <Box>
-                  {billSequence?.sequence?.length > 0 ? (
+                  {billSequence.length != 0 && (
                     <Button
                       variant="contained"
                       color="primary"
@@ -257,7 +282,7 @@ const BillRouting = () => {
                     >
                       Submit
                     </Button>
-                  ) : null}
+                  )}
                 </Box>
               </Box>
             </form>

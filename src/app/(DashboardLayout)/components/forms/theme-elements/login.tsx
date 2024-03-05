@@ -26,6 +26,7 @@ import { Visibility, VisibilityOff } from "@mui/icons-material"
 import { useUser } from "../../../../../context/UserContext/UserContext.provider"
 import { useAuth } from "../../../../../context/JWTContext/AuthContext.provider"
 import callApi from "@/Util/axiosApi"
+import { enqueueSnackbar } from "notistack"
 
 const emailValidationRegex = /^[\w-\\.]+@([\w-]+\.)+[\w-]{2,4}$/
 const mobileValidationRegex =
@@ -61,40 +62,40 @@ function Login() {
   const loginUser = async (email: any) => {
     if (password === "" || inputCaptcha === "") {
       SetCaptchaCode(Math.random().toString(36).substr(2, 6))
-      setToast({
-        message: "Please fill all fields",
-        open: true,
-        severity: "error",
+      // setToast({
+      //   message: "Please fill all fields",
+      //   open: true,
+      //   severity: "error",
+      // })
+      enqueueSnackbar("Please fill all fields", {
+        autoHideDuration: 3000,
+        variant: "error",
       })
       return
-    } else {
-      if (captchaCode === inputCaptcha) {
-        if (emailValidationRegex.test(email)) {
-          let ress: any = await auth.signIn(email, password)
+    } else if (captchaCode !== inputCaptcha) {
+      SetCaptchaCode(Math.random().toString(36).substr(2, 6))
 
-          if (ress?.success == false) {
-            setToast({
-              message: "Incorrect credentials",
-              open: true,
-              severity: "error",
-            })
-          }
-        } else {
-          SetCaptchaCode(Math.random().toString(36).substr(2, 6))
-          setToast({
-            message: "Please enter a valid email address",
-            open: true,
-            severity: "error",
-          })
-        }
-      } else {
-        SetCaptchaCode(Math.random().toString(36).substr(2, 6))
-        setToast({
-          message: "Please enter the correct Captcha",
-          open: true,
-          severity: "error",
-        })
-      }
+      enqueueSnackbar("Please Enter Correct Captcha", {
+        autoHideDuration: 3000,
+        variant: "error",
+      })
+      return
+    }
+
+    let ress: any = await auth.signIn(email, password)
+
+    if (ress.data?.success) {
+      // if (emailValidationRegex.test(email)) {
+      enqueueSnackbar(ress.data?.message, {
+        autoHideDuration: 3000,
+        variant: "success",
+      })
+      // }
+    } else {
+      enqueueSnackbar(ress?.error, {
+        autoHideDuration: 3000,
+        variant: "error",
+      })
     }
   }
 
