@@ -45,8 +45,7 @@ const VALIDATION_TYPE = {
   matchTwo: "match_two",
   mobile: "mobile",
   none: "none",
-  alphanumeric: "alphanumeric",
-  empty:"empty"
+  empty: "empty",
 }
 
 const months = [

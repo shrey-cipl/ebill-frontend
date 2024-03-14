@@ -41,14 +41,12 @@ const validateOnSubmit = (dataToValidate, validationState) => {
   // console.log(fieldKeys, "ggggggggggg")
 
   for (let key of fieldKeys) {
-    // De-structures validation type for that key
-    // console.log(validationState[key])
-
     if (
       key !== "billFilePath" &&
       key !== "maxAdmissibleAmount" &&
       key !== "former"
     ) {
+      // De-structures validation type for that key
       const { validationType } = validationState[key]
 
       // Assumes valid data initially
