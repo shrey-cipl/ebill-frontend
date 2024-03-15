@@ -590,7 +590,10 @@ const ManageBill = () => {
             ...obj,
           },
         }
-
+        console.log(
+          config.data,
+          "ddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+        )
         res = await axiosApi(
           config.url,
           config.method,
