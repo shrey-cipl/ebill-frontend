@@ -146,7 +146,7 @@ const BillRouting = () => {
             }}
           >
             <form>
-              <InputLabel>Bill Type</InputLabel>
+              <InputLabel>Select Bill Type</InputLabel>
               <Select
                 // name={former.id}
                 size="small"

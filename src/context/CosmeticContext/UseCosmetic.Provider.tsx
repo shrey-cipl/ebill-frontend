@@ -10,6 +10,8 @@ const initialCosmeticData = {
   setUserbill: (pre: boolean) => {},
   billType: [],
   setBillType: (prev: any) => {},
+  authenticatedRoute: [],
+  setAuthenticatedRoute: (prev: any) => {},
 }
 
 export const CosmeticContext = createContext(initialCosmeticData)
@@ -25,6 +27,7 @@ function CosmeticContextProvider({ children }: CosmeticContextProviderProps) {
   const [modalLoading, setModalLoading] = useState(false)
   const [userbill, setUserbill] = useState(false)
   const [billType, setBillType] = useState<any>([])
+  const [authenticatedRoute, setAuthenticatedRoute] = useState<any>([])
   // Define your cosmetic-related functions here
   // console.log(billType)
   const globalCosmeticContextValue = useMemo(
@@ -37,8 +40,10 @@ function CosmeticContextProvider({ children }: CosmeticContextProviderProps) {
         billType,
         setUserbill,
         userbill,
+        authenticatedRoute,
+        setAuthenticatedRoute,
       } as any),
-    [modalLoading, billType, userbill]
+    [modalLoading, billType, userbill, authenticatedRoute]
   )
 
   return (

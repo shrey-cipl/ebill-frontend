@@ -25,8 +25,31 @@ const SidebarItems = ({ toggleMobileSidebar }: any) => {
     role ? Menuitems[role] : Menuitems["former"]
   )
   const cosmeticContext = useContext(CosmeticContext)
-  const { billType, setBillType, setUserbill } = cosmeticContext
+  const {
+    billType,
+    setBillType,
+    setUserbill,
+    setAuthenticatedRoute,
+    authenticatedRoute,
+  } = cosmeticContext
   // setBillType(["pops"])
+  // const router = useRouter()
+  useEffect(() => {
+    role
+      ? setAuthenticatedRoute(Menuitems[role])
+      : setAuthenticatedRoute(Menuitems["former"])
+  }, [role])
+
+  console.log(authenticatedRoute, "authenticatedRoute")
+  // useEffect(() => {
+  //   const { pathname } = router
+  //   const foundRoute = authenticatedRoute.find(
+  //     (route) => route?.href === pathname
+  //   )
+  //   if (!foundRoute) {
+  //     router.push("/404")
+  //   }
+  // }, [router])
 
   const obj: any = {
     id: uniqueId(),
