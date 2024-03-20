@@ -4,12 +4,15 @@ import { ThemeProvider } from "@mui/material/styles"
 import CssBaseline from "@mui/material/CssBaseline"
 import { SnackbarProvider } from "notistack"
 
-import AuthProvider from "../context/JWTContext/AuthContext.provider"
+import AuthProvider, {
+  useAuth,
+} from "../context/JWTContext/AuthContext.provider"
 import UserContextProvider from "@/context/UserContext/UserContext.provider"
 import CosmeticContextProvider from "@/context/CosmeticContext/UseCosmetic.Provider"
 
 // global styles
 import "./global.css"
+import { useEffect } from "react"
 
 export default function RootLayout({
   children,

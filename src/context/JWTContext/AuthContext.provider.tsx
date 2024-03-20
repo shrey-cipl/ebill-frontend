@@ -1,6 +1,6 @@
 import React, { createContext, useEffect, useReducer, useMemo } from "react"
 
-import { useRouter } from "next/navigation"
+import { useRouter, useSearchParams } from "next/navigation"
 import axios from "../../config/axios"
 import { isValidToken, setSession } from "../../Util/jwt"
 import AuthReducer from "./AuthContext.reducer"
@@ -43,15 +43,65 @@ export default function AuthProvider({ children }: AuthProviderProps) {
   const router = useRouter()
 
   const pathname = usePathname()
+  const searchParams = useSearchParams()
+  let xml: any = searchParams.get("xml")
+  console.log(xml, "xxx")
+
+  // useEffect(() => {
+  //   const initialize = async () => {
+  //     try {
+  //       // localStorage.getItem('login')
+  //       if (localStorage.getItem("login")) {
+  //         const info: any = JSON.parse(localStorage.getItem("login") || "")
+  //         const { token, data } = info
+
+  //         dispatch({
+  //           type: INITIALIZE,
+  //           payload: {
+  //             isInitialized: true,
+  //             user: { data, token },
+  //           },
+  //         })
+  //       } else {
+  //         //http://localhost:3000/resetpassword
+  //         // /resetpassword]
+
+  //         dispatch({
+  //           type: INITIALIZE,
+  //           payload: {
+  //             isInitialized: false,
+  //             user: null,
+  //           },
+  //         })
+  //         // console.log("logout");
+  //         {
+  //           pathname == "/Forgot" ||
+  //           pathname == "/resetpassword" ||
+  //           pathname == "/FormersLogin"
+  //             ? null
+  //             : router.push("/login")
+  //         }
+  //       }
+  //     } catch (err) {
+  //       dispatch({
+  //         type: INITIALIZE,
+  //         payload: {
+  //           isAuthenticated: false,
+  //           user: null,
+  //         },
+  //       })
+  //     }
+  //   }
+
+  //   initialize()
+  // }, [])
 
   useEffect(() => {
-    const initialize = async () => {
+    const func = async () => {
       try {
-        // localStorage.getItem('login')
         if (localStorage.getItem("login")) {
-          const info: any = JSON.parse(localStorage.getItem("login") || "")
-          const { token, data } = info
-
+          const data: any = JSON.parse(localStorage.getItem("login") || "")
+          const token: any = localStorage.getItem("accessToken")
           dispatch({
             type: INITIALIZE,
             payload: {
@@ -59,39 +109,57 @@ export default function AuthProvider({ children }: AuthProviderProps) {
               user: { data, token },
             },
           })
+          pathname == "/" && router.push("/Home")
+        } else if (xml) {
+          signInOnHome()
         } else {
-          //http://localhost:3000/resetpassword
-          // /resetpassword]
-
-          dispatch({
-            type: INITIALIZE,
-            payload: {
-              isInitialized: false,
-              user: null,
-            },
-          })
-          // console.log("logout");
-          {
-            pathname == "/Forgot" ||
-            pathname == "/resetpassword" ||
-            pathname == "/FormersLogin"
-              ? null
-              : router.push("/login")
-          }
+          signOut()
         }
-      } catch (err) {
-        dispatch({
-          type: INITIALIZE,
-          payload: {
-            isAuthenticated: false,
-            user: null,
-          },
-        })
+      } catch (err: any) {
+        console.log(err, "error on First Render")
+        signOut()
       }
     }
-
-    initialize()
+    func()
   }, [])
+
+  const signInOnHome = async () => {
+    try {
+      const response = await axios.get(
+        `${process.env.NEXT_PUBLIC_BACKEND_SSO_BASE_URL}/api/v1/user/session/${xml}`
+      )
+      console.log(response, "resp")
+      const { token, data }: any = response.data.data.body
+      if (response.data.data.status == false) {
+        signOut()
+        return
+      }
+      localStorage.setItem("login", JSON.stringify(data))
+
+      localStorage.setItem("xml", JSON.stringify(xml))
+
+      setSession(token)
+      dispatch({
+        type: SIGN_IN,
+        payload: {
+          user: { data, token },
+          isAuthenticated: true,
+        },
+      })
+      router.push("/Home")
+    } catch (err: any) {
+      console.log(err, "errrrrrrrrrrrrrr")
+      signOut()
+      dispatch({
+        type: SIGN_IN,
+        payload: {
+          isAuthenticated: false,
+          validationErrors: err.error,
+        },
+      })
+      return err
+    }
+  }
 
   const signIn = async (email: any, password: any) => {
     try {
@@ -103,6 +171,7 @@ export default function AuthProvider({ children }: AuthProviderProps) {
       const { token, data } = response.data
       localStorage.setItem("login", JSON.stringify(response.data))
       setSession(token)
+      console.log(token, data, "kkkkkkkkkkkkkkkkkkkkkkkkkkkkkk")
       dispatch({
         type: SIGN_IN,
         payload: {
@@ -165,14 +234,44 @@ export default function AuthProvider({ children }: AuthProviderProps) {
       return err
     }
   }
-  const signOut = async () => {
-    setSession(null)
-    // console.log("Current Path:", pathname)
-    router.push("/login")
-    dispatch({ type: SIGN_OUT })
+  // const signOut = async () => {
+  //   setSession(null)
+  //   // console.log("Current Path:", pathname)
+  //   router.push("/login")
+  //   dispatch({ type: SIGN_OUT })
 
-    // localStorage.setItem("login", "logout")
-    localStorage.removeItem("login")
+  //   // localStorage.setItem("login", "logout")
+  //   localStorage.removeItem("login")
+  // }
+  const signOut = async () => {
+    const rawData = localStorage.getItem("xml")
+    let info
+
+    if (rawData) {
+      try {
+        info = JSON.parse(rawData)
+        try {
+          const response = await axios.delete(
+            `${process.env.NEXT_PUBLIC_BACKEND_SSO_BASE_URL}/api/v1/user/session/${info}`
+          )
+          console.log(response)
+          router.push(`${process.env.NEXT_PUBLIC_SSO_URL}`)
+          setSession(null)
+          dispatch({ type: SIGN_OUT })
+          localStorage.clear()
+        } catch (err: any) {
+          console.log(err, "error")
+        }
+      } catch (error) {
+        console.error("Error parsing JSON:", error)
+        // Handle the error appropriately, such as displaying a message to the user or providing a default value for 'info'
+      }
+    } else {
+      // Handle case where no data is present in localStorage
+      router.push(`${process.env.NEXT_PUBLIC_SSO_URL}`)
+      dispatch({ type: SIGN_OUT })
+      localStorage.clear()
+    }
   }
   const signOutFor = async () => {
     setSession(null)

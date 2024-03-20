@@ -10,6 +10,7 @@ import {
 } from "@/context/CosmeticContext/UseCosmetic.Provider"
 
 import { useRouter } from "next/navigation"
+import { useAuth } from "@/context/JWTContext/AuthContext.provider"
 const MainWrapper = styled("div")(() => ({
   display: "flex",
   minHeight: "100vh",
@@ -36,7 +37,7 @@ export default function RootLayout({
   const [isSidebarOpen, setSidebarOpen] = useState(true)
   const [isMobileSidebarOpen, setMobileSidebarOpen] = useState(false)
   const path = usePathname()
-
+const auth=useAuth()
   const cosmeticContext = useContext(CosmeticContext)
   const { billType, setBillType, setUserbill, authenticatedRoute } =
     cosmeticContext
@@ -47,14 +48,14 @@ export default function RootLayout({
   authenticatedRoute.map((e: any) => {
     console.log(e?.href === path, "yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy")
   })
-  // useEffect(() => {
-  //   const jsonString = JSON.stringify(authenticatedRoute)
-  //   const isStringPresent = jsonString?.includes(path)
+  useEffect(() => {
+    // const jsonString = JSON.stringify(authenticatedRoute)
+    // const isStringPresent = jsonString?.includes(path)
 
-  //   if (!isStringPresent && authenticatedRoute.length != 0) {
-  //     router.push("/404")
-  //   }
-  // }, [authenticatedRoute, path])
+    // if (!isStringPresent && authenticatedRoute.length != 0) {
+    //   router.push("/404")
+    // }
+  }, [auth, path])
   return (
     <>
       {path === "/login" ||

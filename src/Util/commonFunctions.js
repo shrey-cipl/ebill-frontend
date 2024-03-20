@@ -17,8 +17,8 @@ const validateOnSubmit = (dataToValidate, validationState) => {
   // delete validationState?.former
   // delete dataToValidate?.billFilePath
   // delete validationState?.billFilePath
-  // console.log(dataToValidate, "dataToValidate in cooooooooooooommcomcomc")
-  // console.log(validationState, "validationState  cooooooooooooommcomcomc")
+  console.log(dataToValidate, "dataToValidate in cooooooooooooommcomcomc")
+  console.log(validationState, "validationState  cooooooooooooommcomcomc")
   // Creates a deep copy
   const validationStateCopy = JSON.parse(JSON.stringify(validationState))
 
@@ -41,12 +41,14 @@ const validateOnSubmit = (dataToValidate, validationState) => {
   // console.log(fieldKeys, "ggggggggggg")
 
   for (let key of fieldKeys) {
+    // De-structures validation type for that key
+    // console.log(validationState[key])
+
     if (
       key !== "billFilePath" &&
       key !== "maxAdmissibleAmount" &&
       key !== "former"
     ) {
-      // De-structures validation type for that key
       const { validationType } = validationState[key]
 
       // Assumes valid data initially

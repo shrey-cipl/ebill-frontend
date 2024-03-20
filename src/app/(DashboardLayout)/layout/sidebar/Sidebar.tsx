@@ -18,6 +18,7 @@ const Sidebar = ({
 
   const sidebarWidth = "270px"
   const auth: any = useAuth()
+  console.log(auth, "auth")
   if (lgUp) {
     return (
       <Box
@@ -77,14 +78,23 @@ const Sidebar = ({
                   }}
                 />
               </Box>
+              <Typography
+                sx={{
+                  fontWeight: "900",
+                  fontSize: "15px",
+                  mt: 2,
+                }}
+              >
+                Union Public Service Commission
+              </Typography>
 
               <Typography
                 sx={{
-                  fontSize: "18px",
-                  fontWeight: "800",
+                  fontSize: "13px",
+                  fontWeight: "400",
                   textAlign: "center",
-                  mt: 1,
-                  width: "200px",
+                  m: 2,
+                  // width: "200px",
                   // border: "1px solid black",
                 }}
               >

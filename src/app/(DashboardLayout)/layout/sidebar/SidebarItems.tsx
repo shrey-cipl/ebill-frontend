@@ -21,6 +21,7 @@ const SidebarItems = ({ toggleMobileSidebar }: any) => {
   const auth: any = useAuth()
   const role: any = auth?.user?.data?.role?.name
   // const [state ,setstate] =useState(auth?.user?.role?.name);
+  console.log(auth?.user?.data?.role?.name, "first")
   const [allData, setItems] = useState(
     role ? Menuitems[role] : Menuitems["former"]
   )
@@ -35,12 +36,14 @@ const SidebarItems = ({ toggleMobileSidebar }: any) => {
   // setBillType(["pops"])
   // const router = useRouter()
   useEffect(() => {
-    role
-      ? setAuthenticatedRoute(Menuitems[role])
-      : setAuthenticatedRoute(Menuitems["former"])
-  }, [role])
+    setItems(role ? Menuitems[role] : Menuitems["former"])
+  }, [auth])
 
-  console.log(authenticatedRoute, "authenticatedRoute")
+  console.log(
+    role,
+
+    "authenticatedRouteppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppp"
+  )
   // useEffect(() => {
   //   const { pathname } = router
   //   const foundRoute = authenticatedRoute.find(
