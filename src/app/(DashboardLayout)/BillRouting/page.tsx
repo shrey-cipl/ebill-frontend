@@ -234,6 +234,9 @@ const BillRouting = () => {
                           color="primary"
                           sx={{
                             height: "30px",
+                            padding: "10px 35px",
+                            display: "flex",
+                            justifyContent: "center",
                           }}
                           onClick={() => {
                             addItemAtIndex(
@@ -250,7 +253,9 @@ const BillRouting = () => {
                           sx={{
                             backgroundColor: "red",
                             height: "30px",
-                            px: 3,
+                            padding: "10px 35px",
+                            display: "flex",
+                            justifyContent: "center",
                             "&:hover": {
                               backgroundColor: "#e68282", // Change the color on hover
                             },
