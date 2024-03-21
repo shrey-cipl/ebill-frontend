@@ -19,8 +19,11 @@ const DashboardAdmin = () => {
 
   useEffect(() => {
     const getData = async () => {
+
+      
+    let userRole = encodeURIComponent(authCtx?.user?.data?.role?.name);      
       const config = {
-        url: `/api/user/getDashboardData`,
+        url: `/api/user/getDashboardData?claimAccesedByUser=${userRole}`,
         method: "GET",
         headers: {
           "Content-Type": "application/json",
