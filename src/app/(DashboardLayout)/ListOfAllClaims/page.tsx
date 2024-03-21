@@ -23,12 +23,15 @@ const dataToExport = (data: any) => {
     "Diary No.": item.diaryNumber,
     "Bill Type": item.billType,
     "Bill No.": item.billNumber,
-    "Receiving Date": dayjs(item.claimReceivingDate).format("DD-MM-YYYY"),
+    // "Receiving Date": dayjs(item.claimReceivingDate).format("DD-MM-YYYY"),
     "Claimed Amount": item.totalClaimedAmount,
-    "Sanctioned Amount": item.sanctionedAmount,
-    "Claim From": dayjs(item.claimPeriodFrom).format("DD-MM-YYYY"),
-    "Claimed To": dayjs(item.claimPeriodTo).format("DD-MM-YYYY"),
-    "Admissible Amount": item.totalAdmissibleAmount,
+    // "Sanctioned Amount": item.sanctionedAmount,
+    // "Claim From": dayjs(item.claimPeriodFrom).format("DD-MM-YYYY"),
+    // "Claimed To": dayjs(item.claimPeriodTo).format("DD-MM-YYYY"),
+    // "Admissible Amount": item.totalAdmissibleAmount,
+    Status: item.currentStatus,
+    "Pending Branch": item.pendingBranch,
+    "Forward To": item.lastForwardedTo,
   }))
 }
 
@@ -92,16 +95,16 @@ const ListOfAllClaims = () => {
     { field: "diaryNumber", headerName: "DAIRY NO." },
     { field: "billType", headerName: "BILL TYPE" },
     { field: "billNumber", headerName: "BILL NO." },
-    {
-      field: "claimReceivingDate",
-      headerName: "RECEIVING DATE",
-      valueFormatter: (params) => {
-        return dayjs(params.value).format("YYYY-MM-DD")
-      },
-    },
+    // {
+    //   field: "claimReceivingDate",
+    //   headerName: "RECEIVING DATE",
+    //   valueFormatter: (params) => {
+    //     return dayjs(params.value).format("YYYY-MM-DD")
+    //   },
+    // },
     { field: "totalClaimedAmount", headerName: "CLAIMED AMOUNT" },
-    { field: "sanctionedAmount", headerName: "SANCTIONED AMOUNT" },
-    { field: "currentStatus", headerName: "BILL STATUS" },
+    // { field: "sanctionedAmount", headerName: "SANCTIONED AMOUNT" },
+    { field: "currentStatus", headerName: "STATUS" },
     {
       field: "pendingBranch",
       headerName: "PENDING BRANCH",
@@ -109,22 +112,22 @@ const ListOfAllClaims = () => {
         return `Pending at ${params.value}`
       },
     },
-    {
-      field: "createdAt",
-      headerName: "CREATED AT",
+    // {
+    //   field: "createdAt",
+    //   headerName: "CREATED AT",
 
-      valueFormatter: (params) => {
-        return dayjs(params.value).format("DD-MM-YYYY h:mm A")
-      },
-    },
-    {
-      field: "updatedAt",
-      headerName: "UPDATED ON",
+    //   valueFormatter: (params) => {
+    //     return dayjs(params.value).format("DD-MM-YYYY h:mm A")
+    //   },
+    // },
+    // {
+    //   field: "updatedAt",
+    //   headerName: "UPDATED ON",
 
-      valueFormatter: (params) => {
-        return dayjs(params.value).format("DD-MM-YYYY h:mm A")
-      },
-    },
+    //   valueFormatter: (params) => {
+    //     return dayjs(params.value).format("DD-MM-YYYY h:mm A")
+    //   },
+    // },
     { field: "lastForwardedTo", headerName: "FORWARD TO" },
     {
       field: "random_2",
