@@ -47,61 +47,14 @@ export default function AuthProvider({ children }: AuthProviderProps) {
   let xml: any = searchParams.get("xml")
   console.log(xml, "xxx")
 
-  useEffect(() => {
-    const initialize = async () => {
-      try {
-        // localStorage.getItem('login')
-        if (localStorage.getItem("login")) {
-          const info: any = JSON.parse(localStorage.getItem("login") || "")
-          const { token, data } = info
-
-          dispatch({
-            type: INITIALIZE,
-            payload: {
-              isInitialized: true,
-              user: { data, token },
-            },
-          })
-        } else {
-          //http://localhost:3000/resetpassword
-          // /resetpassword]
-
-          dispatch({
-            type: INITIALIZE,
-            payload: {
-              isInitialized: false,
-              user: null,
-            },
-          })
-          // console.log("logout");
-          {
-            pathname == "/Forgot" ||
-            pathname == "/resetpassword" ||
-            pathname == "/FormersLogin"
-              ? null
-              : router.push("/login")
-          }
-        }
-      } catch (err) {
-        dispatch({
-          type: INITIALIZE,
-          payload: {
-            isAuthenticated: false,
-            user: null,
-          },
-        })
-      }
-    }
-
-    initialize()
-  }, [])
-
   // useEffect(() => {
-  //   const func = async () => {
+  //   const initialize = async () => {
   //     try {
+  //       // localStorage.getItem('login')
   //       if (localStorage.getItem("login")) {
-  //         const data: any = JSON.parse(localStorage.getItem("login") || "")
-  //         const token: any = localStorage.getItem("accessToken")
+  //         const info: any = JSON.parse(localStorage.getItem("login") || "")
+  //         const { token, data } = info
+
   //         dispatch({
   //           type: INITIALIZE,
   //           payload: {
@@ -109,19 +62,80 @@ export default function AuthProvider({ children }: AuthProviderProps) {
   //             user: { data, token },
   //           },
   //         })
-  //         pathname == "/" && router.push("/Home")
-  //       } else if (xml) {
-  //         signInOnHome()
   //       } else {
-  //         signOut()
+
+  //         //http://localhost:3000/resetpassword
+  //         // /resetpassword]
+
+  //         dispatch({
+  //           type: INITIALIZE,
+  //           payload: {
+  //             isInitialized: false,
+  //             user: null,
+  //           },
+  //         })
+  //         // console.log("logout");
+  //         {
+  //           pathname == "/Forgot" ||
+  //           pathname == "/resetpassword" ||
+  //           pathname == "/FormersLogin"
+  //             ? null
+  //             : router.push("/login")
+  //         }
   //       }
-  //     } catch (err: any) {
-  //       console.log(err, "error on First Render")
-  //       signOut()
+  //     } catch (err) {
+  //       dispatch({
+  //         type: INITIALIZE,
+  //         payload: {
+  //           isAuthenticated: false,
+  //           user: null,
+  //         },
+  //       })
   //     }
   //   }
-  //   func()
+
+  //   initialize()
   // }, [])
+
+  useEffect(() => {
+    const func = async () => {
+      if (
+        pathname != "/FormersLogin" &&
+        pathname != "/Forgot" &&
+        pathname != "/resetpassword"
+      ) {
+        try {
+          if (localStorage.getItem("login")) {
+            const data: any = JSON.parse(localStorage.getItem("login") || "")
+            const token: any = localStorage.getItem("accessToken")
+            dispatch({
+              type: INITIALIZE,
+              payload: {
+                isInitialized: true,
+                user: { data, token },
+              },
+            })
+            pathname == "/" && router.push("/Home")
+          } else if (xml) {
+            signInOnHome()
+          } else {
+            signOut()
+            // {
+            //   pathname == "/Forgot" ||
+            //   pathname == "/resetpassword" ||
+            //   pathname == "/FormersLogin"
+            //     ? null
+            //     : router.push("/login")
+            // }
+          }
+        } catch (err: any) {
+          console.log(err, "error on First Render")
+          signOut()
+        }
+      }
+    }
+    func()
+  }, [])
 
   const signInOnHome = async () => {
     try {
