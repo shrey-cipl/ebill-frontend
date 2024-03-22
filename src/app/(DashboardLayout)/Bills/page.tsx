@@ -36,16 +36,18 @@ const BoxWrapper = styled("div")(() => ({
 }))
 
 const dataToExport = (data: any) => {
-  return data.map((item: any) => ({
+  return data.map((item: any, i: any) => ({
+    "S.No": i + 1,
     "Diary No.": item.diaryNumber,
-    "Bill No.": item.billNumber,
-    "Bill Type": item.billType,
     "User Name": item.name,
-    "Receiving Date": dayjs(item.claimReceivingDate).format("DD-MM-YYYY"),
-    "Claim From": dayjs(item.claimPeriodFrom).format("DD-MM-YYYY"),
-    "Claimed To": dayjs(item.claimPeriodTo).format("DD-MM-YYYY"),
+    "Bill Type": item.billType,
+    "Bill No.": item.billNumber,
     "Claimed Amt.": item.totalClaimedAmount,
-    "Admissible Amt.": item.totalAdmissibleAmount,
+    Status: item.currentStatus,
+    "Forward To": item.lastForwardedTo,
+    // "Receiving Date": dayjs(item.claimReceivingDate).format("DD-MM-YYYY"),
+    // "Claim From": dayjs(item.claimPeriodFrom).format("DD-MM-YYYY"),
+    // "Claimed To": dayjs(item.claimPeriodTo).format("DD-MM-YYYY"),
   }))
 }
 
@@ -63,8 +65,7 @@ const Bills = () => {
   const { billType, setBillType, userbill } = cosmeticContext
 
   const handleFetchBills = async () => {
-
-    let userRole = encodeURIComponent(authCtx?.user?.data?.role?.name);
+    let userRole = encodeURIComponent(authCtx?.user?.data?.role?.name)
     const config = {
       url: `/api/claim/getall?lastForwardedToOfficerOrLinkOfficer=${userRole}`,
       method: "GET",
@@ -122,29 +123,29 @@ const Bills = () => {
     { field: "billType", headerName: "BILL TYPE" },
     { field: "billNumber", headerName: "BILL NO." },
     { field: "totalClaimedAmount", headerName: "CLAIMED AMOUNT" },
-    {
-      field: "totalAdmissibleAmount",
-      headerName: "ADMISSIBLE AMOUNT",
-    },
-    { field: "sanctionedAmount", headerName: "SANCTIONED AMOUNT" },
+    // {
+    //   field: "totalAdmissibleAmount",
+    //   headerName: "ADMISSIBLE AMOUNT",
+    // },
+    // { field: "sanctionedAmount", headerName: "SANCTIONED AMOUNT" },
     { field: "currentStatus", headerName: "STATUS" },
     { field: "lastForwardedTo", headerName: "FORWARD TO" },
-    {
-      field: "createdAt",
-      headerName: "CREATED AT",
+    // {
+    //   field: "createdAt",
+    //   headerName: "CREATED AT",
 
-      valueFormatter: (params) => {
-        return dayjs(params.value).format("DD-MM-YYYY h:mm A")
-      },
-    },
-    {
-      field: "updatedAt",
-      headerName: "UPDATED ON",
+    //   valueFormatter: (params) => {
+    //     return dayjs(params.value).format("DD-MM-YYYY h:mm A")
+    //   },
+    // },
+    // {
+    //   field: "updatedAt",
+    //   headerName: "UPDATED ON",
 
-      valueFormatter: (params) => {
-        return dayjs(params.value).format("DD-MM-YYYY h:mm A")
-      },
-    },
+    //   valueFormatter: (params) => {
+    //     return dayjs(params.value).format("DD-MM-YYYY h:mm A")
+    //   },
+    // },
     {
       field: "random_2",
       headerName: "ACTION",
@@ -213,7 +214,7 @@ const Bills = () => {
       },
     },
   ]
-  console.log(userbill, "userbill")
+
   return (
     <PageContainer title="Claims" description="List of all the bills">
       <DashboardNew title="Claims" titleVariant="h5">

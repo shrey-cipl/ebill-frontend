@@ -33,15 +33,16 @@ const BoxWrapper = styled("div")(() => ({
 }))
 
 const dataToExport = (data: any) => {
-  return data.map((item: any) => ({
+  return data.map((item: any, i: any) => ({
+    "S.No": i + 1,
     "User Name": item.name,
-    Designation: item.designation,
-    Phone: item.phone,
-    "Bill No.": item.billNumber,
     "Bill Type": item.billType,
-    "Bill From": dayjs(item.billPeriodFrom).format("DD-MM-YYYY"),
-    "Bill To": dayjs(item.billPeriodTo).format("DD-MM-YYYY"),
+    "Bill No.": item.billNumber,
     "Claimed Amt.": item.claimedAmount,
+    Designation: item.designation,
+    // Phone: item.phone,
+    // "Bill From": dayjs(item.billPeriodFrom).format("DD-MM-YYYY"),
+    // "Bill To": dayjs(item.billPeriodTo).format("DD-MM-YYYY"),
   }))
 }
 
@@ -64,7 +65,13 @@ const UserBills = () => {
   console.log(billType[0], "billTypebillTypebillType")
   const handleFetchBills = async () => {
     const config = {
-      url: `/api/bill/getall?billType=${encodeURIComponent(billType[0])}&billType=${encodeURIComponent(billType[1])}&billType=${encodeURIComponent(billType[2])}&billType=${encodeURIComponent(billType[3])}`,
+      url: `/api/bill/getall?billType=${encodeURIComponent(
+        billType[0]
+      )}&billType=${encodeURIComponent(
+        billType[1]
+      )}&billType=${encodeURIComponent(
+        billType[2]
+      )}&billType=${encodeURIComponent(billType[3])}`,
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -149,30 +156,30 @@ const UserBills = () => {
       valueGetter: (params) => params.api.getAllRowIds().indexOf(params.id) + 1,
       width: 100,
     },
-    { field: "billNumber", headerName: "BILL NO." },
-    { field: "name", headerName: "NAME"  },
-    { field: "claimedAmount", headerName: "CLAIMED AMOUNT" },
-    { field: "billPeriodFrom", headerName: "BILL FROM" },
-    { field: "billPeriodTo", headerName: "BILL TO" },
+    { field: "name", headerName: "NAME" },
     { field: "billType", headerName: "BILL TYPE" },
+    { field: "billNumber", headerName: "BILL NO." },
+    { field: "claimedAmount", headerName: "CLAIMED AMOUNT" },
+    // { field: "billPeriodFrom", headerName: "BILL FROM" },
+    // { field: "billPeriodTo", headerName: "BILL TO" },
     { field: "designation", headerName: "DESIGNATION" },
-    { field: "phone", headerName: "PHONE" },
-    {
-      field: "createdAt",
-      headerName: "CREATED AT",
+    // { field: "phone", headerName: "PHONE" },
+    // {
+    //   field: "createdAt",
+    //   headerName: "CREATED AT",
 
-      valueFormatter: (params) => {
-        return dayjs(params.value).format("DD-MM-YYYY h:mm A")
-      },
-    },
-    {
-      field: "updatedAt",
-      headerName: "UPDATED ON",
+    //   valueFormatter: (params) => {
+    //     return dayjs(params.value).format("DD-MM-YYYY h:mm A")
+    //   },
+    // },
+    // {
+    //   field: "updatedAt",
+    //   headerName: "UPDATED ON",
 
-      valueFormatter: (params) => {
-        return dayjs(params.value).format("DD-MM-YYYY h:mm A")
-      },
-    },
+    //   valueFormatter: (params) => {
+    //     return dayjs(params.value).format("DD-MM-YYYY h:mm A")
+    //   },
+    // },
     {
       field: "id",
       headerName: "ACTION",
