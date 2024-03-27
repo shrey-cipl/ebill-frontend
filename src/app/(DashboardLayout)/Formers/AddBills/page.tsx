@@ -9,7 +9,7 @@ import {
   TextField,
   FormControl,
 } from "@mui/material"
-
+import { BILL_TYPE } from "@/config/constants"
 import PageContainer from "../../components/container/PageContainer"
 import DashboardNew from "../../components/shared/DashboardNew"
 import { useAuth } from "@/context/JWTContext/AuthContext.provider"
@@ -20,6 +20,7 @@ import Tooltip from "@mui/material/Tooltip"
 
 import { FIELDS_FORMERS_ADD_BILL } from "@/config/formFields"
 import { validateOnSubmit } from "@/Util/commonFunctions"
+import DynamicTable from "../../components/dynamicTable/DynamicTable"
 
 const initialFieldState: any = {}
 const initialValidationState: any = {}
@@ -34,13 +35,28 @@ for (let arrEl of FIELDS_FORMERS_ADD_BILL) {
     errMsg: "",
   }
 }
+interface TableRowData {
+  phone: string
+  periodFrom: string
+  periodTo: string
+  claimedAmount: string
+  admissibleAmount: string
+}
 
 const FormerAddBill = () => {
   const [formerFieldState, setFormerFieldState] = useState(initialFieldState)
   const [validations, setValidations] = useState(initialValidationState)
   const [previewUrl, setPreviewUrl] = useState<string | null>(null)
   const [former, setFormer] = useState<any>()
-
+  const [tableData, setTableData] = useState<TableRowData[]>([
+    {
+      phone: "",
+      periodFrom: "",
+      periodTo: "",
+      claimedAmount: "",
+      admissibleAmount: "",
+    },
+  ])
   const authCtx: any = useAuth()
   const router = useRouter()
 
@@ -360,6 +376,21 @@ const FormerAddBill = () => {
                 )
               })}
             </div>
+            <br />
+            <br />
+            <Box
+              sx={{
+                width: "100%",
+              }}
+            >
+              {/* for 'Telephone/Mobile' bill type */}
+              {formerFieldState.billType === BILL_TYPE[3] ? (
+                <DynamicTable
+                  tableData={tableData}
+                  setTableData={setTableData}
+                />
+              ) : null}
+            </Box>
             <div
               style={{
                 display: "flex",
