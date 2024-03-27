@@ -97,6 +97,46 @@ export default function AuthProvider({ children }: AuthProviderProps) {
     initialize()
   }, [])
 
+  // useEffect(() => {
+  //   const func = async () => {
+  //     if (
+  //       pathname != "/FormersLogin" &&
+  //       pathname != "/Forgot" &&
+  //       pathname != "/resetpassword"
+  //     ) {
+  //       try {
+  //         if (localStorage.getItem("login")) {
+  //           const data: any = JSON.parse(localStorage.getItem("login") || "")
+  //           const token: any = localStorage.getItem("accessToken")
+  //           dispatch({
+  //             type: INITIALIZE,
+  //             payload: {
+  //               isInitialized: true,
+  //               user: { data, token },
+  //             },
+  //           })
+  //           pathname == "/" && router.push("/Home")
+  //         } else if (xml) {
+  //           signInOnHome()
+  //         } else {
+  //           signOut()
+  //           // {
+  //           //   pathname == "/Forgot" ||
+  //           //   pathname == "/resetpassword" ||
+  //           //   pathname == "/FormersLogin"
+  //           //     ? null
+  //           //     : router.push("/login")
+  //           // }
+  //         }
+  //       } catch (err: any) {
+  //         console.log(err, "error on First Render")
+  //         signOut()
+  //       }
+  //     }
+  //   }
+  //   func()
+  // }, [])
+  
   const signInOnHome = async () => {
     try {
       const response = await axios.get(
