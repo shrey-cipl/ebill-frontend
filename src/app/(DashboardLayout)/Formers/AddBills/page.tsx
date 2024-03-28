@@ -59,6 +59,10 @@ const FormerAddBill = () => {
   ])
   const authCtx: any = useAuth()
   const router = useRouter()
+  console.log(tableData, "tableData")
+  useEffect(() => {
+      setFormerFieldState({ ...formerFieldState, telephoneNumbers: tableData })
+  }, [tableData])
 
   const handleSubmit = async (e: any) => {
     e.preventDefault()
@@ -87,7 +91,9 @@ const FormerAddBill = () => {
     if (!allValidationsPass) {
       return
     }
+    console.log(formerFieldState, "formerFieldState")
 
+    // console.log(fieldKeysArr, "fieldKeysArr")
     const formDataToSend = new FormData()
 
     const fieldKeysArr = Object.keys(formerFieldState)
@@ -95,7 +101,16 @@ const FormerAddBill = () => {
     fieldKeysArr.forEach((key) =>
       formDataToSend.append(key, formerFieldState[key])
     )
+    console.log(formDataToSend, "formDataToSend")
 
+    // "telephoneNumbers": [
+    //   {
+    //       "phone": "8383824575",
+    //       "periodFrom": "2023-05-01",
+    //       "periodTo": "2023-07-31",
+    //       "claimedAmount": 550,
+    //       "admissibleAmount": 800
+    //   },
     try {
       const config = {
         url: `/api/bill/create`,

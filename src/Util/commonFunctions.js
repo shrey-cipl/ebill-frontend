@@ -47,7 +47,8 @@ const validateOnSubmit = (dataToValidate, validationState) => {
     if (
       key !== "billFilePath" &&
       key !== "maxAdmissibleAmount" &&
-      key !== "former"
+      key !== "former" &&
+      key !== "telephoneNumbers"
     ) {
       const { validationType } = validationState[key]
 
@@ -184,7 +185,12 @@ const validateOnSubmit = (dataToValidate, validationState) => {
       }
     }
   }
-  const keysToRemove = ["billFilePath", "maxAdmissibleAmount", "former"]
+  const keysToRemove = [
+    "billFilePath",
+    "maxAdmissibleAmount",
+    "former",
+    "telephoneNumbers",
+  ]
   const filteredFieldKeys = fieldKeys.filter(
     (key) => !keysToRemove.includes(key)
   )
