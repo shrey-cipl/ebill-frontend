@@ -99,7 +99,11 @@ const FormerAddBill = () => {
     const fieldKeysArr = Object.keys(formerFieldState)
 
     fieldKeysArr.forEach((key) =>
-      formDataToSend.append(key, formerFieldState[key])
+      { if (key === "telephoneNumbers") {
+        formDataToSend.append("telephoneNumbers", JSON.stringify(tableData));
+      } else {
+        formDataToSend.append(key, formerFieldState[key]);
+      }}
     )
     console.log(formDataToSend, "formDataToSend")
 
