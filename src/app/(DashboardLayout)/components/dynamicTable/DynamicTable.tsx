@@ -8,8 +8,9 @@ import {
   TableContainer,
   TableHead,
   TableRow,
+  Typography,
 } from "@mui/material"
-
+import { useSearchParams } from "next/navigation"
 interface TableRowData {
   phone: string
   periodFrom: string
@@ -45,18 +46,30 @@ const DynamicTable: React.FC<DynamicTableProps> = ({
     setTableData(updatedData)
   }
 
+
+  const searchParams = useSearchParams()
+
+  const paramBillId = searchParams.get("bill_id")
+  const paramMode = searchParams.get("mode")
+
+
   const handleInputChange = (
     index: number,
     field: keyof TableRowData,
     value: string
   ) => {
+    console.log(tableData,"tableData");
     const updatedData = [...tableData]
+
     updatedData[index] = {
       ...updatedData[index],
       [field]: value,
     }
     setTableData(updatedData)
   }
+
+
+
 
   return (
     <div>
@@ -69,7 +82,7 @@ const DynamicTable: React.FC<DynamicTableProps> = ({
               <TableCell>Period To</TableCell>
               <TableCell>Claimed Amount</TableCell>
               <TableCell>Admissible Amount</TableCell>
-              <TableCell>Add/Remove</TableCell>
+              {paramBillId||paramMode?null:<TableCell>Add/Remove</TableCell>}
             </TableRow>
           </TableHead>
           <TableBody>
@@ -85,6 +98,9 @@ const DynamicTable: React.FC<DynamicTableProps> = ({
                   />
                 </TableCell>
                 <TableCell>
+                {paramBillId||paramMode? <Typography>
+                  {row.periodFrom.substring(8,  9) +"-"+ row.periodFrom.substring(5,  7) + "-"+ row.periodFrom.substring(0,  4)}
+                </Typography>:
                   <Input
                     type="date"
                     value={row.periodFrom}
@@ -92,8 +108,12 @@ const DynamicTable: React.FC<DynamicTableProps> = ({
                       handleInputChange(index, "periodFrom", e.target.value)
                     }
                   />
+                }
                 </TableCell>
                 <TableCell>
+                {paramBillId||paramMode? <Typography>
+                  {row.periodTo.substring(8,  9) +"-"+ row.periodTo.substring(5,  7) + "-"+ row.periodTo.substring(0,  4)}
+                </Typography>:
                   <Input
                     type="date"
                     value={row.periodTo}
@@ -101,6 +121,7 @@ const DynamicTable: React.FC<DynamicTableProps> = ({
                       handleInputChange(index, "periodTo", e.target.value)
                     }
                   />
+                   }
                 </TableCell>
                 <TableCell>
                   <Input
@@ -125,23 +146,27 @@ const DynamicTable: React.FC<DynamicTableProps> = ({
                   />
                 </TableCell>
                 <TableCell>
-                  <Button
+                {paramBillId||paramMode?null:<Button
                     onClick={() => removeRow(index)}
                     variant="contained"
                     color="secondary"
                   >
                     Remove
-                  </Button>
+                  </Button>}
+                 
                 </TableCell>
               </TableRow>
             ))}
           </TableBody>
         </Table>
-        <div style={{ width: "100%", textAlign: "center" }}>
-          <Button onClick={addRow} variant="contained" color={"primary"}>
-            Add More
-          </Button>
-        </div>
+        {paramBillId||paramMode?null:
+         <div style={{ width: "100%", textAlign: "center" }}>
+         <Button onClick={addRow} variant="contained" color={"primary"}>
+           Add More
+         </Button>
+       </div>
+        }
+       
       </TableContainer>
     </div>
   )
