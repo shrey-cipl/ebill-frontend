@@ -217,7 +217,7 @@ const ManageBill = () => {
             billRouting,
           } = billData.data
           console.log(
-            billData,
+            telephoneNumbers ,
             "jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj"
           )
           let flag = false
@@ -257,7 +257,7 @@ const ManageBill = () => {
             totalAdmissibleAmount,
             maxAdmissibleAmount,
             currentStatus,
-
+            telephoneNumbers,
             currentremark,
             billFilePath: bill.billFilePath,
             lastForwardedTo: "",
@@ -291,6 +291,8 @@ const ManageBill = () => {
     }
   }, [paramBillId, authCtx.user.token])
 
+
+  console.log(dataFields,"dataFieldsdataFieldsdataFields");
   useEffect(() => {
     getBills()
   }, [paramMode, authCtx.user.token])
@@ -329,6 +331,10 @@ const ManageBill = () => {
         "ppppppppppppppppppppppppppppppppppppppppppppppp"
       )
 
+if(selectedBill){
+  setTableData([...selectedBill.telephoneNumbers]);
+}
+
       if (selectedBill) {
         // used only in add-mode
         selectedBillId = selectedBill._id
@@ -341,6 +347,7 @@ const ManageBill = () => {
           email: selectedBill.former[0].email,
           phone: selectedBill.former[0].phone,
           billType: selectedBill.billType,
+          telephoneNumbers:selectedBill.telephoneNumbers,
           totalClaimedAmount: selectedBill.claimedAmount,
           claimPeriodFrom: dayjs(selectedBill.billPeriodFrom).format(
             "YYYY-MM-DD"
