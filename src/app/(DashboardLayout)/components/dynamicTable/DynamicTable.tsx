@@ -81,7 +81,7 @@ const DynamicTable: React.FC<DynamicTableProps> = ({
               <TableCell>Period From</TableCell>
               <TableCell>Period To</TableCell>
               <TableCell>Claimed Amount</TableCell>
-              <TableCell>Admissible Amount</TableCell>
+              {/* <TableCell>Admissible Amount</TableCell> */}
               {paramBillId||paramMode?null:<TableCell>Add/Remove</TableCell>}
             </TableRow>
           </TableHead>
@@ -99,7 +99,7 @@ const DynamicTable: React.FC<DynamicTableProps> = ({
                 </TableCell>
                 <TableCell>
                 {paramBillId||paramMode? <Typography>
-                  {row.periodFrom.substring(8,  9) +"-"+ row.periodFrom.substring(5,  7) + "-"+ row.periodFrom.substring(0,  4)}
+                  {row.periodFrom.substring(8,  10) +"-"+ row.periodFrom.substring(5,  7) + "-"+ row.periodFrom.substring(0,  4)}
                 </Typography>:
                   <Input
                     type="date"
@@ -112,7 +112,7 @@ const DynamicTable: React.FC<DynamicTableProps> = ({
                 </TableCell>
                 <TableCell>
                 {paramBillId||paramMode? <Typography>
-                  {row.periodTo.substring(8,  9) +"-"+ row.periodTo.substring(5,  7) + "-"+ row.periodTo.substring(0,  4)}
+                  {row.periodTo.substring(8,  10) +"-"+ row.periodTo.substring(5,  7) + "-"+ row.periodTo.substring(0,  4)}
                 </Typography>:
                   <Input
                     type="date"
@@ -132,7 +132,7 @@ const DynamicTable: React.FC<DynamicTableProps> = ({
                     }
                   />
                 </TableCell>
-                <TableCell>
+                {/* <TableCell>
                   <Input
                     type="text"
                     value={row.admissibleAmount}
@@ -144,17 +144,17 @@ const DynamicTable: React.FC<DynamicTableProps> = ({
                       )
                     }
                   />
-                </TableCell>
-                <TableCell>
-                {paramBillId||paramMode?null:<Button
+                </TableCell> */}
+                {paramBillId||paramMode?null:<TableCell>
+                <Button
                     onClick={() => removeRow(index)}
                     variant="contained"
                     color="secondary"
                   >
                     Remove
-                  </Button>}
+                  </Button>
                  
-                </TableCell>
+                </TableCell>}
               </TableRow>
             ))}
           </TableBody>
