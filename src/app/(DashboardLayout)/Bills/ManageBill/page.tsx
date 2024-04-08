@@ -143,6 +143,7 @@ const ManageBill = () => {
   const [dataFields, setDataFields] = useState(initialFieldState)
   const [BillList, setBillList] = useState([])
   const [bool, setBool] = useState(true)
+  const [Submitbool, setsubmitbool] = useState(true)
   const [billSequence, setBillSequence] = useState<any>([])
   const [lastForwardedTo, setlastForwardedTo] = useState<any>("")
   const [lastForwardedBy, setlastForwardedBy] = useState<any>("")
@@ -217,7 +218,7 @@ const ManageBill = () => {
             billRouting,
           } = billData.data
           console.log(
-            telephoneNumbers ,
+            telephoneNumbers,
             "jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj"
           )
           let flag = false
@@ -291,8 +292,7 @@ const ManageBill = () => {
     }
   }, [paramBillId, authCtx.user.token])
 
-
-  console.log(dataFields,"dataFieldsdataFieldsdataFields");
+  console.log(dataFields, "dataFieldsdataFieldsdataFields")
   useEffect(() => {
     getBills()
   }, [paramMode, authCtx.user.token])
@@ -331,9 +331,9 @@ const ManageBill = () => {
         "ppppppppppppppppppppppppppppppppppppppppppppppp"
       )
 
-if(selectedBill){
-  setTableData([...selectedBill.telephoneNumbers]);
-}
+      if (selectedBill) {
+        setTableData([...selectedBill.telephoneNumbers])
+      }
 
       if (selectedBill) {
         // used only in add-mode
@@ -347,7 +347,7 @@ if(selectedBill){
           email: selectedBill.former[0].email,
           phone: selectedBill.former[0].phone,
           billType: selectedBill.billType,
-          telephoneNumbers:selectedBill.telephoneNumbers,
+          telephoneNumbers: selectedBill.telephoneNumbers,
           totalClaimedAmount: selectedBill.claimedAmount,
           claimPeriodFrom: dayjs(selectedBill.billPeriodFrom).format(
             "YYYY-MM-DD"
@@ -429,6 +429,7 @@ if(selectedBill){
   }
 
   const handleFormSubmit = async (e: any) => {
+    setsubmitbool((prev) => !prev)
     e.preventDefault()
     if (paramMode === BILL_MODES.add) {
       console.log(
@@ -456,6 +457,7 @@ if(selectedBill){
       setValidations(updatedValidationState)
 
       if (!allValidationsPass) {
+        setsubmitbool((prev) => !prev)
         return
       }
     }
@@ -503,22 +505,21 @@ if(selectedBill){
       setValidations(updatedValidationState)
 
       if (!allValidationsPass) {
+        setsubmitbool((prev) => !prev)
         return
       }
+      console.log(Submitbool, "///////////////////////////////")
     }
     try {
       let res
       if (paramMode === BILL_MODES.add) {
         // creates a copy of the state
         const fieldsCopy: any = { ...dataFields }
-
         delete fieldsCopy.name
         delete fieldsCopy.email
         delete fieldsCopy.phone
         delete fieldsCopy.billNumber
-
         // setlastForwardedToLink(billSequence[1])
-
         let obj = await createObj(
           fieldsCopy,
           selectedBillId,
@@ -541,7 +542,6 @@ if(selectedBill){
             ...obj,
           },
         }
-
         res = await axiosApi(
           config.url,
           config.method,
@@ -554,7 +554,6 @@ if(selectedBill){
         )
       } else if (paramMode === BILL_MODES.update) {
         const { currentStatus, lastForwardedTo, currentremark } = dataFields
-
         let obj =
           tableData[0]?.phone !== ""
             ? {
@@ -584,7 +583,6 @@ if(selectedBill){
                 billProcessingStartDate:
                   updateModeFields.billProcessingStartDate,
               }
-
         const config = {
           url: `/api/claim/approveClaim`,
           method: "PATCH",
@@ -592,7 +590,6 @@ if(selectedBill){
             "Content-Type": "application/json",
             authorization: `Bearer ${authCtx.user?.token}`,
           },
-
           data: {
             ...obj,
           },
@@ -608,14 +605,14 @@ if(selectedBill){
           config.data
         )
       }
-
       enqueueSnackbar(res.message, {
         preventDuplicate: true,
         variant: "success",
       })
-
       router.push("/Bills")
     } catch (err: any) {
+      setsubmitbool((prev) => !prev)
+      // setsubmitbool(true)
       enqueueSnackbar(err.message, {
         preventDuplicate: true,
         variant: "success",
@@ -1042,6 +1039,7 @@ if(selectedBill){
                 size="small"
                 variant="contained"
                 onClick={handleFormSubmit}
+                disabled={!Submitbool}
               >
                 Submit
               </Button>
