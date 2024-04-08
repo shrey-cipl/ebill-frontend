@@ -1,6 +1,6 @@
-import PropTypes from "prop-types";
-import ArrowPathIcon from "@heroicons/react/24/solid/ArrowPathIcon";
-import ArrowRightIcon from "@heroicons/react/24/solid/ArrowRightIcon";
+import PropTypes from "prop-types"
+import ArrowPathIcon from "@heroicons/react/24/solid/ArrowPathIcon"
+import ArrowRightIcon from "@heroicons/react/24/solid/ArrowRightIcon"
 import {
   Button,
   Card,
@@ -9,12 +9,12 @@ import {
   CardHeader,
   Divider,
   SvgIcon,
-} from "@mui/material";
-import { alpha, useTheme } from "@mui/material/styles";
-import { Chart } from "./Chart";
+} from "@mui/material"
+import { alpha, useTheme } from "@mui/material/styles"
+import { Chart } from "./Chart"
 
 const useChartOptions = () => {
-  const theme = useTheme();
+  const theme = useTheme()
 
   return {
     chart: {
@@ -75,18 +75,12 @@ const useChartOptions = () => {
         show: true,
       },
       categories: [
-        "Jan",
-        "Feb",
-        "Mar",
-        "Apr",
-        "May",
-        "Jun",
-        "Jul",
-        "Aug",
-        "Sep",
-        "Oct",
-        "Nov",
-        "Dec",
+        "Total Claims",
+        "Pending Claims",
+        "Closed Claims",
+        "Fwd to bank",
+        "Total Bills",
+        "Unlinked Bills",
       ],
       labels: {
         offsetY: 5,
@@ -104,12 +98,12 @@ const useChartOptions = () => {
         },
       },
     },
-  };
-};
+  }
+}
 
 export const OverviewSales = (props: any) => {
-  const { chartSeries, sx } = props;
-  const chartOptions = useChartOptions();
+  const { chartSeries, sx } = props
+  const chartOptions = useChartOptions()
 
   return (
     <Card sx={sx}>
@@ -153,10 +147,10 @@ export const OverviewSales = (props: any) => {
         </Button> */}
       </CardActions>
     </Card>
-  );
-};
+  )
+}
 
 OverviewSales.protoTypes = {
   chartSeries: PropTypes.array.isRequired,
   sx: PropTypes.object,
-};
+}

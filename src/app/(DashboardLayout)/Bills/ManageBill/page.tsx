@@ -86,22 +86,6 @@ for (let arrEl of FIELDS_MANAGE_BILL_UPDATE) {
     errMsg: "",
   }
 }
-// const updateSelectOptions = (
-//   fields: any[],
-//   fieldNameToUpdate: any,
-//   updatedOptions: any[]
-// ) => {
-//   return fields.map((field: any) => {
-//     if (field.fieldName === fieldNameToUpdate && field.type === "select") {
-//       return { ...field, selectOptions: updatedOptions }
-//     } else {
-//       return field
-//     }
-//   })
-// }
-
-// Example usage
-// const mappthin = updateSelectOptions(FIELDS_MANAGE_BILL, "Bill Type", billType)
 
 const getBillData = async (id: any, token: any) => {
   const config = {
@@ -179,21 +163,9 @@ const ManageBill = () => {
   const authCtx: any = useAuth()
   const role: any = authCtx?.user?.data?.role?.name
 
-  // Populates form fields with bill data
-  // console.log(
-  //   dataFields,
-  //   "00000000000000000000000000000000000000000000000000000000000000000000000000000000000"
-  // )
-  // useEffect(() => {
-  //   console.log(lastForwardedTo, "init_idinit_id")
-
-  // }, [lastForwardedTo])
-
   useEffect(() => {
     if (paramBillId) {
       getBillData(paramBillId, authCtx.user.token).then((billData: any) => {
-        console.log("billDATA: ", billData)
-
         if (billData && billData.data) {
           const {
             diaryNumber,
@@ -319,8 +291,6 @@ const ManageBill = () => {
   // when re-directed from 'UserBills page'
 
   useEffect(() => {
-    console.log(paramUserpageId, "paramuser")
-    console.log(paramUserpageId, "f")
     if (paramUserpageId) {
       const selectedBill: any = BillList.find(
         (bill: any) => bill._id === paramUserpageId
@@ -348,6 +318,7 @@ const ManageBill = () => {
           phone: selectedBill.former[0].phone,
           billType: selectedBill.billType,
           telephoneNumbers: selectedBill.telephoneNumbers,
+
           totalClaimedAmount: selectedBill.claimedAmount,
           claimPeriodFrom: dayjs(selectedBill.billPeriodFrom).format(
             "YYYY-MM-DD"
@@ -461,22 +432,7 @@ const ManageBill = () => {
         return
       }
     }
-    // if (paramMode === BILL_MODES.update) {
-    //   const { allValidationsPass, updatedValidationState } = validateOnSubmit(
-    //     updateModeFields,
-    //     validationsUpdateMode
-    //   )
-    //   console.log(
-    //     allValidationsPass,
-    //     updatedValidationState,
-    //     "kkkkkkkkkkkkkkkkkkkkkkk"
-    //   )
-    //   setValidationsUpdateMode(updatedValidationState)
 
-    //   if (!allValidationsPass) {
-    //     return
-    //   }
-    // }
     if (paramMode === BILL_MODES.update) {
       delete dataFields.maxAdmissibleAmount
       // delete dataFields.lastForwardedTo
@@ -484,23 +440,13 @@ const ManageBill = () => {
         ? { ...updateModeFields, ...dataFields }
         : { ...dataFields }
 
-      console.log(
-        objjj,
-        validationsUpdateMode,
-        "objjjjjjjjjjjjjjjjjjjjjjjjjjjjjj"
-      )
-
       let result = replaceNullWithEmpty(objjj)
 
       const { allValidationsPass, updatedValidationState } = validateOnSubmit(
         result,
         validationsUpdateMode
       )
-      console.log(
-        allValidationsPass,
-        updatedValidationState,
-        "allValidationsPass, updatedValidationState"
-      )
+
       // setValidationsUpdateMode(updatedValidationState)
       setValidations(updatedValidationState)
 
@@ -745,7 +691,6 @@ const ManageBill = () => {
     }
   }, [updateModeFields])
 
-  // console.log(billSequence, "ghghgg")
   return (
     <>
       <PageContainer
@@ -768,7 +713,12 @@ const ManageBill = () => {
             >
               {FIELDS_MANAGE_BILL.map((field, i) => {
                 // Permanantly disabled fields
-                const permanantDisable = ["name", "phone", "email"]
+                const permanantDisable = [
+                  "diaryNumber",
+                  "name",
+                  "phone",
+                  "email",
+                ]
                 const disabledPermananty = permanantDisable.includes(field.id)
                   ? true
                   : false

@@ -259,11 +259,28 @@ const ManageFormer = () => {
         branchName: res.data.BRANCH,
       }))
     } catch (err) {
+      setFormerFields((prevState: any) => ({
+        ...prevState,
+        bankName: "",
+        branchName: "",
+      }))
+
       console.log(err)
     }
   }
 
   const handleFieldChange = (e: any) => {
+    if (e.target.name === "ifscCode") {
+      const { bankName, branchName } = formerFields
+
+      if (bankName.trim() && branchName.trim()) {
+        setFormerFields((prevState: any) => ({
+          ...prevState,
+          bankName: "",
+          branchName: "",
+        }))
+      }
+    }
     setFormerFields((prevState: any) => ({
       ...prevState,
       [e.target.name]: e.target.value,

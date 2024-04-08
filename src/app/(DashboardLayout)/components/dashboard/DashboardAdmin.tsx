@@ -19,9 +19,7 @@ const DashboardAdmin = () => {
 
   useEffect(() => {
     const getData = async () => {
-
-      
-    let userRole = encodeURIComponent(authCtx?.user?.data?.role?.name);      
+      let userRole = encodeURIComponent(authCtx?.user?.data?.role?.name)
       const config = {
         url: `/api/user/getDashboardData?claimAccesedByUser=${userRole}`,
         method: "GET",
@@ -45,17 +43,6 @@ const DashboardAdmin = () => {
   return (
     <Grid>
       <Box
-        //   sx={{
-        //     display: "grid",
-        //     gridTemplateColumns: "repeat(3, 1fr)",
-        //     gap: "20px",
-        //     bgcolor: "background.paper",
-        //     borderRadius: 4,
-        //     marginTop: "20px",
-        //     backgroundColor: "rgb(93, 135, 255)",
-        //     p: 2,
-        //     mx: 2,
-        //   }}
         sx={{
           display: "grid",
           gridTemplateColumns: "repeat(3, 1fr)",
@@ -115,13 +102,20 @@ const DashboardAdmin = () => {
         <OverviewSales
           chartSeries={[
             {
-              name: "This year",
-              data: [18, 16, 5, 8, 3, 14, 14, 16, 17, 19, 18, 20],
+              name: "Data",
+              data: [
+                dashboardData.claimCount,
+                dashboardData.pendingClaimsCount,
+                dashboardData.closedClaimsCount,
+                dashboardData.forwardToBankCount,
+                dashboardData.billCount,
+                dashboardData.unlinkedBillsCount,
+              ],
             },
-            {
-              name: "Last year",
-              data: [12, 11, 4, 6, 2, 9, 9, 10, 11, 12, 13, 13],
-            },
+            // {
+            //   name: "Last year",
+            //   data: [12, 11, 4, 6, 2, 9, 9, 10, 11, 12, 13, 13],
+            // },
           ]}
           sx={{ height: "100%" }}
         />

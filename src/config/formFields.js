@@ -10,6 +10,14 @@ const FIELDS_MANAGE_BILL = [
     validationType: VALIDATION_TYPE.alphaNumeric,
   },
   {
+    id: "fileNumber",
+    fieldName: "File Number",
+    type: "text",
+    placeholder: "Enter file number here",
+    required: true,
+    validationType: VALIDATION_TYPE.alphaNumeric,
+  },
+  {
     id: "claimReceivingDate",
     fieldName: "Claim Receiving Date (DD-MM-YYYY)",
     type: "date",
@@ -55,14 +63,6 @@ const FIELDS_MANAGE_BILL = [
     placeholder: "Enter phone number here",
     required: true,
     validationType: VALIDATION_TYPE.mobile,
-  },
-  {
-    id: "fileNumber",
-    fieldName: "File Number",
-    type: "text",
-    placeholder: "Enter file number here",
-    required: true,
-    validationType: VALIDATION_TYPE.alphaNumeric,
   },
   {
     id: "claimPeriodFrom",
@@ -147,7 +147,6 @@ const FIELDS_MANAGE_BILL_UPDATE = [
     required: true,
     validationType: VALIDATION_TYPE.amount,
   },
-
   {
     id: "PFMS",
     fieldName: "PFMS",
@@ -160,7 +159,6 @@ const FIELDS_MANAGE_BILL_UPDATE = [
     id: "billProcessingStartDate",
     fieldName: "Bill Processing Start Date",
     type: "date",
-
     required: true,
     validationType: VALIDATION_TYPE.empty,
   },
