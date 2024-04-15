@@ -12,21 +12,39 @@ import PageContainer from "../components/container/PageContainer"
 import DashboardNew from "../components/shared/DashboardNew"
 import { exportDataToExcel, exportDataToPDF } from "@/Util/commonFunctions"
 
-const dataToExport = (data: any) => {
-  return data.map((item: any) => ({
-    "I.P.": item.ip,
-    Method: item.method,
-    Path: item.path,
-    Date: dayjs(item.timestamp).format("DD-MM-YYYY"),
-    Time: dayjs(item.timestamp).format("h:mm a"),
-    Email: item.email,
-    "Login Status": item.status,
-  }))
+const dataToExport = (data: any, visibleColumns: any) => {
+  return data.map((item: any) => {
+    let obj: any
+
+    // Checks column's visibility state before printing
+    if (visibleColumns.ip) obj = { ...obj, "I.P.": item.ip }
+    if (visibleColumns.method) obj = { ...obj, Method: item.method }
+    if (visibleColumns.path) obj = { ...obj, Path: item.path }
+    if (visibleColumns.date)
+      obj = { ...obj, Date: dayjs(item.timestamp).format("DD-MM-YYYY") }
+    if (visibleColumns.time)
+      obj = { ...obj, Time: dayjs(item.timestamp).format("h:mm a") }
+    if (visibleColumns.email) obj = { ...obj, Email: item.email }
+    if (visibleColumns.status) obj = { ...obj, "Login Status": item.status }
+
+    return obj
+  })
 }
 
 const SystemLogs = () => {
   const [allLogs, setAllLogs] = useState([])
   const [filterBy, setFilterBy] = useState("user")
+
+  // Default state MUST match data grid's column's 'field' property
+  const [columnVisibilityState, setColumnVisibilityState] = useState({
+    ip: true,
+    method: true,
+    path: true,
+    date: true,
+    time: true,
+    email: true,
+    status: true,
+  })
 
   useEffect(() => {
     const getData = async () => {
@@ -148,7 +166,10 @@ const SystemLogs = () => {
               variant="contained"
               size="small"
               onClick={() =>
-                exportDataToPDF(dataToExport(filteredList), "System Logs")
+                exportDataToPDF(
+                  dataToExport(filteredList, columnVisibilityState),
+                  "System Logs"
+                )
               }
             >
               PDF
@@ -158,7 +179,10 @@ const SystemLogs = () => {
               variant="contained"
               size="small"
               onClick={() =>
-                exportDataToExcel(dataToExport(filteredList), "System Logs")
+                exportDataToExcel(
+                  dataToExport(filteredList, columnVisibilityState),
+                  "System Logs"
+                )
               }
             >
               Excel
@@ -182,6 +206,12 @@ const SystemLogs = () => {
 
               return ""
             }}
+            onColumnVisibilityModelChange={(model: any) =>
+              setColumnVisibilityState((prevState) => ({
+                ...prevState,
+                ...model,
+              }))
+            }
           />
         </>
       </DashboardNew>

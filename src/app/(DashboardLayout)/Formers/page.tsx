@@ -1,39 +1,57 @@
-"use client";
+"use client"
 
-import { useEffect, useState } from "react";
+import { useEffect, useState } from "react"
 
-import Button from "@mui/material/Button";
+import Button from "@mui/material/Button"
 
-import { useRouter } from "next/navigation";
-import Link from "next/link";
-import dayjs from "dayjs";
+import { useRouter } from "next/navigation"
+import Link from "next/link"
+import dayjs from "dayjs"
 
-import PageContainer from "../components/container/PageContainer";
-import DashboardNew from "../components/shared/DashboardNew";
-import axiosApi from "@/Util/axiosApi";
-import { useAuth } from "@/context/JWTContext/AuthContext.provider";
+import PageContainer from "../components/container/PageContainer"
+import DashboardNew from "../components/shared/DashboardNew"
+import axiosApi from "@/Util/axiosApi"
+import { useAuth } from "@/context/JWTContext/AuthContext.provider"
 
-import { GridColDef } from "@mui/x-data-grid";
-import CustomGrid from "../components/CustomGrid";
-import { exportDataToExcel, exportDataToPDF } from "@/Util/commonFunctions";
-import { FORMER_MODES } from "@/config/constants";
+import { GridColDef } from "@mui/x-data-grid"
+import CustomGrid from "../components/CustomGrid"
+import { exportDataToExcel, exportDataToPDF } from "@/Util/commonFunctions"
+import { FORMER_MODES } from "@/config/constants"
 
-const dataToExport = (data: any) => {
-  return data.map((item: any) => ({
-    "User Name": item.name,
-    Designation: item.designation,
-    Phone: item.phone,
-    Email: item.email,
-    "Bank Acc. No.": item.bankAccountNumber,
-    Status: item.status,
-  }));
-};
+const dataToExport = (data: any, visibleColumns: any) => {
+  return data.map((item: any) => {
+    let obj: any
+
+    // Checks column's visibility state before printing
+    if (visibleColumns.name) obj = { ...obj, "User Name": item.name }
+    if (visibleColumns.status) obj = { ...obj, Status: item.status }
+    if (visibleColumns.designation)
+      obj = { ...obj, Designation: item.designation }
+    if (visibleColumns.email) obj = { ...obj, Email: item.email }
+    if (visibleColumns.phone) obj = { ...obj, Phone: item.phone }
+    if (visibleColumns.bankAccountNumber)
+      obj = { ...obj, "Bank Acc. No.": item.bankAccountNumber }
+    if (visibleColumns.isActive) obj = { ...obj, Active: item.isActive }
+
+    return obj
+  })
+}
 
 const Formers = () => {
-  const [formersList, setFormersList] = useState([]);
+  const [formersList, setFormersList] = useState([])
+  // Default state MUST match data grid's column's 'field' property
+  const [columnVisibilityState, setColumnVisibilityState] = useState({
+    name: true,
+    status: true,
+    designation: true,
+    email: true,
+    phone: true,
+    bankAccountNumber: true,
+    isActive: true,
+  })
 
-  const router = useRouter();
-  const authCtx: any = useAuth();
+  const router = useRouter()
+  const authCtx: any = useAuth()
 
   const handleFetchFormers = async () => {
     const config = {
@@ -43,26 +61,26 @@ const Formers = () => {
         "Content-Type": "application/json",
         authorization: `Bearer ${authCtx.user?.token}`,
       },
-    };
+    }
 
     try {
-      const res = await axiosApi(config.url, config.method, config.headers);
+      const res = await axiosApi(config.url, config.method, config.headers)
 
       if (res && res.data) {
         for (let item of res.data) {
-          item.id = item._id;
-          item.bankAccountNumber = item.bankDetails.bankAccountNumber;
+          item.id = item._id
+          item.bankAccountNumber = item.bankDetails.bankAccountNumber
         }
-        setFormersList(res.data);
+        setFormersList(res.data)
       }
     } catch (err) {
-      console.log(err);
+      console.log(err)
     }
-  };
+  }
 
   useEffect(() => {
-    handleFetchFormers();
-  }, [authCtx.user?.token]);
+    handleFetchFormers()
+  }, [authCtx.user?.token])
 
   const columns: GridColDef[] = [
     {
@@ -74,26 +92,27 @@ const Formers = () => {
     { field: "status", headerName: "STATUS" },
     { field: "designation", headerName: "DESIGNATION" },
     { field: "email", headerName: "EMAIL" },
+    { field: "phone", headerName: "PHONE" },
     {
       field: "bankAccountNumber",
       headerName: "BANK A/C",
     },
-    {
-      field: "createdAt",
-      headerName: "CREATED AT",
+    // {
+    //   field: "createdAt",
+    //   headerName: "CREATED AT",
 
-      valueFormatter: (params) => {
-        return dayjs(params.value).format("DD-MM-YYYY h:mm A");
-      },
-    },
-    {
-      field: "updatedAt",
-      headerName: "UPDATED ON",
+    //   valueFormatter: (params) => {
+    //     return dayjs(params.value).format("DD-MM-YYYY h:mm A");
+    //   },
+    // },
+    // {
+    //   field: "updatedAt",
+    //   headerName: "UPDATED ON",
 
-      valueFormatter: (params) => {
-        return dayjs(params.value).format("DD-MM-YYYY h:mm A");
-      },
-    },
+    //   valueFormatter: (params) => {
+    //     return dayjs(params.value).format("DD-MM-YYYY h:mm A");
+    //   },
+    // },
     { field: "isActive", headerName: "ACTIVE" },
     {
       field: "random_2",
@@ -106,10 +125,10 @@ const Formers = () => {
           >
             Update
           </Link>
-        );
+        )
       },
     },
-  ];
+  ]
 
   return (
     <PageContainer
@@ -136,7 +155,10 @@ const Formers = () => {
               variant="contained"
               size="small"
               onClick={() =>
-                exportDataToPDF(dataToExport(formersList), "Formers List")
+                exportDataToPDF(
+                  dataToExport(formersList, columnVisibilityState),
+                  "Formers List"
+                )
               }
             >
               PDF
@@ -146,7 +168,10 @@ const Formers = () => {
               variant="contained"
               size="small"
               onClick={() =>
-                exportDataToExcel(dataToExport(formersList), "Formers List")
+                exportDataToExcel(
+                  dataToExport(formersList, columnVisibilityState),
+                  "Formers List"
+                )
               }
             >
               Excel
@@ -167,16 +192,22 @@ const Formers = () => {
               if (params.field === "isActive") {
                 return params.row.isActive === "Active"
                   ? "text-green"
-                  : "text-red";
+                  : "text-red"
               }
 
-              return "";
+              return ""
             }}
+            onColumnVisibilityModelChange={(model: any) =>
+              setColumnVisibilityState((prevState) => ({
+                ...prevState,
+                ...model,
+              }))
+            }
           />
         </>
       </DashboardNew>
     </PageContainer>
-  );
-};
+  )
+}
 
-export default Formers;
+export default Formers

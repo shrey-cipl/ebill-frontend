@@ -1,6 +1,12 @@
 import { DataGrid, GridToolbar } from "@mui/x-data-grid"
 
-const CustomGrid = ({ rows, columns, sx, getCellClassName }: any) => {
+const CustomGrid = ({
+  rows,
+  columns,
+  sx,
+  getCellClassName,
+  onColumnVisibilityModelChange,
+}: any) => {
   for (let i = 0; i < columns.length; i++) {
     if (columns[i].field === "s.no") {
       columns[i] = { ...columns[i], width: 50 }
@@ -48,6 +54,7 @@ const CustomGrid = ({ rows, columns, sx, getCellClassName }: any) => {
         pagination: { paginationModel: { pageSize: 25 } },
       }}
       pageSizeOptions={[25, 50, 100]}
+      onColumnVisibilityModelChange={onColumnVisibilityModelChange}
     />
   )
 }

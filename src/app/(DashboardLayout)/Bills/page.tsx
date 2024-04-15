@@ -35,25 +35,42 @@ const BoxWrapper = styled("div")(() => ({
   },
 }))
 
-const dataToExport = (data: any) => {
-  return data.map((item: any, i: any) => ({
-    "S.No": i + 1,
-    "Diary No.": item.diaryNumber,
-    "User Name": item.name,
-    "Bill Type": item.billType,
-    "Bill No.": item.billNumber,
-    "Claimed Amt.": item.totalClaimedAmount,
-    Status: item.currentStatus,
-    "Forward To": item.lastForwardedTo,
-    // "Receiving Date": dayjs(item.claimReceivingDate).format("DD-MM-YYYY"),
-    // "Claim From": dayjs(item.claimPeriodFrom).format("DD-MM-YYYY"),
-    // "Claimed To": dayjs(item.claimPeriodTo).format("DD-MM-YYYY"),
-  }))
+const dataToExport = (data: any, visibleColumns: any) => {
+  return data.map((item: any, i: any) => {
+    let obj: any
+
+    // Checks column's visibility state before printing
+    // if (visibleColumns.sNo) obj = { ...obj, "S.No": i + 1 }
+    if (visibleColumns.diaryNumber)
+      obj = { ...obj, "Diary No.": item.diaryNumber }
+    if (visibleColumns.name) obj = { ...obj, "User Name": item.name }
+    if (visibleColumns.billType) obj = { ...obj, "Bill Type": item.billType }
+    if (visibleColumns.billNumber) obj = { ...obj, "Bill No.": item.billNumber }
+    if (visibleColumns.totalClaimedAmount)
+      obj = { ...obj, "Claimed Amt.": item.totalClaimedAmount }
+    if (visibleColumns.currentStatus)
+      obj = { ...obj, Status: item.currentStatus }
+    if (visibleColumns.lastForwardedTo)
+      obj = { ...obj, "Forward To": item.lastForwardedTo }
+
+    return obj
+  })
 }
 
 const Bills = () => {
   const backendBaseUrl = process.env.NEXT_PUBLIC_BACKEND_BASE_URL
   const [billList, setBillList] = useState([])
+  // Default state MUST match data grid's column's 'field' property
+  const [columnVisibilityState, setColumnVisibilityState] = useState({
+    diaryNumber: true,
+    name: true,
+    billType: true,
+    billNumber: true,
+    totalClaimedAmount: true,
+    currentStatus: true,
+    lastForwardedTo: true,
+  })
+
   // Modal states
   const [modalState, setModalState] = useState(false)
   const [selectedBill, setSelectedBill] = useState<any>({})
@@ -239,7 +256,12 @@ const Bills = () => {
               sx={{ background: "#9C27B0" }}
               variant="contained"
               size="small"
-              onClick={() => exportDataToPDF(dataToExport(billList), "Claims")}
+              onClick={() =>
+                exportDataToPDF(
+                  dataToExport(billList, columnVisibilityState),
+                  "Claims"
+                )
+              }
             >
               PDF
             </Button>
@@ -248,7 +270,10 @@ const Bills = () => {
               variant="contained"
               size="small"
               onClick={() =>
-                exportDataToExcel(dataToExport(billList), "Claims")
+                exportDataToExcel(
+                  dataToExport(billList, columnVisibilityState),
+                  "Claims"
+                )
               }
             >
               Excel
@@ -274,6 +299,12 @@ const Bills = () => {
 
               return ""
             }}
+            onColumnVisibilityModelChange={(model: any) =>
+              setColumnVisibilityState((prevState) => ({
+                ...prevState,
+                ...model,
+              }))
+            }
           />
 
           {/* BILL MODAL */}

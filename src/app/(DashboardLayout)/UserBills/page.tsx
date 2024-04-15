@@ -32,18 +32,21 @@ const BoxWrapper = styled("div")(() => ({
   },
 }))
 
-const dataToExport = (data: any) => {
-  return data.map((item: any, i: any) => ({
-    "S.No": i + 1,
-    "User Name": item.name,
-    "Bill Type": item.billType,
-    "Bill No.": item.billNumber,
-    "Claimed Amt.": item.claimedAmount,
-    Designation: item.designation,
-    // Phone: item.phone,
-    // "Bill From": dayjs(item.billPeriodFrom).format("DD-MM-YYYY"),
-    // "Bill To": dayjs(item.billPeriodTo).format("DD-MM-YYYY"),
-  }))
+const dataToExport = (data: any, visibleColumns: any) => {
+  return data.map((item: any) => {
+    let obj: any
+
+    // Checks column's visibility state before printing
+    if (visibleColumns.name) obj = { ...obj, "User Name": item.name }
+    if (visibleColumns.billType) obj = { ...obj, "Bill Type": item.billType }
+    if (visibleColumns.billNumber) obj = { ...obj, "Bill No.": item.billNumber }
+    if (visibleColumns.claimedAmount)
+      obj = { ...obj, "Claimed Amt.": item.claimedAmount }
+    if (visibleColumns.designation)
+      obj = { ...obj, Designation: item.designation }
+
+    return obj
+  })
 }
 
 const UserBills = () => {
@@ -53,6 +56,14 @@ const UserBills = () => {
   // Modal states
   const [modalState, setModalState] = useState(false)
   const [selectedBill, setSelectedBill] = useState<any>({})
+  // Default state MUST match data grid's column's 'field' property
+  const [columnVisibilityState, setColumnVisibilityState] = useState({
+    name: true,
+    billType: true,
+    billNumber: true,
+    claimedAmount: true,
+    designation: true,
+  })
 
   const cosmeticContext = useContext(CosmeticContext)
   const { modalLoading, setModalLoading, billType } = cosmeticContext
@@ -277,7 +288,10 @@ const UserBills = () => {
               variant="contained"
               size="small"
               onClick={() =>
-                exportDataToPDF(dataToExport(billList), "User Bills")
+                exportDataToPDF(
+                  dataToExport(billList, columnVisibilityState),
+                  "User Bills"
+                )
               }
             >
               PDF
@@ -287,7 +301,10 @@ const UserBills = () => {
               variant="contained"
               size="small"
               onClick={() =>
-                exportDataToExcel(dataToExport(billList), "User Bills")
+                exportDataToExcel(
+                  dataToExport(billList, columnVisibilityState),
+                  "User Bills"
+                )
               }
             >
               Excel
@@ -313,6 +330,12 @@ const UserBills = () => {
 
               return ""
             }}
+            onColumnVisibilityModelChange={(model: any) =>
+              setColumnVisibilityState((prevState) => ({
+                ...prevState,
+                ...model,
+              }))
+            }
           />
           {selectedBill.nodata ? null : (
             <>

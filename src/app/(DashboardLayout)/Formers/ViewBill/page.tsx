@@ -29,23 +29,45 @@ const BoxWrapper = styled("div")(() => ({
   },
 }))
 
-const dataToExport = (data: any) => {
-  return data.map((item: any) => ({
-    "Bill No.": item.billNumber,
-    "Bill Type": item.billType,
-    "Bill From": dayjs(item.billPeriodFrom).format("DD-MM-YYYY"),
-    "Bill To": dayjs(item.billPeriodTo).format("DD-MM-YYYY"),
-    "Claimed Amt.": item.claimedAmount,
-  }))
+const dataToExport = (data: any, visibleColumns: any) => {
+  return data.map((item: any) => {
+    let obj: any
+
+    // Checks column's visibility state before printing
+    if (visibleColumns.claimedAmount)
+      obj = { ...obj, "Claimed Amt.": item.claimedAmount }
+    if (visibleColumns.billType) obj = { ...obj, "Bill Type": item.billType }
+    if (visibleColumns.billNumber) obj = { ...obj, "Bill No.": item.billNumber }
+    if (visibleColumns.billPeriodFrom)
+      obj = {
+        ...obj,
+        "Bill From": dayjs(item.billPeriodFrom).format("DD-MM-YYYY"),
+      }
+    if (visibleColumns.billPeriodTo)
+      obj = { ...obj, "Bill To": dayjs(item.billPeriodTo).format("DD-MM-YYYY") }
+
+    return obj
+  })
 }
 
-const Bills = () => {
+const ViewBills = () => {
   const backendBaseUrl = process.env.NEXT_PUBLIC_BACKEND_BASE_URL
   const [billList, setBillList] = useState([])
 
   // Modal states
   const [modalState, setModalState] = useState(false)
   const [selectedBill, setSelectedBill] = useState<any>({})
+
+  // Default state MUST match data grid's column's 'field' property
+  const [columnVisibilityState, setColumnVisibilityState] = useState({
+    claimedAmount: true,
+    billType: true,
+    billPeriodFrom: true,
+    billPeriodTo: true,
+    billNumber: true,
+    // createdAt: true,
+    // updatedAt: true
+  })
 
   const cosmeticContext = useContext(CosmeticContext)
   const { modalLoading, setModalLoading } = cosmeticContext
@@ -128,8 +150,9 @@ const Bills = () => {
       headerName: "S.NO",
       valueGetter: (params) => params.api.getAllRowIds().indexOf(params.id) + 1,
     },
-    { field: "claimedAmount", headerName: "CLAIMED AMOUNT" },
+    { field: "claimedAmount", headerName: "CLAIMED AMT." },
     { field: "billType", headerName: "BILL TYPE" },
+    { field: "billNumber", headerName: "BILL No." },
 
     {
       field: "billPeriodFrom",
@@ -145,22 +168,22 @@ const Bills = () => {
         return dayjs(params.value).format("DD-MM-YYYY")
       },
     },
-    {
-      field: "createdAt",
-      headerName: "CREATED AT",
+    // {
+    //   field: "createdAt",
+    //   headerName: "CREATED AT",
 
-      valueFormatter: (params) => {
-        return dayjs(params.value).format("DD-MM-YYYY h:mm A")
-      },
-    },
-    {
-      field: "updatedAt",
-      headerName: "UPDATED ON",
+    //   valueFormatter: (params) => {
+    //     return dayjs(params.value).format("DD-MM-YYYY h:mm A")
+    //   },
+    // },
+    // {
+    //   field: "updatedAt",
+    //   headerName: "UPDATED ON",
 
-      valueFormatter: (params) => {
-        return dayjs(params.value).format("DD-MM-YYYY h:mm A")
-      },
-    },
+    //   valueFormatter: (params) => {
+    //     return dayjs(params.value).format("DD-MM-YYYY h:mm A")
+    //   },
+    // },
     {
       field: "id",
       headerName: "ACTION",
@@ -228,7 +251,10 @@ const Bills = () => {
               variant="contained"
               size="small"
               onClick={() =>
-                exportDataToPDF(dataToExport(billList), "Former Bills")
+                exportDataToPDF(
+                  dataToExport(billList, columnVisibilityState),
+                  "Former Bills"
+                )
               }
             >
               PDF
@@ -238,7 +264,10 @@ const Bills = () => {
               variant="contained"
               size="small"
               onClick={() =>
-                exportDataToExcel(dataToExport(billList), "Former Bills")
+                exportDataToExcel(
+                  dataToExport(billList, columnVisibilityState),
+                  "Former Bills"
+                )
               }
             >
               Excel
@@ -264,6 +293,12 @@ const Bills = () => {
 
               return ""
             }}
+            onColumnVisibilityModelChange={(model: any) =>
+              setColumnVisibilityState((prevState) => ({
+                ...prevState,
+                ...model,
+              }))
+            }
           />
 
           {selectedBill.nodata ? (
@@ -337,4 +372,4 @@ const Bills = () => {
   )
 }
 
-export default Bills
+export default ViewBills

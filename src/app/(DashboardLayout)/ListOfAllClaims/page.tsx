@@ -16,28 +16,43 @@ import { exportDataToExcel, exportDataToPDF } from "@/Util/commonFunctions"
 import { Box, Dialog, DialogContent } from "@mui/material"
 import ViewLog from "../components/View/ViewLog"
 
-const dataToExport = (data: any) => {
-  return data.map((item: any, i: any) => ({
-    "S.No": i + 1,
-    Name: item.name,
-    "Diary No.": item.diaryNumber,
-    "Bill Type": item.billType,
-    "Bill No.": item.billNumber,
-    // "Receiving Date": dayjs(item.claimReceivingDate).format("DD-MM-YYYY"),
-    "Claimed Amount": item.totalClaimedAmount,
-    // "Sanctioned Amount": item.sanctionedAmount,
-    // "Claim From": dayjs(item.claimPeriodFrom).format("DD-MM-YYYY"),
-    // "Claimed To": dayjs(item.claimPeriodTo).format("DD-MM-YYYY"),
-    // "Admissible Amount": item.totalAdmissibleAmount,
-    Status: item.currentStatus,
-    "Pending Branch": item.pendingBranch,
-    "Forward To": item.lastForwardedTo,
-  }))
+const dataToExport = (data: any, visibleColumns: any) => {
+  return data.map((item: any) => {
+    let obj: any
+
+    // Checks column's visibility state before printing
+    if (visibleColumns.name) obj = { ...obj, Name: item.name }
+    if (visibleColumns.diaryNumber)
+      obj = { ...obj, "Diary No.": item.diaryNumber }
+    if (visibleColumns.billType) obj = { ...obj, "Bill Type": item.billType }
+    if (visibleColumns.billNumber) obj = { ...obj, "Bill No.": item.billNumber }
+    if (visibleColumns.totalClaimedAmount)
+      obj = { ...obj, "Claimed Amount": item.totalClaimedAmount }
+    if (visibleColumns.currentStatus)
+      obj = { ...obj, Status: item.currentStatus }
+    if (visibleColumns.pendingBranch)
+      obj = { ...obj, "Pending Branch": item.pendingBranch }
+    if (visibleColumns.lastForwardedTo)
+      obj = { ...obj, "Forward To": item.lastForwardedTo }
+
+    return obj
+  })
 }
 
 const ListOfAllClaims = () => {
   const [billList, setBillList] = useState([])
   const [id, setId] = useState("")
+  // Default state MUST match data grid's column's 'field' property
+  const [columnVisibilityState, setColumnVisibilityState] = useState({
+    name: true,
+    diaryNumber: true,
+    billType: true,
+    billNumber: true,
+    totalClaimedAmount: true,
+    currentStatus: true,
+    pendingBranch: true,
+    lastForwardedTo: true,
+  })
 
   const [open, setOpen] = useState(false)
   const handleOpenPopup: any = () => {
@@ -164,7 +179,10 @@ const ListOfAllClaims = () => {
               variant="contained"
               size="small"
               onClick={() =>
-                exportDataToPDF(dataToExport(billList), "List of all Claims")
+                exportDataToPDF(
+                  dataToExport(billList, columnVisibilityState),
+                  "List of all Claims"
+                )
               }
             >
               PDF
@@ -174,7 +192,10 @@ const ListOfAllClaims = () => {
               variant="contained"
               size="small"
               onClick={() =>
-                exportDataToExcel(dataToExport(billList), "List of all Claims")
+                exportDataToExcel(
+                  dataToExport(billList, columnVisibilityState),
+                  "List of all Claims"
+                )
               }
             >
               Excel
@@ -200,6 +221,12 @@ const ListOfAllClaims = () => {
 
               return ""
             }}
+            onColumnVisibilityModelChange={(model: any) =>
+              setColumnVisibilityState((prevState) => ({
+                ...prevState,
+                ...model,
+              }))
+            }
           />
           {open && (
             <Dialog
