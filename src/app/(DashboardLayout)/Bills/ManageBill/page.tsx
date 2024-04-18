@@ -12,7 +12,7 @@ import Typography from "@mui/material/Typography"
 import Select from "@mui/material/Select"
 import MenuItem from "@mui/material/MenuItem"
 import Button from "@mui/material/Button"
-import Box from "@mui/material/Box"
+import { Box, FormControl } from "@mui/material"
 import { styled } from "@mui/system"
 import dayjs from "dayjs"
 import Tooltip from "@mui/material/Tooltip"
@@ -36,7 +36,7 @@ import {
   FIELDS_MANAGE_BILL_UPDATE,
 } from "@/config/formFields"
 
-const FormControl = styled("div")(() => ({
+const FormControll = styled("div")(() => ({
   marginTop: "10px",
 }))
 
@@ -779,7 +779,7 @@ const ManageBill = () => {
                     : false
 
                 return (
-                  <FormControl key={i}>
+                  <FormControll key={i}>
                     <Typography
                       fontWeight={600}
                       component="label"
@@ -806,28 +806,32 @@ const ManageBill = () => {
                       <>
                         {field.id == "lastForwardedTo" ? (
                           <>
-                            <Select
-                              name={field.id}
-                              size="small"
-                              value={billSequence[0]}
-                              onChange={(e) => handleFieldChange(e)}
-                              sx={{ width: "100%" }}
-                              disabled={
-                                disabledPermananty ||
-                                disabledFromUserBills ||
-                                disabledUpdateFields
-                              }
-                              error={
-                                !validations[field.id]?.valid &&
-                                validations[field.id]?.errMsg
-                              }
-                            >
-                              {billSequence.map((bill: any, i: any) => (
-                                <MenuItem value={bill} key={i}>
-                                  {bill}
-                                </MenuItem>
-                              ))}
-                            </Select>
+                            {" "}
+                            <FormControl size="small" sx={{ width: "100%" }}>
+                              <InputLabel>{field.InputLabel}</InputLabel>
+                              <Select
+                                name={field.id}
+                                size="small"
+                                value={billSequence[0]}
+                                onChange={(e) => handleFieldChange(e)}
+                                disabled={
+                                  disabledPermananty ||
+                                  disabledFromUserBills ||
+                                  disabledUpdateFields
+                                }
+                                label={field.InputLabel}
+                                error={
+                                  !validations[field.id]?.valid &&
+                                  validations[field.id]?.errMsg
+                                }
+                              >
+                                {billSequence.map((bill: any, i: any) => (
+                                  <MenuItem value={bill} key={i}>
+                                    {bill}
+                                  </MenuItem>
+                                ))}
+                              </Select>
+                            </FormControl>
                             <InputLabel
                               sx={{
                                 color: "#fba088",
@@ -839,7 +843,9 @@ const ManageBill = () => {
                             </InputLabel>
                           </>
                         ) : field.type === "select" ? (
-                          <>
+                          <FormControl size="small" sx={{ width: "100%" }}>
+                            <InputLabel>{field.InputLabel}</InputLabel>
+
                             <Select
                               name={field.id}
                               size="small"
@@ -855,6 +861,7 @@ const ManageBill = () => {
                                 !validations[field.id]?.valid &&
                                 validations[field.id]?.errMsg
                               }
+                              label={field.InputLabel}
                             >
                               {field.id === "billNumber"
                                 ? BillList.map((bill: any) => (
@@ -873,6 +880,7 @@ const ManageBill = () => {
                                     )
                                   )}
                             </Select>
+
                             <InputLabel
                               sx={{
                                 color: "#fba088",
@@ -882,7 +890,7 @@ const ManageBill = () => {
                             >
                               {validations[field.id]?.errMsg}
                             </InputLabel>
-                          </>
+                          </FormControl>
                         ) : (
                           <TextField
                             name={field.id}
@@ -931,7 +939,7 @@ const ManageBill = () => {
                         {validations[field.id].errMsg}
                       </p>
                     ) : null} */}
-                  </FormControl>
+                  </FormControll>
                 )
               })}
 

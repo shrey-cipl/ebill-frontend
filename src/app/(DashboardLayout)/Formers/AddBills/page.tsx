@@ -8,6 +8,7 @@ import {
   MenuItem,
   TextField,
   FormControl,
+  InputLabel,
 } from "@mui/material"
 import { BILL_TYPE } from "@/config/constants"
 import PageContainer from "../../components/container/PageContainer"
@@ -61,7 +62,7 @@ const FormerAddBill = () => {
   const router = useRouter()
   console.log(tableData, "tableData")
   useEffect(() => {
-      setFormerFieldState({ ...formerFieldState, telephoneNumbers: tableData })
+    setFormerFieldState({ ...formerFieldState, telephoneNumbers: tableData })
   }, [tableData])
 
   const handleSubmit = async (e: any) => {
@@ -98,13 +99,13 @@ const FormerAddBill = () => {
 
     const fieldKeysArr = Object.keys(formerFieldState)
 
-    fieldKeysArr.forEach((key) =>
-      { if (key === "telephoneNumbers") {
-        formDataToSend.append("telephoneNumbers", JSON.stringify(tableData));
+    fieldKeysArr.forEach((key) => {
+      if (key === "telephoneNumbers") {
+        formDataToSend.append("telephoneNumbers", JSON.stringify(tableData))
       } else {
-        formDataToSend.append(key, formerFieldState[key]);
-      }}
-    )
+        formDataToSend.append(key, formerFieldState[key])
+      }
+    })
     console.log(formDataToSend, "formDataToSend")
 
     // "telephoneNumbers": [
@@ -277,46 +278,54 @@ const FormerAddBill = () => {
                     >
                       {field.type === "selectFormer" ? (
                         authCtx?.user?.data?.role && (
+                          <FormControl size="small">
+                            <InputLabel>Enter Select Former</InputLabel>
+                            <Select
+                              name={field.id}
+                              size="small"
+                              // value={former.map((el: any) => el._id)}
+                              onChange={(e) => handleFieldChange(e)}
+                              sx={{ width: "100%" }}
+                              required
+                              label="Enter Select Former"
+                              // error={
+                              //   !validations[field.id]?.valid &&
+                              //   validations[field.id]?.errMsg
+                              // }
+                            >
+                              {former?.map((option: any, i: any) => {
+                                return (
+                                  <MenuItem value={option._id} key={i}>
+                                    {option.name}
+                                  </MenuItem>
+                                )
+                              })}
+                            </Select>
+                          </FormControl>
+                        )
+                      ) : field.type === "select" ? (
+                        <FormControl size="small">
+                          <InputLabel>Enter Bill Type</InputLabel>
                           <Select
                             name={field.id}
+                            label="Enter Bill Type"
                             size="small"
-                            // value={former.map((el: any) => el._id)}
+                            value={formerFieldState[field.id]}
                             onChange={(e) => handleFieldChange(e)}
                             sx={{ width: "100%" }}
                             required
-                            // error={
-                            //   !validations[field.id]?.valid &&
-                            //   validations[field.id]?.errMsg
-                            // }
+                            error={
+                              !validations[field.id]?.valid &&
+                              validations[field.id]?.errMsg
+                            }
                           >
-                            {former?.map((option: any, i: any) => {
-                              return (
-                                <MenuItem value={option._id} key={i}>
-                                  {option.name}
-                                </MenuItem>
-                              )
-                            })}
+                            {field.selectOptions?.map((option, i) => (
+                              <MenuItem value={option} key={i}>
+                                {option}
+                              </MenuItem>
+                            ))}
                           </Select>
-                        )
-                      ) : field.type === "select" ? (
-                        <Select
-                          name={field.id}
-                          size="small"
-                          value={formerFieldState[field.id]}
-                          onChange={(e) => handleFieldChange(e)}
-                          sx={{ width: "100%" }}
-                          required
-                          error={
-                            !validations[field.id]?.valid &&
-                            validations[field.id]?.errMsg
-                          }
-                        >
-                          {field.selectOptions?.map((option, i) => (
-                            <MenuItem value={option} key={i}>
-                              {option}
-                            </MenuItem>
-                          ))}
-                        </Select>
+                        </FormControl>
                       ) : field.type === "file" ? (
                         <TextField
                           name={field.id}
