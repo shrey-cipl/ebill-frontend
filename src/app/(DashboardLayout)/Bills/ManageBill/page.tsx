@@ -166,7 +166,7 @@ const ManageBill = () => {
   useEffect(() => {
     if (paramBillId) {
       getBillData(paramBillId, authCtx.user.token).then((billData: any) => {
-        if (billData && billData.data) {
+        if (billData && billData?.data) {
           const {
             diaryNumber,
             claimReceivingDate,
@@ -633,9 +633,34 @@ const ManageBill = () => {
       if (dataFields.billType) {
         setBillSequence([])
         getData(dataFields.billType)
+        admissibleAmtSet(dataFields.billType)
       }
     }
   }, [dataFields.billType])
+
+  const admissibleAmtSet = async (selectedBillType: any) => {
+    const config = {
+      url: `/api/amount/get?billType=${encodeURIComponent(selectedBillType)}`,
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        authorization: `Bearer ${authCtx.user?.token}`,
+      },
+    }
+
+    try {
+      const res = await axiosApi(config.url, config.method, config.headers)
+      // console.log("ahahahhaha:", res.data[0].totalAdmissibleAmount)
+      if (res && res?.data) {
+        setDataFields((prevState: any) => ({
+          ...prevState,
+          totalAdmissibleAmount: res.data[0].totalAdmissibleAmount,
+        }))
+      }
+    } catch (err: any) {
+      console.log(err.message)
+    }
+  }
 
   const getData = async (selectedBillType: any) => {
     const config = {
@@ -651,11 +676,6 @@ const ManageBill = () => {
 
     try {
       const res = await axiosApi(config.url, config.method, config.headers)
-      // console.log(res, "ressssssssssssssssssssssssssssa")
-      // console.log(
-      //   res.data[0]._id,
-      //   "hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh"
-      // )
 
       if (res && res.data) {
         setInit_id(res.data[0]._id)
@@ -714,10 +734,11 @@ const ManageBill = () => {
               {FIELDS_MANAGE_BILL.map((field, i) => {
                 // Permanantly disabled fields
                 const permanantDisable = [
-                  "diaryNumber",
+                  // "diaryNumber",
                   "name",
                   "phone",
                   "email",
+                  "totalAdmissibleAmount",
                 ]
                 const disabledPermananty = permanantDisable.includes(field.id)
                   ? true

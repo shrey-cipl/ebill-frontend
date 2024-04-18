@@ -208,11 +208,11 @@ const DynamicTable: React.FC<DynamicTableProps> = ({
                 <TableCell>
                   {paramBillId || paramMode ? (
                     <Typography>
-                      {row.periodFrom.substring(8, 10) +
+                      {row.periodFrom?.substring(8, 10) +
                         "-" +
-                        row.periodFrom.substring(5, 7) +
+                        row.periodFrom?.substring(5, 7) +
                         "-" +
-                        row.periodFrom.substring(0, 4)}
+                        row.periodFrom?.substring(0, 4)}
                     </Typography>
                   ) : (
                     <Input
@@ -236,11 +236,11 @@ const DynamicTable: React.FC<DynamicTableProps> = ({
                 <TableCell>
                   {paramBillId || paramMode ? (
                     <Typography>
-                      {row.periodTo.substring(8, 10) +
+                      {row.periodTo?.substring(8, 10) +
                         "-" +
-                        row.periodTo.substring(5, 7) +
+                        row.periodTo?.substring(5, 7) +
                         "-" +
-                        row.periodTo.substring(0, 4)}
+                        row.periodTo?.substring(0, 4)}
                     </Typography>
                   ) : (
                     <Input
