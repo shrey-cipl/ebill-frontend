@@ -150,7 +150,7 @@ const ViewBills = () => {
       headerName: "S.No",
       valueGetter: (params) => params.api.getAllRowIds().indexOf(params.id) + 1,
     },
-    { field: "claimedAmount", headerName: "Claimed Aount" },
+    { field: "claimedAmount", headerName: "Claimed Amt." },
     { field: "billType", headerName: "Bill Type" },
     { field: "billNumber", headerName: "Bill No." },
 
@@ -250,6 +250,7 @@ const ViewBills = () => {
               sx={{ background: "#9C27B0" }}
               variant="contained"
               size="small"
+              disabled={billList.length === 0}
               onClick={() =>
                 exportDataToPDF(
                   dataToExport(billList, columnVisibilityState),
@@ -263,6 +264,7 @@ const ViewBills = () => {
               sx={{ background: "#9C27B0" }}
               variant="contained"
               size="small"
+              disabled={billList.length === 0}
               onClick={() =>
                 exportDataToExcel(
                   dataToExport(billList, columnVisibilityState),

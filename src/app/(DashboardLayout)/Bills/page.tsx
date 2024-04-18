@@ -139,7 +139,7 @@ const Bills = () => {
     },
     { field: "billType", headerName: "Bill Type" },
     { field: "billNumber", headerName: "Bill No." },
-    { field: "totalClaimedAmount", headerName: "Claimed Amount" },
+    { field: "totalClaimedAmount", headerName: "Claimed Amt." },
     // {
     //   field: "totalAdmissibleAmount",
     //   headerName: "ADMISSIBLE AMOUNT",
@@ -256,6 +256,7 @@ const Bills = () => {
               sx={{ background: "#9C27B0" }}
               variant="contained"
               size="small"
+              disabled={billList.length === 0}
               onClick={() =>
                 exportDataToPDF(
                   dataToExport(billList, columnVisibilityState),
@@ -269,6 +270,7 @@ const Bills = () => {
               sx={{ background: "#9C27B0" }}
               variant="contained"
               size="small"
+              disabled={billList.length === 0}
               onClick={() =>
                 exportDataToExcel(
                   dataToExport(billList, columnVisibilityState),

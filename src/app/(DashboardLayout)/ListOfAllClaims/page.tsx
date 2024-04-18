@@ -178,6 +178,7 @@ const ListOfAllClaims = () => {
               sx={{ background: "#9C27B0" }}
               variant="contained"
               size="small"
+              disabled={billList.length === 0}
               onClick={() =>
                 exportDataToPDF(
                   dataToExport(billList, columnVisibilityState),
@@ -191,6 +192,7 @@ const ListOfAllClaims = () => {
               sx={{ background: "#9C27B0" }}
               variant="contained"
               size="small"
+              disabled={billList.length === 0}
               onClick={() =>
                 exportDataToExcel(
                   dataToExport(billList, columnVisibilityState),

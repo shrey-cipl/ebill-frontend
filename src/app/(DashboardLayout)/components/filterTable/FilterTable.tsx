@@ -22,10 +22,10 @@ const columns: GridColDef[] = [
   { field: "diaryNumber", headerName: "Diary No." },
   { field: "name", headerName: "Name" },
   { field: "billType", headerName: "Bill Type" },
-  { field: "totalAdmissibleAmount", headerName: "Admissible Amount" },
+  { field: "totalAdmissibleAmount", headerName: "Admissible Amt." },
   {
     field: "sanctionedAmount",
-    headerName: "Sanctioned Amount",
+    headerName: "Sanctioned Amt.",
   },
   {
     field: "currentStatus",
@@ -59,6 +59,7 @@ const FilterTable = ({ allReportsByfilter, get }: FilterTableProps) => {
               sx={{ background: "#9C27B0" }}
               variant="contained"
               size="small"
+              disabled={allReportsByfilter.length === 0}
               onClick={() =>
                 exportDataToPDF(dataToExport(allReportsByfilter), "Report")
               }
@@ -69,6 +70,7 @@ const FilterTable = ({ allReportsByfilter, get }: FilterTableProps) => {
               sx={{ background: "#9C27B0" }}
               variant="contained"
               size="small"
+              disabled={allReportsByfilter.length === 0}
               onClick={() =>
                 exportDataToExcel(dataToExport(allReportsByfilter), "Report")
               }

@@ -139,6 +139,7 @@ const ListOfAllClaims = () => {
               sx={{ background: "#9C27B0" }}
               variant="contained"
               size="small"
+              disabled={billList.length === 0}
               onClick={() =>
                 exportDataToPDF(dataToExport(billList), "List of all Claims")
               }
@@ -149,6 +150,7 @@ const ListOfAllClaims = () => {
               sx={{ background: "#9C27B0" }}
               variant="contained"
               size="small"
+              disabled={billList.length === 0}
               onClick={() =>
                 exportDataToExcel(dataToExport(billList), "List of all Claims")
               }
