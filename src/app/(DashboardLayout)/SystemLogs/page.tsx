@@ -165,6 +165,7 @@ const SystemLogs = () => {
               sx={{ background: "#9C27B0" }}
               variant="contained"
               size="small"
+              disabled={filteredList.length === 0}
               onClick={() =>
                 exportDataToPDF(
                   dataToExport(filteredList, columnVisibilityState),
@@ -178,6 +179,7 @@ const SystemLogs = () => {
               sx={{ background: "#9C27B0" }}
               variant="contained"
               size="small"
+              disabled={filteredList.length === 0}
               onClick={() =>
                 exportDataToExcel(
                   dataToExport(filteredList, columnVisibilityState),

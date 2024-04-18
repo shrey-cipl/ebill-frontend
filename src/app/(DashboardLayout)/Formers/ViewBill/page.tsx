@@ -147,23 +147,23 @@ const ViewBills = () => {
   const columns: GridColDef[] = [
     {
       field: "s.no", // confirm this
-      headerName: "S.NO",
+      headerName: "S.No",
       valueGetter: (params) => params.api.getAllRowIds().indexOf(params.id) + 1,
     },
-    { field: "claimedAmount", headerName: "CLAIMED AMT." },
-    { field: "billType", headerName: "BILL TYPE" },
-    { field: "billNumber", headerName: "BILL No." },
+    { field: "claimedAmount", headerName: "Claimed Amt." },
+    { field: "billType", headerName: "Bill Type" },
+    { field: "billNumber", headerName: "Bill No." },
 
     {
       field: "billPeriodFrom",
-      headerName: "BILL FROM",
+      headerName: "Bill From",
       valueFormatter: (params) => {
         return dayjs(params.value).format("DD-MM-YYYY")
       },
     },
     {
       field: "billPeriodTo",
-      headerName: "BILL TO",
+      headerName: "Bill To",
       valueFormatter: (params) => {
         return dayjs(params.value).format("DD-MM-YYYY")
       },
@@ -186,7 +186,7 @@ const ViewBills = () => {
     // },
     {
       field: "id",
-      headerName: "ACTION",
+      headerName: "Action",
       renderCell: (params) => {
         return (
           <button
@@ -207,7 +207,7 @@ const ViewBills = () => {
     },
     {
       field: "Download",
-      headerName: "DOWNLOAD",
+      headerName: "Download",
       renderCell: (params) => {
         const downloadLink = params.row.billFilePath
 
@@ -250,6 +250,7 @@ const ViewBills = () => {
               sx={{ background: "#9C27B0" }}
               variant="contained"
               size="small"
+              disabled={billList.length === 0}
               onClick={() =>
                 exportDataToPDF(
                   dataToExport(billList, columnVisibilityState),
@@ -263,6 +264,7 @@ const ViewBills = () => {
               sx={{ background: "#9C27B0" }}
               variant="contained"
               size="small"
+              disabled={billList.length === 0}
               onClick={() =>
                 exportDataToExcel(
                   dataToExport(billList, columnVisibilityState),

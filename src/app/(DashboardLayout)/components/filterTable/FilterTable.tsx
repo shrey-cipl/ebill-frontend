@@ -14,22 +14,22 @@ interface FilterTableProps {
 const columns: GridColDef[] = [
   {
     field: "s.no", // confirm this
-    headerName: "S.NO",
+    headerName: "S.No",
     valueGetter: (params: any) =>
       params.api.getAllRowIds().indexOf(params.id) + 1,
     width: 100,
   },
-  { field: "diaryNumber", headerName: "DIARY NO." },
-  { field: "name", headerName: "NAME" },
-  { field: "billType", headerName: "BILL TYPE" },
-  { field: "totalAdmissibleAmount", headerName: "ADMISSIBLE AMOUNT" },
+  { field: "diaryNumber", headerName: "Diary No." },
+  { field: "name", headerName: "Name" },
+  { field: "billType", headerName: "Bill Type" },
+  { field: "totalAdmissibleAmount", headerName: "Admissible Amt." },
   {
     field: "sanctionedAmount",
-    headerName: "SANCTIONED AMOUNT",
+    headerName: "Sanctioned Amt.",
   },
   {
     field: "currentStatus",
-    headerName: "STATUS",
+    headerName: "Status",
   },
 ]
 
@@ -59,6 +59,7 @@ const FilterTable = ({ allReportsByfilter, get }: FilterTableProps) => {
               sx={{ background: "#9C27B0" }}
               variant="contained"
               size="small"
+              disabled={allReportsByfilter.length === 0}
               onClick={() =>
                 exportDataToPDF(dataToExport(allReportsByfilter), "Report")
               }
@@ -69,6 +70,7 @@ const FilterTable = ({ allReportsByfilter, get }: FilterTableProps) => {
               sx={{ background: "#9C27B0" }}
               variant="contained"
               size="small"
+              disabled={allReportsByfilter.length === 0}
               onClick={() =>
                 exportDataToExcel(dataToExport(allReportsByfilter), "Report")
               }

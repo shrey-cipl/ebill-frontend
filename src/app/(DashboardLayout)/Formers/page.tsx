@@ -85,17 +85,17 @@ const Formers = () => {
   const columns: GridColDef[] = [
     {
       field: "s.no", // confirm this
-      headerName: "S.NO",
+      headerName: "S.No",
       valueGetter: (params) => params.api.getAllRowIds().indexOf(params.id) + 1,
     },
-    { field: "name", headerName: "NAME" },
-    { field: "status", headerName: "STATUS" },
-    { field: "designation", headerName: "DESIGNATION" },
-    { field: "email", headerName: "EMAIL" },
-    { field: "phone", headerName: "PHONE" },
+    { field: "name", headerName: "Name" },
+    { field: "status", headerName: "Status" },
+    { field: "designation", headerName: "Designation" },
+    { field: "email", headerName: "Email" },
+    { field: "phone", headerName: "Phone" },
     {
       field: "bankAccountNumber",
-      headerName: "BANK A/C",
+      headerName: "Bank A/C",
     },
     // {
     //   field: "createdAt",
@@ -113,10 +113,10 @@ const Formers = () => {
     //     return dayjs(params.value).format("DD-MM-YYYY h:mm A");
     //   },
     // },
-    { field: "isActive", headerName: "ACTIVE" },
+    { field: "isActive", headerName: "Active" },
     {
       field: "random_2",
-      headerName: "ACTION",
+      headerName: "Action",
       renderCell: (params) => {
         return (
           <Link
@@ -154,6 +154,7 @@ const Formers = () => {
               sx={{ background: "#9C27B0" }}
               variant="contained"
               size="small"
+              disabled={formersList.length === 0}
               onClick={() =>
                 exportDataToPDF(
                   dataToExport(formersList, columnVisibilityState),
@@ -167,6 +168,7 @@ const Formers = () => {
               sx={{ background: "#9C27B0" }}
               variant="contained"
               size="small"
+              disabled={formersList.length === 0}
               onClick={() =>
                 exportDataToExcel(
                   dataToExport(formersList, columnVisibilityState),
