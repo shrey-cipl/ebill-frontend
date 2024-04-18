@@ -53,33 +53,33 @@ const ResetOfAllBills = () => {
   const columns: GridColDef[] = [
     {
       field: "s.no", // confirm this
-      headerName: "S.NO",
+      headerName: "S.No",
       valueGetter: (params) => params.api.getAllRowIds().indexOf(params.id) + 1,
     },
-    { field: "name", headerName: "NAME" },
-    { field: "diaryNumber", headerName: "DAIRY NO." },
-    { field: "billType", headerName: "BILL TYPE" },
-    { field: "billNumber", headerName: "BILL NO." },
+    { field: "name", headerName: "Name" },
+    { field: "diaryNumber", headerName: "Dairy No." },
+    { field: "billType", headerName: "Bill Type TYPE" },
+    { field: "billNumber", headerName: "Bill No." },
     {
       field: "claimReceivingDate",
-      headerName: "RECEIVING DATE",
+      headerName: "Receiving Date",
       valueFormatter: (params) => {
         return dayjs(params.value).format("YYYY-MM-DD")
       },
     },
-    { field: "totalClaimedAmount", headerName: "CLAIMED AMOUNT" },
-    { field: "sanctionedAmount", headerName: "SANCTIONED AMOUNT" },
-    { field: "currentStatus", headerName: "BILL STATUS" },
+    { field: "totalClaimedAmount", headerName: "Claimed Amt." },
+    { field: "sanctionedAmount", headerName: "Sanctioned Amt." },
+    { field: "currentStatus", headerName: "Bill Status" },
     {
       field: "pendingBranch",
-      headerName: "PENDING BRANCH",
+      headerName: "Pending Branch",
       valueFormatter: (params) => {
         return `Pending at ${params.value}`
       },
     },
     {
       field: "createdAt",
-      headerName: "CREATED AT",
+      headerName: "Created At",
 
       valueFormatter: (params) => {
         return dayjs(params.value).format("DD-MM-YYYY h:mm A")
@@ -87,16 +87,16 @@ const ResetOfAllBills = () => {
     },
     {
       field: "updatedAt",
-      headerName: "UPDATED ON",
+      headerName: "Updated On",
 
       valueFormatter: (params) => {
         return dayjs(params.value).format("DD-MM-YYYY h:mm A")
       },
     },
-    { field: "lastForwardedTo", headerName: "FORWARD TO" },
+    { field: "lastForwardedTo", headerName: "Forward To TO" },
     {
       field: "random_2",
-      headerName: "CHANNEL LOG",
+      headerName: "Channel Log",
       renderCell: (params) => {
         console.log(params.row.bill.claim)
         return (

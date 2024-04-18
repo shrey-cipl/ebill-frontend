@@ -126,27 +126,27 @@ const Bills = () => {
   const columns: GridColDef[] = [
     {
       field: "s.no", // confirm this
-      headerName: "S.NO",
+      headerName: "S.No",
       valueGetter: (params) => params.api.getAllRowIds().indexOf(params.id) + 1,
     },
-    { field: "diaryNumber", headerName: "DIARY NO." },
+    { field: "diaryNumber", headerName: "Diary No." },
     {
       field: "name",
-      headerName: "NAME",
+      headerName: "Name",
       // renderCell: (params) => (
       //   <div style={{ whiteSpace: "break-spaces" }}>{params.value}</div>
       // ),
     },
-    { field: "billType", headerName: "BILL TYPE" },
-    { field: "billNumber", headerName: "BILL NO." },
-    { field: "totalClaimedAmount", headerName: "CLAIMED AMOUNT" },
+    { field: "billType", headerName: "Bill Type" },
+    { field: "billNumber", headerName: "Bill No." },
+    { field: "totalClaimedAmount", headerName: "Claimed Amount" },
     // {
     //   field: "totalAdmissibleAmount",
     //   headerName: "ADMISSIBLE AMOUNT",
     // },
     // { field: "sanctionedAmount", headerName: "SANCTIONED AMOUNT" },
-    { field: "currentStatus", headerName: "STATUS" },
-    { field: "lastForwardedTo", headerName: "FORWARD TO" },
+    { field: "currentStatus", headerName: "Status" },
+    { field: "lastForwardedTo", headerName: "Forward To" },
     // {
     //   field: "createdAt",
     //   headerName: "CREATED AT",
@@ -165,7 +165,7 @@ const Bills = () => {
     // },
     {
       field: "random_2",
-      headerName: "ACTION",
+      headerName: "Action",
       renderCell: (params) => {
         if (params.row.pendingBranch) {
           return (
@@ -200,7 +200,7 @@ const Bills = () => {
     },
     {
       field: "Download",
-      headerName: "DOWNLOAD",
+      headerName: "Download",
       renderCell: (params) => {
         const downloadLink = params.row.billFilePath
 

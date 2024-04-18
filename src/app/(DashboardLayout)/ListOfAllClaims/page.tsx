@@ -103,13 +103,13 @@ const ListOfAllClaims = () => {
   const columns: GridColDef[] = [
     {
       field: "s.no", // confirm this
-      headerName: "S.NO",
+      headerName: "S.No",
       valueGetter: (params) => params.api.getAllRowIds().indexOf(params.id) + 1,
     },
-    { field: "name", headerName: "NAME" },
-    { field: "diaryNumber", headerName: "DAIRY NO." },
-    { field: "billType", headerName: "BILL TYPE" },
-    { field: "billNumber", headerName: "BILL NO." },
+    { field: "name", headerName: "Name" },
+    { field: "diaryNumber", headerName: "Dairy No." },
+    { field: "billType", headerName: "Bill Type" },
+    { field: "billNumber", headerName: "Bill No." },
     // {
     //   field: "claimReceivingDate",
     //   headerName: "RECEIVING DATE",
@@ -117,12 +117,12 @@ const ListOfAllClaims = () => {
     //     return dayjs(params.value).format("YYYY-MM-DD")
     //   },
     // },
-    { field: "totalClaimedAmount", headerName: "CLAIMED AMOUNT" },
+    { field: "totalClaimedAmount", headerName: "Claimed Amt." },
     // { field: "sanctionedAmount", headerName: "SANCTIONED AMOUNT" },
-    { field: "currentStatus", headerName: "STATUS" },
+    { field: "currentStatus", headerName: "Status" },
     {
       field: "pendingBranch",
-      headerName: "PENDING BRANCH",
+      headerName: "Pending Branch",
       valueFormatter: (params) => {
         return `Pending at ${params.value}`
       },
@@ -143,10 +143,10 @@ const ListOfAllClaims = () => {
     //     return dayjs(params.value).format("DD-MM-YYYY h:mm A")
     //   },
     // },
-    { field: "lastForwardedTo", headerName: "FORWARD TO" },
+    { field: "lastForwardedTo", headerName: "Forward To" },
     {
       field: "random_2",
-      headerName: "CHANNEL LOG",
+      headerName: "Channel Log",
       renderCell: (params) => {
         return (
           <Button
