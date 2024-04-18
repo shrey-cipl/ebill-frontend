@@ -75,8 +75,8 @@ const Users = () => {
   ]
 
   return (
-    <PageContainer title="All Users" description="List of all the Users">
-      <DashboardNew title="All Users" titleVariant="h5">
+    <PageContainer title="Users" description="List of all the Users">
+      <DashboardNew title="Users" titleVariant="h5">
         <>
           <CustomGrid rows={usersList} columns={columns} />
         </>
