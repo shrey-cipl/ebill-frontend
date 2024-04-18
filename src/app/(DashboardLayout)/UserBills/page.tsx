@@ -163,17 +163,17 @@ const UserBills = () => {
   const columns: GridColDef[] = [
     {
       field: "s.no", // confirm this
-      headerName: "S.NO",
+      headerName: "S.No",
       valueGetter: (params) => params.api.getAllRowIds().indexOf(params.id) + 1,
       width: 100,
     },
-    { field: "name", headerName: "NAME" },
-    { field: "billType", headerName: "BILL TYPE" },
-    { field: "billNumber", headerName: "BILL NO." },
-    { field: "claimedAmount", headerName: "CLAIMED AMOUNT" },
+    { field: "name", headerName: "Name" },
+    { field: "billType", headerName: "Bill Type" },
+    { field: "billNumber", headerName: "Bill No." },
+    { field: "claimedAmount", headerName: "Claimed Amt." },
     // { field: "billPeriodFrom", headerName: "BILL FROM" },
     // { field: "billPeriodTo", headerName: "BILL TO" },
-    { field: "designation", headerName: "DESIGNATION" },
+    { field: "designation", headerName: "Designation" },
     // { field: "phone", headerName: "PHONE" },
     // {
     //   field: "createdAt",
@@ -193,7 +193,7 @@ const UserBills = () => {
     // },
     {
       field: "id",
-      headerName: "ACTION",
+      headerName: "Action",
       renderCell: (params) => {
         if (params.row.claim[0]) {
           return (
@@ -244,7 +244,7 @@ const UserBills = () => {
     },
     {
       field: "Download",
-      headerName: "DOWNLOAD",
+      headerName: "Download",
       renderCell: (params) => {
         const downloadLink = params.row.billFilePath
 

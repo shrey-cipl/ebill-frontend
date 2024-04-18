@@ -88,14 +88,14 @@ const SystemLogs = () => {
   const columns: GridColDef[] = [
     {
       field: "s.no", // confirm this
-      headerName: "S.NO",
+      headerName: "S.No",
       valueGetter: (params) => params.api.getAllRowIds().indexOf(params.id) + 1,
     },
     { field: "ip", headerName: "I.P." },
-    { field: "method", headerName: "METHOD" },
+    { field: "method", headerName: "Method" },
     {
       field: "path",
-      headerName: "PATH",
+      headerName: "Path",
       valueFormatter: (params) => {
         const arrSplit = params.value.split("/")
         return arrSplit[arrSplit.length - 1]
@@ -103,25 +103,25 @@ const SystemLogs = () => {
     },
     {
       field: "date",
-      headerName: "DATE",
+      headerName: "Date",
       valueFormatter: (params) => {
         return dayjs(params.value).format("DD-MM-YYYY")
       },
     },
     {
       field: "time",
-      headerName: "TIME",
+      headerName: "Time",
       valueFormatter: (params) => {
         return dayjs(params.value).format("h:mm a")
       },
     },
     {
       field: "email",
-      headerName: "EMAIL",
+      headerName: "Email",
     },
     {
       field: "status",
-      headerName: "LOGIN STATUS",
+      headerName: "Login Status",
     },
   ]
 

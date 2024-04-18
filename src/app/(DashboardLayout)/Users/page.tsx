@@ -50,16 +50,16 @@ const Users = () => {
   const columns: GridColDef[] = [
     {
       field: "s.no", // confirm this
-      headerName: "S.NO",
+      headerName: "S.No",
       valueGetter: (params) => params.api.getAllRowIds().indexOf(params.id) + 1,
     },
-    { field: "roleName", headerName: "ROLE" },
-    { field: "name", headerName: "USER NAME" },
-    { field: "email", headerName: "EMAIL" },
-    { field: "phone", headerName: "PHONE" },
+    { field: "roleName", headerName: "Role" },
+    { field: "name", headerName: "User Name" },
+    { field: "email", headerName: "Email" },
+    { field: "phone", headerName: "Phone" },
     {
       field: "random_2",
-      headerName: "CHANNEL LOG",
+      headerName: "Channel Log",
       renderCell: (params) => {
         return (
           <Link
