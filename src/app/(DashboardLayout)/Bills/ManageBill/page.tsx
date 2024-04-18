@@ -614,7 +614,10 @@ const ManageBill = () => {
     const { name, value } = e.target
 
     if (name === "sanctionedAmount") {
-      if (+value > dataFields.totalAdmissibleAmount) {
+      if (
+        +value > dataFields.totalAdmissibleAmount ||
+        +value > dataFields.totalClaimedAmount
+      ) {
         return
       }
     }
