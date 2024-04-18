@@ -568,8 +568,6 @@ const ManageBill = () => {
   }
 
   const handleFieldChange = (e: any) => {
-    // 'value' extracted here is unique billNumber
-    // (only for Bill Number field)
     const { name, value } = e.target
 
     if (name == "lastForwardedTo") {
@@ -583,7 +581,8 @@ const ManageBill = () => {
     }
 
     if (name === "billNumber") {
-      // here 'value' contains bill number
+      // 'value' extracted here is unique billNumber
+      // (only for Bill Number field)
       const selectedBill: any = BillList.find(
         (bill: any) => bill.billNumber === value
       )
@@ -601,7 +600,6 @@ const ManageBill = () => {
         billFilePath: selectedBill.billFilePath,
         // former: empId,
       }))
-      // console.log(selectedBill, "selectedBill")
     } else {
       // For other fields, directly set the value
       setDataFields((prevState: any) => ({
@@ -613,9 +611,17 @@ const ManageBill = () => {
 
   // Updates 'update' mode fields
   const handleUpdatedModeFields = (e: any) => {
+    const { name, value } = e.target
+
+    if (name === "sanctionedAmount") {
+      if (+value > dataFields.totalAdmissibleAmount) {
+        return
+      }
+    }
+
     setUpdateModeFields((prevState: any) => ({
       ...prevState,
-      [e.target.name]: e.target.value,
+      [name]: value,
     }))
   }
 
