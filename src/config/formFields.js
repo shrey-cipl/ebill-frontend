@@ -32,6 +32,7 @@ const FIELDS_MANAGE_BILL = [
     selectOptions: BILL_TYPE,
     required: true,
     validationType: VALIDATION_TYPE.none,
+    InputLabel:"Enter Bill Type"
   },
   {
     id: "billNumber",
@@ -39,6 +40,7 @@ const FIELDS_MANAGE_BILL = [
     type: "select",
     required: true,
     validationType: VALIDATION_TYPE.none,
+    InputLabel:"Enter bill Number"
   },
   {
     id: "name",
@@ -107,6 +109,7 @@ const FIELDS_MANAGE_BILL = [
     id: "currentStatus",
     fieldName: "Status",
     type: "select",
+    InputLabel:"Enter Status",
     selectOptions: [
       "Open",
       "Under Processing",
@@ -123,6 +126,7 @@ const FIELDS_MANAGE_BILL = [
     id: "lastForwardedTo",
     fieldName: "Forward To",
     type: "select",
+    InputLabel:"Enter Forward To",
     selectOptions: ROLES,
     required: true,
     validationType: VALIDATION_TYPE.empty,
@@ -177,6 +181,7 @@ const FIELDS_MANAGE_FORMERS = [
     id: "status",
     fieldName: "Status",
     type: "select",
+    InputLabel:"Enter Status",
     selectOptions: ["Present", "Ex"],
     required: true,
     validationType: VALIDATION_TYPE.none,
@@ -184,6 +189,7 @@ const FIELDS_MANAGE_FORMERS = [
   {
     id: "designation",
     fieldName: "Designation",
+    InputLabel:"Enter Designation",
     type: "select",
     selectOptions: ["Chairman", "Member"],
     required: true,
@@ -217,6 +223,7 @@ const FIELDS_MANAGE_FORMERS = [
     id: "isActive",
     fieldName: "Active",
     type: "select",
+    InputLabel:"Enter ",
     selectOptions: ["Active", "Inactive"],
     required: true,
     validationType: VALIDATION_TYPE.none,
