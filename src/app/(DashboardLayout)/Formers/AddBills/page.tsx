@@ -49,7 +49,7 @@ const FormerAddBill = () => {
   const [validations, setValidations] = useState(initialValidationState)
   const [previewUrl, setPreviewUrl] = useState<string | null>(null)
   const [former, setFormer] = useState<any>()
-  const [tableData, setTableData] = useState<TableRowData[]>([
+  const [tableData, setTableData] = useState<any>([
     {
       phone: "",
       periodFrom: "",
@@ -64,10 +64,27 @@ const FormerAddBill = () => {
   useEffect(() => {
     setFormerFieldState({ ...formerFieldState, telephoneNumbers: tableData })
   }, [tableData])
-
+  console.log(
+    formerFieldState.billType,
+    "===",
+    BILL_TYPE[3] && tableData.phone,
+    "===",
+    ""
+  )
   const handleSubmit = async (e: any) => {
     e.preventDefault()
-
+    console.log(tableData[0].phone, "kkkkkkkkkkkkkkkkkkkkk")
+    if (
+      formerFieldState.billType === BILL_TYPE[3] &&
+      (tableData[0].phone === "" ||
+        tableData[0].periodFrom === "" ||
+        tableData[0].periodTo === "" ||
+        tableData[0].claimedAmount === "" ||
+        tableData[0].admissibleAmount === "")
+    ) {
+      alert("Please fill in the dynamic table fields before submitting.")
+      return
+    }
     //   console.log(formerFieldState,validations,"jkdjdsjdjkds");
     //   const keysToRemove = ["former"]
     // const filteredformerFieldState = [...formerFieldState].filter(
@@ -116,6 +133,7 @@ const FormerAddBill = () => {
     //       "claimedAmount": 550,
     //       "admissibleAmount": 800
     //   },
+
     try {
       const config = {
         url: `/api/bill/create`,
@@ -164,7 +182,25 @@ const FormerAddBill = () => {
   console.log(authCtx, "AUTH ")
 
   const handleFieldChange = (e: any) => {
+    const fileValidation = [".jpg", ".png", ".jpeg",".pdf"]
     const { name, value, type, files } = e.target
+
+    if (name === "billType") {
+      setType(value)
+    }
+
+    if(type==="file"){
+      for (let i of fileValidation){
+        if (value.endsWith(i)) {
+          setFormerFieldState((prevState: any) => ({
+            ...prevState,
+            [name]: files[0],
+          }))
+        }
+      }
+    }
+
+      
 
     if (name === "billType") {
       setType(value)

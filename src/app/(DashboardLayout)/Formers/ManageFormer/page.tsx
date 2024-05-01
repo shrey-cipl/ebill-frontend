@@ -465,6 +465,15 @@ const ManageFormer = () => {
                                   : false
                               }
                               required={former.required}
+                              error={
+                                !validations[former.id].valid &&
+                                validations[former.id].errMsg
+                              }
+                              // helperText={
+                              //   !validations[field.id]?.valid &&
+                              //   validations[field.id]?.errMsg &&
+                              //   validations[field.id]?.errMsg
+                              // }
                             />
                           )}
                         </Box>

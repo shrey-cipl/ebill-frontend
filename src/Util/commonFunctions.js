@@ -41,7 +41,7 @@ const validateOnSubmit = (dataToValidate, validationState) => {
 
   for (let key of fieldKeys) {
     if (
-      key !== "billFilePath" &&
+      // key !== "billFilePath" &&
       key !== "maxAdmissibleAmount" &&
       key !== "former" &&
       key !== "telephoneNumbers"
@@ -53,6 +53,31 @@ const validateOnSubmit = (dataToValidate, validationState) => {
       validationStateCopy[key].valid = true
       validationStateCopy[key].errMsg = ""
 
+      console.log(dataToValidate[key], "aaaaalll  VALIDATION_TYPE.name")
+      if (validationType === VALIDATION_TYPE.name) {
+        const nameRegex = regExCheck(
+          dataToValidate[key],
+          /^[a-zA-Z]+(?:[\s-][a-zA-Z]+)*$/
+        )
+
+        if (!nameRegex) {
+          validationStateCopy[key].valid = false
+          validationStateCopy[key].errMsg = "only valid name is allowed"
+        }
+      }
+      if (validationType === VALIDATION_TYPE.file) {
+        const fileValidation = regExCheck(
+          dataToValidate[key].name,
+          /\.(jpg|png|jpeg|pdf)$/i
+        )
+
+        if (!fileValidation) {
+          validationStateCopy[key].valid = false
+          validationStateCopy[key].errMsg =
+            "Only .jpg , .png , .jpeg , .pdf is allowed"
+        }
+      }
+      // const fileValidation = /\.(jpg|png|jpeg|pdf)$/i;
       if (validationType === VALIDATION_TYPE.alphaNumeric) {
         // Allows alpha-numeric, with (.), (-), (/) and characters upto 30
         const validAlphanumeric = regExCheck(
@@ -183,7 +208,7 @@ const validateOnSubmit = (dataToValidate, validationState) => {
     }
   }
   const keysToRemove = [
-    "billFilePath",
+    // "billFilePath",
     "maxAdmissibleAmount",
     "former",
     "telephoneNumbers",

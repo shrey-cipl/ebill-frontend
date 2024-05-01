@@ -175,7 +175,7 @@ const FIELDS_MANAGE_FORMERS = [
     type: "text",
     placeholder: "Enter name here",
     required: true,
-    validationType: VALIDATION_TYPE.none,
+    validationType: VALIDATION_TYPE.name,
   },
   {
     id: "status",

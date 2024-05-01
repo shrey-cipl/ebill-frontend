@@ -46,6 +46,7 @@ const VALIDATION_TYPE = {
   mobile: "mobile",
   none: "none",
   empty: "empty",
+  name :"name"
 }
 
 const months = [
